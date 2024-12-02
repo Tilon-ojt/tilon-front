@@ -10,6 +10,7 @@ function App() {
       <Routes>
         <Route path="/home" element={ <TilonHomepage/>}></Route>
         <Route path="/login/admin" element={ <Loginpage/>}></Route>
+        <Route path="/admin/home" element={ <Loginpage/>}></Route>
       </Routes>
     </BrowserRouter>
   );

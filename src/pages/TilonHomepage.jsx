@@ -57,7 +57,7 @@ const TilonHomepage = () => {
       // 현재 스크롤 위치에 따라 100vh 또는 220px씩 스크롤
       if (window.scrollY + viewportHeight >= document.body.scrollHeight) {
         window.scrollTo({
-          top: window.scrollY + scrollDirection * 220,
+          top: window.scrollY + scrollDirection * 250,
           behavior: 'smooth',
         });
       } else {
@@ -98,7 +98,7 @@ const TilonHomepage = () => {
       <div className="section" style={{ height: '100vh', background: 'lightcoral' }}>두 번째 섹션</div>
       <div className="section" style={{ height: '100vh', background: 'lightgreen' }}>세 번째 섹션</div>
 
-      <footer style={{ width: '100%', height: '220px' }}>
+      <footer style={{ width: '100%', height: '250px' }}>
         footercontent
       </footer>
     </div>
