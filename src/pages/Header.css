@@ -139,4 +139,47 @@
 }
 .sidebar.open {
     right: 0;
+}
+
+/* 화면 크기가 750px 이하일 때 적용 */
+@media (max-width: 750px) {
+    .sidebar {
+        width: 100% !important; 
+    }
+
+    .nav {
+        padding: 7% 10% !important;
+
+        .nav-title {
+            font-size: 35px !important;
+        }
+
+        >div >ul {
+            gap: 20px !important;
+        }
+    }
+
+  
+  }
+
+  /* 화면 크기가 600px 이하일 때 적용 */
+@media (max-width: 600px) {
+    .sidebar {
+        width: 100%;
+    }
+
+    .nav {
+
+        padding: 7% 5% !important;
+
+        .nav-title {
+            font-size: 35px !important;
+        }
+
+        >div >ul {
+            gap: 10px !important;
+        }
+    }
+
+  
   }
