@@ -1,0 +1,163 @@
+.footer{
+    display: flex;
+    flex-direction: row;
+    margin: 2vw 5vw;
+    height: 200px;
+
+    .left{
+        width: 70%;
+        display: flex;
+        flex-direction: column;
+
+        .first-list{
+            display: flex;
+            flex-direction: row;
+
+            >ul{
+                padding: 0;
+                display: flex;
+                gap: 15px;
+                margin: 0;
+            }
+
+            >ul>li{
+                min-width: 40px;
+                height: 24px !important;
+                color: white;
+                display: inline;
+                font-size: 20px;
+                >a {
+                    text-decoration: none; /* 밑줄 제거 */
+                    color: inherit;        /* 부모 요소의 색상 상속 */
+                    outline: none;         /* 클릭 시 외곽선 제거 */
+                    cursor: pointer;      /* 커서 기본 설정 */
+                    position: relative;
+                }
+            }
+
+            >ul>hr{
+                height: 15px;
+            }
+        }
+
+        .txt{
+            display: flex;
+            flex-direction: column;
+            margin-top: 2vw;
+            margin-bottom: 2vh;
+            
+            >strong{
+                color: white;
+                font-size: 14px;
+                margin-bottom: 2vh;
+            }
+
+            >span{
+                color: lightgray;
+                font-size: 14px;
+                margin-bottom: 2px;
+            }
+        }
+
+        
+        .end-list{
+            display: flex;
+            flex-direction: row;
+            padding-top: 2vh;
+
+            >ul{
+                padding: 0;
+                display: flex;
+                gap: 15px;
+                margin: 0;
+            }
+
+            >ul>li{
+                min-width: 40px;
+                height: 24px !important;
+                display: inline;
+                font-size: 15px;
+                >span{
+                    margin-left: 3vw;
+                    color: lightgray;
+                }
+
+                >a {
+                    text-decoration: none; /* 밑줄 제거 */
+                    outline: none;         /* 클릭 시 외곽선 제거 */
+                    cursor: pointer;      /* 커서 기본 설정 */
+                    position: relative;
+                }
+
+                a>strong{
+                    color: white;
+                }
+
+                a>span{
+                    color: lightgray;
+                }
+            }
+
+            >ul>hr{
+                height: 15px;
+            }
+        }
+    }
+
+
+    .right{
+        color: white;
+        width: 30%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: flex-end;
+
+        .option{
+            height: 95vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-end;
+
+            >select{
+                background-color: transparent;
+                color: white;
+                border: 1.5px solid white;
+                /* border-radius: 5%; */
+                width: 30vh;
+                height: 5vh;
+                padding-left: 10px;
+            }
+
+            >select>option{
+                color: black;
+            }
+        }
+        
+        .icon{
+            width: 12vh;
+            height: 5vh;
+            display: flex;
+            gap: 2vh;
+
+            .blog{
+                a>img{
+                    border-radius: 1vh;
+                    width: 5vh;
+                    height: 5vh;
+                }
+            }
+
+            .youtube{
+                a>img{
+                    border-radius: 1vh;
+                    width: 5vh;
+                    height: 5vh;
+                }
+            }
+        }
+    }
+
+}
