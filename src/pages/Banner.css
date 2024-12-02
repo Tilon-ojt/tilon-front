@@ -1,0 +1,115 @@
+.video-container {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+
+    .arrow-icons-container  {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        left: 50%;
+        bottom: 50px;
+
+
+        >svg {
+            opacity: 0;  /* 초기 상태는 숨겨진 상태 */
+            animation: showArrow 1s forwards infinite;
+
+        }
+        
+        >svg:nth-child(1) {
+          animation-delay: 0s /* 첫 번째 화살표는 바로 나타남 */
+        }
+        
+        >svg:nth-child(2) {
+          animation-delay: 0.1s;  /* 두 번째 화살표는 0.2초 후에 나타남 */
+        }
+        
+        >svg:nth-child(3) {
+          animation-delay: 0.2s;  /* 세 번째 화살표는 0.4초 후에 나타남 */
+        }
+
+    }
+
+    .description {
+        display: none;
+    }
+
+      
+}
+
+.home-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+}      
+
+.section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: bold;
+  }
+
+
+
+@keyframes showArrow {
+0% {
+  opacity: 0;  /* 시작 시에는 완전히 투명 */
+}
+50% {
+    opacity: 0;
+}
+100% {
+  opacity: 1;  /* 1초 후에는 불투명(보이게) */
+}
+
+}
+
+/* 화면 크기가 770px 이하일 때 적용 */
+@media (max-width: 770px) {
+    .home-video {
+      display: none;
+    }
+
+    .video-container {
+        background-image: url(https://www.tilon.com/dist/mobile_background.png?7ac29b2f1c8e752976decf0624518fd5) !important;
+        height: 50vh;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .arrow-icons-container {
+        display: none !important;
+    }
+
+    .description {
+        display: block !important;
+        color: white;
+        position: absolute;
+        bottom: 0;
+        left: 50px;
+        margin-bottom: 25px;
+
+        .description-title {
+            margin-bottom: 20px;
+            >h1 {
+                height: 35px;
+                font-size: 30px;
+                color: white;
+                margin-bottom: 0;
+                margin-top: 0;
+            }
+        }
+
+
+        >h5 {
+            margin: 0;
+
+        }
+    }
+  
+  
+  }
