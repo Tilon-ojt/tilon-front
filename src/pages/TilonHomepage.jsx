@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Header from './Header';
 import Banner from './Banner';
 import './TilonHomepage.css';
+import Footer from './Footer/Footer';
 
 const TilonHomepage = () => {
   const isScrolling = useRef(false); // 스크롤이 진행 중인지 여부를 추적하는 변수
@@ -99,7 +100,7 @@ const TilonHomepage = () => {
       <div className="section" style={{ height: '100vh', background: 'lightgreen' }}>세 번째 섹션</div>
 
       <footer style={{ width: '100%', height: '250px' }}>
-        footercontent
+        <Footer/>
       </footer>
     </div>
   );
