@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import TilonHomepage from "./pages/TilonHomepage";
-
+import PrInsight from './pages/PrInsight/PrInsight';
 
 
 function App() {
@@ -8,6 +8,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/home" element={ <TilonHomepage/>}></Route>
+        <Route path="/prsection" element={ <PrInsight/>}></Route>
       </Routes>
     </BrowserRouter>
   );
