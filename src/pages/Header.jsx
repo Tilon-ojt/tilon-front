@@ -56,7 +56,7 @@ function Header() {
                         <ul>
                             <li>
                                 <a href="#">
-                                    <p>가상화</p>
+                                    <p style={{width: '54px'}}>가상화</p>
                                 </a>
                             </li>
                             <li>

@@ -10,12 +10,14 @@ import store from './store';
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/home" element={ <TilonHomepage/>}></Route>
-        <Route path="/login/admin" element={ <Loginpage/>}></Route>
-        <Route path="/prsection" element={ <PrInsight/>}></Route>
-        <Route path="/admin/home" element={<Adminpage />}></Route>
-      </Routes>
+      <Provider store={store}>
+        <Routes>
+          <Route path="/home" element={<TilonHomepage />}></Route>
+          <Route path="/login/admin" element={<Loginpage />}></Route>
+          <Route path="/prsection" element={<PrInsight />}></Route>
+          <Route path="/admin/home" element={<Adminpage />}></Route>
+        </Routes>
+      </Provider>
     </BrowserRouter>
   );
 }

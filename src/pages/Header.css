@@ -114,8 +114,8 @@
                     position: relative;
                     height: 24px;                       
 
-                    &::after {
-                        content: "@@@@";
+                    &::before {
+                        content: "";
                         position: absolute;
                         bottom: 0;
                         left: 0;
@@ -127,7 +127,7 @@
                         transition: .3s ease-in-out;
 
                     }
-                    &:hover::after {
+                    &:hover::before {
                         height: 10px;
                     }
 
