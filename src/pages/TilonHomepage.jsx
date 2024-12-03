@@ -3,6 +3,7 @@ import Header from './Header';
 import Banner from './Banner';
 import './TilonHomepage.css';
 import Footer from './Footer/Footer';
+import News from './News/News';
 
 const TilonHomepage = () => {
   const isScrolling = useRef(false); // 스크롤이 진행 중인지 여부를 추적하는 변수
@@ -18,6 +19,8 @@ const TilonHomepage = () => {
 
     // 화면 크기 변경시 상태 업데이트 처리
     if (window.innerWidth <= 770) {
+      console.log("화면 크기가 770보다 작을때 : " + window.innerWidth);
+
       setIsWideScreen(false);
     }
 
@@ -25,7 +28,17 @@ const TilonHomepage = () => {
   }, []);
 
   useEffect(() => {
+
     const handleScroll = (e) => {
+
+      // 화면 크기가 770px 이하일 때는 스크롤을 정상적으로 허용
+      if (!isWideScreen) return;
+
+      e.preventDefault(); // 기본 스크롤 동작 방지
+      // 이미 스크롤 중이면 처리하지 않음
+      if (isScrolling.current) return;
+
+
       // 1초 후에 isScrolling을 false로 설정하여 다시 스크롤을 가능하게 함
       setTimeout(() => {
         isScrolling.current = false;
@@ -38,27 +51,20 @@ const TilonHomepage = () => {
           setShowChevron(true);
         }
 
-      }, 700); // 1초 후
+      }, 1000);
+
 
       const scrollDirection = e.deltaY > 0 ? 1 : -1; // 아래로 스크롤하면 1, 위로 스크롤하면 -1
       const viewportHeight = window.innerHeight; // 현재 뷰포트 높이
 
-      // 화면 크기가 770px 이하일 때는 스크롤을 정상적으로 허용
-      if (!isWideScreen) return;
-      e.preventDefault(); // 기본 스크롤 동작 방지
-
-
-      // 이미 스크롤 중이면 처리하지 않음
-      if (isScrolling.current) return;
-
       isScrolling.current = true; // 스크롤이 진행 중이라고 설정
 
 
-
+      // window.scrollY는 현재 스크롤한 위치를 보여줌(기준이 화며 상단임)
       // 현재 스크롤 위치에 따라 100vh 또는 220px씩 스크롤
       if (window.scrollY + viewportHeight >= document.body.scrollHeight) {
         window.scrollTo({
-          top: window.scrollY + scrollDirection * 220,
+          top: window.scrollY + scrollDirection * 250,
           behavior: 'smooth',
         });
       } else {
@@ -95,12 +101,14 @@ const TilonHomepage = () => {
       <Banner />
       <Header />
 
-      <div className="section" style={{ height: '100vh', background: 'lightblue' }}>첫 번째 섹션</div>
+      <div className="section">
+        <News />
+      </div>
       <div className="section" style={{ height: '100vh', background: 'lightcoral' }}>두 번째 섹션</div>
       <div className="section" style={{ height: '100vh', background: 'lightgreen' }}>세 번째 섹션</div>
 
-      <footer style={{ width: '100%', height: '250px' }}>
-        <Footer/>
+      <footer className="footer-section" style={{ width: '100%', height: '250px' }}>
+        <Footer />
       </footer>
     </div>
   );
