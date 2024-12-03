@@ -3,10 +3,10 @@ import "./Prsection.css";
 
 function PrInsight() {
   return (
-    <div classname="PrInsight">
+    <div className="totalSection">
       <article className="firstSection">
         <div className="titlesection">
-          <h2>PR</h2>
+          <h2 className="headtitle">PR</h2>
           <small className="subtitle">언론 속 틸론의 소식을 접해보세요.</small>
           <br />
           <a href="https://tilon.com/inside/article" className="Prlink">
@@ -59,13 +59,13 @@ function PrInsight() {
 
       <article className="secondSection">
         <div className="titlesection">
-          <h2>INSIGHT</h2>
+          <h2 className="headtitle">INSIGHT</h2>
           <small className="subtitle">틸론의 인사이트를 확인해보세요.</small>
           <br />
-          <a href="https://tilon.com/inside/article" className="Prlink">
+          <a href="https://tilon.com/inside/insight" className="Prlink">
             about more
             <img
-              alt="새로운 소식 바로가기"
+              alt="틸론 소식 바로가기"
               src="https://tilon.com/dist/pc_rightarrow.png?3bf280490a64ada3efb31ded788805b9"
               className="arrow"
             />
@@ -75,8 +75,8 @@ function PrInsight() {
           <ul className="cardList">
             <li className="cardItem">
               <img
-                src="pr_4.jpg"
-                alt="틸론, 혁신적인 기술로 클라우드 산업 선도"
+                src="https://tilon.com/downloads/6134f14e-9a13-420c-8ac5-9a1b3dc2a4bd.jpg"
+                alt="제주의 디지털 혁신 이끌고 지속 가능한 미래 만드는 데 일조할 것"
               />
               <p className="card_text">"제주의 디지털 혁신 이끌고 지속 가능한 미래 만드는 데 일조할 것"</p>
               <span className="card_tag">
@@ -97,18 +97,20 @@ function PrInsight() {
             </li>
             <li className="cardItem">
               <img
-                src="https://tilon.com/\downloads\af29deae-116c-4b0e-8087-9d4260c987d2.jpg"
+                src="https://tilon.com/downloads/af29deae-116c-4b0e-8087-9d4260c987d2.jpg"
                 alt="최백준 틸론 대표 “VDI는 디지털 역량 강화의 핵심” [K-SaaS 리더스]"
               />
               <p className="card_text">최백준 틸론 대표 “VDI는 디지털 역량 강화의 핵심” [K-SaaS 리더스]</p>
               <span className="card_tag">
-                <span>#Daas</span>
+                <span>#DaaS</span>
                 <span>#DstationX</span>
               </span>
             </li>
           </ul>
         </div>
       </article>
+
+      
     </div>
   );
 }

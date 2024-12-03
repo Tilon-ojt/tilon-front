@@ -1,49 +1,52 @@
-.firstSection {
-    padding: 3rem;
-    display: flex;
-    justify-content: flex-start;
-    gap: 10rem;
-    
-    font-family: Pretendard sans-serif;
-    background-color:black;
-    align-items: flex-start;
-  }
+.totalSection {
+  background-color: black;
+  width: 100%;
+  overflow-x: hidden;
+  padding: 10vw 5vw;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
   
-  h2 {
+}
+
+.headtitle{
+    font-size: 3.5vw;
     text-align: left;
-    font-size: 36px;
     color:white;
     font-family: sans-serif;
-    margin: 0px 0px 10px;
-    
-  }
-  .secondSection {
-    padding: 3rem;
-    display: flex;
-    justify-content: flex-start;
-    gap: 10rem;
-    margin: 0 0 32px;
+    margin: 0px 0px 1vh;
+    line-height: 1.2;
+}
+
+.firstSection, .secondSection {
+    padding: 0 0 2rem;
+    display: flex; /*가로 방향 배치*/
     font-family: Pretendard sans-serif;
-    background-color:black;
     align-items: flex-start;
+    gap: 3vh;
+    box-sizing: border-box;
+    width: 100%;
   }
-  
-  h2 {
-    text-align: left;
-    font-size: 36px;
-    color:white;
-    font-family: sans-serif;
-    margin: 0px 0px 10px;
-    
+
+
+  .titlesection{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0;
   }
   
   .subtitle {
-    font-size: 16px;
+    font-size: 1.1vw;
     color: white;
     display: block;
-    white-space: nowrap;
     font-family: Pretendard sans-serif;
-    margin: 0px 0px 30px;
+    margin: 0px 0px 3vh;
+    letter-spacing: -0.1em; /*텍스트간 공백 줄이기*/
+    white-space: nowrap; /* 줄바꿈 방지 */
   }
   
   .Prlink {
@@ -51,27 +54,26 @@
     align-items: center;
     font-family: Pretendard sans-serif;
     color: white;
-    width: 132px;
-    font-size: 12px;
+    font-size: 1.5vw;
     text-decoration: none;
-    padding : 12px 23px;
+    padding: 1vw 1.5vw;
     border: 1px solid #fff;
-    border-radius: 20px;
-    box-sizing: border-box; /* padding & border 요소가 총 너비에 영향을 미치기 때문에 포함한 너비로 지정*/
+    border-radius: 30px;
+    box-sizing: border-box;
+    font-weight: 500;
+    transition: all 0.3s ease;
   }
+
   .arrow {
     display: block;
-    width: 12px;
-    height: 6px;
-    margin: 0 0 0 3px;
+    width: 1vw;
+    height: 1vh;
+    margin: 0.5vh 0 0 1vh;
   }
   
   .cardsContainer {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    max-width: 1200px; /* 원하는 최대 너비 설정 */
-    width: 90%;
+    gap: 2vw;
+    justify-content: center;
     margin: 0 auto;
     flex-wrap: wrap;
   }
@@ -82,53 +84,181 @@
     padding: 0;
     margin: 0;
     display: flex;
-    flex-direction: row;
-    gap: 2rem; /* 각 카드 간 간격 */
-    align-items: flex-start;
+    gap: 2vw; /* 각 카드 간 간격 */
+    justify-content: center;
+    
   }
   
   .cardItem {
-    width: 300px;
+    width: 20vw;
+    height: 38vh;
     background-color: #fff;
     box-shadow: 0 6px 20px rgba(56, 125, 255, 0.17);
     border-radius: 10px;
-    overflow: hidden;
+    overflow: hidden; /* 내부 콘텐츠 넘침 숨김 */
     text-align: center;
+    min-width: 200px;
+    
   }
   
   .cardItem img {
-    width: 300px;
-    height: 163px;
+    width: 100%;
+    height: 60%;
+    object-fit: cover; /* 크기 조정 시 비율 유지 */
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
   }
   
   .card_text {
-    font-size: 16px;
+    font-size: 1.1vw;
+    margin: 0 1rem;
+    padding-top: 1.2vh;
+    padding-bottom: 4vh;
     color: #252e48;
-    line-height: 1.5;
+    font-weight: bold;
+    line-height: 1.1;
+    height: 30%;
+    display: block;
     overflow: hidden;
+    text-overflow: ellipsis; /* 넘치는 텍스트에 ... 표시 */
+    max-height: calc(1.1em * 2); /* 2줄로 제한 */
   }
+
   
   .card_tag {
-    display: block;
-    font-size: 14px;
+    display: flex;
+    justify-content: left;
+    padding-left: 1.2vw;
     color: #7b7b7b;
-    margin-bottom: 0.5rem;
+    
+    gap: 2vw;
+    width: 100%;
+    align-self: flex-start; /* 첫 번째 태그가 상단에 맞춰지도록 설정 */
   }
   
-  @media only screen and (max-width: 1024px) {
-    .cardsContainer {
-      width: 100%;
-    }
+  .card_tag span {
+    border: 1px solid #7b7b7b;   
+    padding: 0.4vw 0.6vw;            
+    border-radius: 20px;          
+    font-size: 0.8vw;              
+    color: #fff;               
+    display: inline-block;        /* 인라인 블록 요소로 표시 */
+    background-color: black;
+}
   
-    .cardList {
-      flex-direction: row;
-      gap: 1.5rem; /* 화면 크기 줄어들 때 카드 간격 감소 */
-    }
+
+@media only screen and (max-width: 1021px) {
   
-    .cardItem {
-      width: 90%; /* 카드의 너비를 90%로 설정 */
-    }
+  .Prlink {
+    font-size: 0.8rem; /* 텍스트 크기 줄이기 */
+    padding: 0.6rem; /* 내부 패딩 줄이기 */
+  }
+
+  .cardList {
+    display: grid;
+    padding-left: 1vw;
+    grid-template-columns: 1fr 1fr; /* 한 줄에 2개의 카드 항목 */
+    gap: 1.5rem; /* 카드 간 간격 조정 */
+  }
+
+  .cardItem {
+    width: 100%; /* 반응형 크기 조정 */
+    height: auto;
+  }
+  .firstSection .cardList li:nth-child(n+3),
+  .secondSection .cardList li:nth-child(n+3) {
+    display: none; /* 세 번째 카드부터는 숨기기 */
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .totalSection {
+    flex-direction: column !important; /* 수직 배열로 변경 */
+    align-items: center;
+    padding: 10vw 5vw;
+  }
+
+  .firstSection, .secondSection {
+    width: 90% !important; 
+    padding: 0 0 2rem !important;
+    flex-direction: column !important; /* 섹션 내 요소들도 수직 배열로 변경 */
+    align-items: stretch !important; /* 모든 요소들이 섹션의 너비에 맞게 늘어남 */
+    gap: 2rem !important; 
+
+  .titlesection {
+    margin-left: 0 !important; /* 수직 배열에서는 좌측 여백 제거 */
+    margin-bottom: 20px !important; /* 타이틀 섹션과 다른 요소들 사이에 여백 추가 */
+    display: flex !important; /* 플렉스를 사용해 수평 배열로 변경 */
+    flex-direction: column !important; /* 수직으로 배열 */
+    align-items: flex-start !important; /* 텍스트 왼쪽 정렬 */
+  }
+
+  .subtitle, .Prlink {
+    text-align: inline-block !important; /* 수평 정렬 */
   }
   
+  .subtitle {
+    font-size: 1rem;
+    margin-bottom: 0px !important;
+  }
+  .Prlink {
+    font-size: 0.6rem !important;
+    padding: 0.5rem 1.2rem !important;
+    text-decoration: none !important;
+    color: white;
+    border: 1px solid #fff;
+    border-radius: 30px;
+    display: flex !important;
+  }
+
+  .cardList {
+    display: grid !important;
+    grid-template-columns: 1fr !important; /* 한 줄에 하나의 카드만 표시 */
+    flex-direction: column !important; /* 카드 리스트를 수직 배열로 변경 */
+    gap: 1rem !important; /* 카드 간 간격을 수직으로 설정 */
+    width: 100% !important; /* 카드 리스트가 부모 요소의 너비를 채우도록 설정 */
+  }
+
+  .cardItem {
+    width: 90% !important; /* 각 카드가 수직 배열에서 전체 너비를 차지하도록 설정 */
+    height: auto !important;
+  }
+
+  .cardItem img {
+    width: 100%;
+    height: 60%;
+  }
+  .card_text {
+    font-size: 3vw !important;
+    font-weight: 600;
+  }
+  
+  .card_tag span{
+    padding-left: 5vw;
+    gap: 4vw;
+    margin-top: 4vh;  
+  }
+
+  .card_tag span {
+    padding: 1vw 3vw;   
+    font-size: 2vw;   
+  }
+
+  .titlesection h2 {
+    font-size: 7vw !important; /* 제목 크기 유지 */
+  }
+}
+.cardsContainer {
+  overflow: hidden; /* 넘치는 내용 숨기기 */
+}
+
+.cardList li {
+  display: none; /* 기본적으로 모든 카드 항목을 숨김 */
+}
+
+/* 각 article의 첫 번째 카드 항목만 보이도록 설정 */
+.firstSection .cardList li:nth-child(1),
+.secondSection .cardList li:nth-child(1) {
+  display: block !important; /* 첫 번째 카드 항목만 보이도록 설정 */
+}
+}
