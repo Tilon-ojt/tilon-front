@@ -18,10 +18,9 @@ function App() {
           <Route path="/home" element={<TilonHomepage />}></Route>
           <Route path="/login/admin" element={<Loginpage />}></Route>
           <Route path="/prsection" element={<PrInsight />}></Route>
-          <Route path="/admin/home" element={<Adminpage />}></Route>
-                  {/* 임의로 설정한 라우트 */}
-        <Route path="/home/admin" element={ <AdminHome/>}></Route>
-        <Route path="/edit-profile/admin" element={ <EditProfile/>}></Route>
+          <Route path="/admin/page" element={<Adminpage />}></Route>
+          <Route path="/home/admin" element={<AdminHome />}></Route>
+          <Route path="/edit-profile/admin" element={<EditProfile />}></Route>
         </Routes>
       </Provider>
     </BrowserRouter>

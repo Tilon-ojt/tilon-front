@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
-
 import AdminAddModal from "./AdminAddModal";
-import './AdminInfoBox.css';
 import { OPEN_MODAL } from '../reducer/AdminModal';
+
+import './AdminInfoBox.css';
 
 function AdminInfoBox({ adminInfo }) {
     const isShow = useSelector((state) => state.adminModal.isShow);
@@ -20,9 +20,9 @@ function AdminInfoBox({ adminInfo }) {
 
     useEffect(() => {
         // 현재 페이지에 해당하는 항목들 계산
-        const indexOfLastItem = currentPage * itemsPerPage;
-        const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-        setCurrentItems(adminInfo.slice(indexOfFirstItem, indexOfLastItem));
+        const indexOfLastItem = currentPage * itemsPerPage; // 1 * 10 = 10 / 2 * 10 = 20
+        const indexOfFirstItem = indexOfLastItem - itemsPerPage; // 10 - 10 = 0 / 20 - 10 = 10
+        setCurrentItems(adminInfo.slice(indexOfFirstItem, indexOfLastItem)); // 0, 10 (0부터 10개) / 10, 20
     }, [currentPage, adminInfo]); // adminInfo도 의존성으로 추가
 
     // 체크박스 클릭 핸들러
@@ -59,6 +59,11 @@ function AdminInfoBox({ adminInfo }) {
         pageNumbers.push(i);
     }
 
+    const deleteUesr = () => {
+        console.log(`삭제될 유저 번호 : ${selectedIds}`);
+        
+    }
+
     return (
         <div className="admin-info-box">
             <h2>관리자 정보</h2>
@@ -66,7 +71,7 @@ function AdminInfoBox({ adminInfo }) {
                 <button className="add-button" onClick={openModal}>추가</button>
                 <button
                     className="delete-button"
-                    onClick={() => console.log("선택된 ID:", selectedIds)}
+                    onClick={deleteUesr}
                 >
                     삭제
                 </button>
