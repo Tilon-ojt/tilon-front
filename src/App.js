@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import TilonHomepage from "./pages/TilonHomepage";
-import Loginpage from "./Components/Loginpage";
+import Loginpage from "./components/Loginpage";
 import PrInsight from './pages/PrInsight/PrInsight';
 
 
