@@ -4,8 +4,9 @@
 }
 
 .admin-nav{
-        border-right: 2px solid rgb(60, 72, 77);
-        background-color: rgb(70, 103, 114);
+    
+    border-right: 2px solid rgb(60, 72, 77);
+    background-color: rgb(70, 103, 114);
     height: 50px;
     display: flex;
     flex-direction: row;
@@ -40,6 +41,11 @@
         align-items: center;
         gap: 20px;
 
+        >span{
+            color: white;
+            font-size: 17px;
+        }
+
         >div{
             /* border: 1px solid green; */
             width: 45px;
@@ -63,9 +69,7 @@
     .admin-side{
         /* border: 1px solid green; */
         width: 250px;
-
-        /* background-color: rgb(221, 221, 221); */
-        border-right: 2px solid rgb(60, 72, 77);
+        border-right: 1px solid rgb(70, 103, 114);
         >ul{
             padding-left: 0;
             margin: 0;
@@ -97,14 +101,13 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        background-color: rgba(180, 198, 204, 0.473);
 
         /* background-color: lightgray; */
 
         >div{
-            border: 1px solid lightblue;
             width: 95%;
             height: 90%;
-
             background-color: white;
         }
     }
