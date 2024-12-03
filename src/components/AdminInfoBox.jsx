@@ -26,6 +26,8 @@ function AdminInfoBox({ adminInfo }) {
     }, [currentPage, adminInfo]); // adminInfo도 의존성으로 추가
 
     // 체크박스 클릭 핸들러
+    // 이미 선택된 목록에 있는지 확인 후 없으면 추가하고 있으면 선택해제 시킴
+    // 상태 업데이트 함수(set~)는 콜백 함수로 현재 상태값을 전달
     const handleCheckboxChange = (id) => {
         setSelectedIds((prevSelected) =>
             prevSelected.includes(id)
