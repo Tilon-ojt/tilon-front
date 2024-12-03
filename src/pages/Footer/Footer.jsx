@@ -11,11 +11,8 @@ function Footer(){
 
     return(
         <div className="footer">
-
-            {/* 리스트와 회사 소개 */}
             <div className="left">
-
-                <div className="first-list">
+                <div className="list">
                     <ul>
                         <li>
                             <a href="https://www.tilon.com/company/info">
@@ -48,45 +45,48 @@ function Footer(){
                         </li>
                     </ul>
                 </div>
-
                 <div className="txt">
-                    <strong> 주식회사 틸론</strong>
-                    <span>대표 최백준 | 대표전화 02-2627-9000 | FAX 02-2627-9099 | 사업자번호 119-81-49757</span>
+                    <strong>주식회사 틸론</strong>
+                    {/* 전화번호와 팩스번호를 tel: 프로토콜로 감싸 클릭 시 전화걸기/팩스 보내기 */}
+                    <span>
+                        대표 최백준 | 
+                        대표전화 <a href="tel:02-2627-9000">02-2627-9000</a> | 
+                        FAX     <a href="tel:02-2627-9099">02-2627-9099</a> | 
+                        사업자번호 119-81-49757
+                    </span>
                     <span>서울 법인 (07789) 서울시 강서구 마곡중앙14로 22</span>
                     <span>제주 법인 (63309) 제주특별자치도 제주시 첨단로 213-3, 311호-312호</span>
                 </div>
-
-                <div className="end-list">
-                <ul>
-                        <li>
-                            <a href="https://www.tilon.com/usage">
-                                <span>이용약관</span>
-                            </a>
-                        </li>
-                        <hr/>
-                        <li>
-                            <a href="https://www.tilon.com/privacy">
-                                <strong>개인정보취급방침</strong>
-                            </a>
-                        </li>
-                        <hr/>
-                        <li>
-                            <a href="https://www.tilon.com/tba/partner">
-                                <span>사업 제휴</span>
-                            </a>
-                        </li>
-                        <li>
-                            <span>ⓒTILON Co., Ltd. All Rights Reserved.</span>
-                        </li>
-                    </ul>
+                <div className="list-copy">
+                    <div className="end">
+                        <ul>
+                            <li>
+                                <a href="https://www.tilon.com/usage">
+                                    <span>이용약관</span>
+                                </a>
+                            </li>
+                            <hr/>
+                            <li>
+                                <a href="https://www.tilon.com/privacy">
+                                    <strong>개인정보취급방침</strong>
+                                </a>
+                            </li>
+                            <hr/>
+                            <li>
+                                <a href="https://www.tilon.com/tba/partner">
+                                    <span>사업 제휴</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div className="copyright">
+                        <span>ⓒTILON Co., Ltd. All Rights Reserved.</span>
+                    </div>
                 </div>
             </div>
 
-            
-            {/* 옵션과 아이콘*/}
-            <div className="right"> 
-                {/* 옵션 */}
-                <div className="option" >
+            <div className="right">
+                <div className="select-box">
                     <select name="select" onChange={optionHandler}>
                         <option value="">패밀리 사이트</option>
                         <option value="http://tilonsoft.com/" >TilonSoft</option>
@@ -97,13 +97,13 @@ function Footer(){
                     </select>
                 </div>
 
-                {/* 블로그와 유튜브 */}
                 <div className="icon">
                     <div className="blog">
                         <a href="https://blog.naver.com/hitilon">
                             <img src="https://www.tilon.com/dist/pc_blog.png?15db7583f8fc239ce4c24e8ce744d5c4" alt="blog"/>
                         </a>
                     </div>
+
                     <div className="youtube">
                         <a href="https://www.youtube.com/user/TilonCompany">
                             <img src="https://www.tilon.com/dist/pc_youtube.png?6555cf4c4948a9031cd1bd5cb667427b" alt="youtube"/>
@@ -111,7 +111,6 @@ function Footer(){
                     </div>
                 </div>
             </div>
-
         </div>
     );
 }
