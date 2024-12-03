@@ -42,7 +42,7 @@
 
 .card{
 
-    border: 1px solid orange;
+    /* border: 1px solid orange; */
 
     width: 23%;
     height: auto;
@@ -50,8 +50,8 @@
     flex-direction: column;
     cursor: pointer;
 
-    animation: showCard 3s both;
-    /* animation-timeline: scroll() ; */
+    opacity: 0;
+    transition: opacity 2s;
 
     >a {
         text-decoration: none;
@@ -79,10 +79,8 @@
     }
 }
 
-@keyframes showCard{
-    0%{
-        opacity: 0;
-    }
+.card.visible {
+    opacity: 1;
 }
 
 
