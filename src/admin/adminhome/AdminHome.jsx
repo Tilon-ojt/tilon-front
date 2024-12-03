@@ -1,45 +1,54 @@
+import React, { useState } from 'react';
 import '../adminhome/AdminHome.css';
 
-function AdminHome(){
-    return(
-        <div className='admin-home'>
-            <div className='admin-nav'>
-                <div className='nav-logo'>
-                    <img
-                        alt='tilon-logo'
-                        src='https://www.tilon.com/dist/pc_logo.png?a30e64d3cafa9a2c5cbf7b217ccc9aba'
-                    />
-                </div>
-                <div className='txt-icon'>
-                    <span>hi님 반갑습니다!</span>
-                    <div>
-                        <img
-                            alt='log-out'
-                        />
-                    </div>
-                </div>
-            </div>
+import NewsList from '../components/news/NewsList.jsx';
+import EditNews from '../components/news/EditNews.jsx';
 
-            <div className='admin-page'>
-                <div className='admin-side'>
+function AdminHome() {
+    const [adminComp, setAdminComp] = useState('Profile');
+
+    const renderComponent = () => {
+        switch (adminComp) {
+            case 'News':
+                return <NewsList onNavigate={(c)=>setAdminComp(c)}/>;
+            case 'EditNews':
+                return <EditNews/>
+            default:
+                return <div>반갑습니다!</div>;
+        }
+    };
+
+    return (
+        <div className='admin-home'>
+            <nav>
+                <img
+                    alt='logo'
+                    src='https://www.tilon.com/dist/pc_logo.png?a30e64d3cafa9a2c5cbf7b217ccc9aba'
+                />
+                <div>
+                    <span>~님 안녕하세요!</span>
+                    <img alt='logout'/>
+                </div>
+            </nav>
+
+            <div className='admin-home-space'>
+                <side>
                     <ul>
-                        <li> <a href='#'>내 정보 수정</a> </li>
+                        <li>내 정보 수정</li>
                         <hr/>
-                        <li> <a href='#'>뉴스</a> </li>
+                        <li onClick={() => setAdminComp('News')}>News</li>
                         <hr/>
-                        <li> <a href='#'>PR</a> </li>
+                        <li>PR</li>
                         <hr/>
-                        <li> <a href='#'>INSIGHT</a> </li>
+                        <li>INSIGHT</li>
                         <hr/>
                     </ul>
-                </div>
+                </side>
 
-                <div className='admin-screen'>
-                    <div></div>
+                <div className='admin-component'>
+                    {renderComponent()}
                 </div>
-
             </div>
-
         </div>
     );
 }
