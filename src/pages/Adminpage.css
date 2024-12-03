@@ -1,0 +1,51 @@
+.adminpage {
+    background-image: url(https://tilon.com/common/images/pc_newbg.png);
+    width: 100%;
+    height: 100vh;
+    position: relative;
+
+    .admin-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 40px;
+        color: white;
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+
+            .tilon-logo {
+                height: 40px;
+                /* 로고 크기 */
+                width: auto;
+            }
+        }
+
+        .logout-icon {
+            cursor: pointer;
+            margin-left: 20px;
+            transition: transform 0.3s ease;
+        }
+        
+        .logout-icon:hover {
+            transform: scale(1.2);
+        }
+
+
+    }
+}
+
+
+
+
+/* 폼 스타일링 */
+.admin-info{
+    width: 60%;
+    margin-top: 50px;
+    border-radius: 5px;
+    position: absolute;
+    top: 130px;
+    left: 20%;
+}
+

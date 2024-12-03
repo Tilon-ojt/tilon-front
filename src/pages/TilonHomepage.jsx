@@ -26,7 +26,7 @@ const TilonHomepage = () => {
 
   useEffect(() => {
     const handleScroll = (e) => {
-      // 1초 후에 isScrolling을 false로 설정하여 다시 스크롤을 가능하게 함
+      // 0.7초 후에 isScrolling을 false로 설정하여 다시 스크롤을 가능하게 함
       setTimeout(() => {
         isScrolling.current = false;
         console.log(`1초 후 스크롤 위치 : ${window.scrollY}`);
@@ -38,13 +38,17 @@ const TilonHomepage = () => {
           setShowChevron(true);
         }
 
-      }, 700); // 1초 후
+      }, 700);
 
       const scrollDirection = e.deltaY > 0 ? 1 : -1; // 아래로 스크롤하면 1, 위로 스크롤하면 -1
       const viewportHeight = window.innerHeight; // 현재 뷰포트 높이
 
       // 화면 크기가 770px 이하일 때는 스크롤을 정상적으로 허용
       if (!isWideScreen) return;
+
+      // 휠 스크롤 이벤트 등록
+      window.addEventListener('wheel', handleScroll, { passive: false });
+      
       e.preventDefault(); // 기본 스크롤 동작 방지
 
 
@@ -54,7 +58,7 @@ const TilonHomepage = () => {
       isScrolling.current = true; // 스크롤이 진행 중이라고 설정
 
 
-
+      // window.scrollY는 현재 스크롤한 위치를 보여줌(기준이 화며 상단임)
       // 현재 스크롤 위치에 따라 100vh 또는 220px씩 스크롤
       if (window.scrollY + viewportHeight >= document.body.scrollHeight) {
         window.scrollTo({
@@ -68,9 +72,6 @@ const TilonHomepage = () => {
         });
       }
     };
-
-    // 휠 스크롤 이벤트 등록
-    window.addEventListener('wheel', handleScroll, { passive: false });
 
     // 컴포넌트 언마운트 시 이벤트 제거
     return () => window.removeEventListener('wheel', handleScroll);
@@ -100,7 +101,7 @@ const TilonHomepage = () => {
       <div className="section" style={{ height: '100vh', background: 'lightgreen' }}>세 번째 섹션</div>
 
       <footer style={{ width: '100%', height: '250px' }}>
-        <Footer/>
+        <Footer />
       </footer>
     </div>
   );
