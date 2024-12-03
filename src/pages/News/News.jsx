@@ -17,7 +17,7 @@ function News() {
                     }
                 });
             },
-            { threshold: 0.2 } // 요소가 20% 이상 보이면 감지
+            { threshold: 0.2 } // 요소가 0% 이상 보이면 감지
         );
 
         // cardRefs.current 값을 로컬 변수로 복사
@@ -49,12 +49,12 @@ function News() {
                         className="card"
                         ref={(el) => (cardRefs.current[index] = el)} // ref 등록
                     >
-                        <a href="https://www.naver.com">
+                        <a href="https://www.naver.com"> {/* 연결 링크 - 관리자 설정 */}
                             <img
-                                alt={`news-img${index + 1}`}
-                                src="https://tilon.com/downloads/news_1.jpg"
+                                alt={`news-img${index + 1}`} 
+                                src="https://tilon.com/downloads/news_1.jpg" //  뉴스 썸네일 - 관리자 설정
                             />
-                            <span>Title {index + 1}</span>
+                            <span>Title {index + 1}</span> {/* 뉴스 제목 - 관리자 설정 */}
                         </a>
                     </div>
                 ))}

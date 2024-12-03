@@ -51,7 +51,7 @@
     cursor: pointer;
 
     opacity: 0;
-    transition: opacity 2s;
+    transition: opacity 0.7s 0.3s;
 
     >a {
         text-decoration: none;
