@@ -3,6 +3,7 @@ import Header from './Header';
 import Banner from './Banner';
 import './TilonHomepage.css';
 import Footer from './Footer/Footer';
+import News from './News/News';
 
 const TilonHomepage = () => {
   const isScrolling = useRef(false); // 스크롤이 진행 중인지 여부를 추적하는 변수
@@ -55,10 +56,10 @@ const TilonHomepage = () => {
 
 
 
-      // 현재 스크롤 위치에 따라 100vh 또는 220px씩 스크롤
+      // 현재 스크롤 위치에 따라 100vh 또는 250px씩 스크롤
       if (window.scrollY + viewportHeight >= document.body.scrollHeight) {
         window.scrollTo({
-          top: window.scrollY + scrollDirection * 220,
+          top: window.scrollY + scrollDirection * 250,
           behavior: 'smooth',
         });
       } else {
@@ -95,11 +96,13 @@ const TilonHomepage = () => {
       <Banner />
       <Header />
 
-      <div className="section" style={{ height: '100vh', background: 'lightblue' }}>첫 번째 섹션</div>
+      <div className="section">
+        <News/>
+      </div>
       <div className="section" style={{ height: '100vh', background: 'lightcoral' }}>두 번째 섹션</div>
       <div className="section" style={{ height: '100vh', background: 'lightgreen' }}>세 번째 섹션</div>
 
-      <footer style={{ width: '100%', height: '250px' }}>
+      <footer className="footer-section" style={{ width: '100%', height: '250px' }}>
         <Footer/>
       </footer>
     </div>

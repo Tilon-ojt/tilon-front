@@ -49,10 +49,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2rem;
+    height: 100vh;
+    /* font-size: 2rem; */
     font-weight: bold;
-  }
+}
 
+
+.footer-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 
 @keyframes showArrow {
@@ -65,8 +72,9 @@
 100% {
   opacity: 1;  /* 1초 후에는 불투명(보이게) */
 }
-
 }
+
+
 
 /* 화면 크기가 770px 이하일 때 적용 */
 @media (max-width: 770px) {
@@ -112,4 +120,11 @@
     }
   
   
+  }
+
+  /* 700px 기준 */
+  @media (max-width:700px){
+    .section{
+      height: auto;
+    }
   }
