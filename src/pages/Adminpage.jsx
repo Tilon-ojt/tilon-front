@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { LogOut } from 'lucide-react';
-import AdminInfoBox from '../components/AdminInfoBox';
+import AdminInfoBox from '../Components/AdminInfoBox';
 import "./Adminpage.css";
 
 function Adminpage() {
