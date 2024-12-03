@@ -1,0 +1,114 @@
+.admin-home{
+    /* border: 1px solid red; */
+    height: 100vh;
+}
+
+.admin-nav{
+    
+    border-right: 2px solid rgb(60, 72, 77);
+    background-color: rgb(70, 103, 114);
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+
+    justify-content: space-between;
+
+    .nav-logo{
+        /* border: 1px solid green; */
+        width: 110px;
+        height: 100%;
+        padding-left: 10px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        > img{
+            width: 100px;
+            height: auto;
+        }
+    }
+
+    .txt-icon{
+        /* border: 1px solid green; */
+        width: 300px;
+        height: 100%;
+        padding-left: 10px;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 20px;
+
+        >span{
+            color: white;
+            font-size: 17px;
+        }
+
+        >div{
+            /* border: 1px solid green; */
+            width: 45px;
+            height: 45px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 5px;
+        }
+    }
+
+}
+
+.admin-page{
+    /* border-bottom: 3px solid lightblue; */
+    height: 95%;
+
+    display: flex;
+    flex-direction: row;
+
+    .admin-side{
+        /* border: 1px solid green; */
+        width: 250px;
+        border-right: 1px solid rgb(70, 103, 114);
+        >ul{
+            padding-left: 0;
+            margin: 0;
+        }
+
+        >ul>hr{
+            opacity: 80%;
+        }
+
+        >ul > li{
+            /* border: 1px solid orange; */
+            height: 30px;
+            list-style: none;
+            margin: 10px;
+            
+        }
+
+        >ul>li>a{
+            text-decoration: none;
+            color: black;
+            font-size: 17px;
+        }
+    }
+
+    .admin-screen{
+        /* border: 1px solid green; */
+        width: 90%;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(180, 198, 204, 0.473);
+
+        /* background-color: lightgray; */
+
+        >div{
+            width: 95%;
+            height: 90%;
+            background-color: white;
+        }
+    }
+}
