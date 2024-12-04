@@ -175,18 +175,23 @@
   .totalSection {
     flex-direction: column !important; /* 수직 배열로 변경 */
     align-items: center;
-    padding: 10vw 5vw;
+    padding: 5vw;
   }
+  /* 각 article의 첫 번째 카드 항목만 보이도록 설정 */
+  .firstSection .cardList li:nth-child(1),
+  .secondSection .cardList li:nth-child(1) {
+  display: block !important; /* 첫 번째 카드 항목만 보이도록 설정 */
+}
 
   .firstSection, .secondSection {
-    width: 90% !important; 
+    width: 100% !important; 
     padding: 0 0 2rem !important;
     flex-direction: column !important; /* 섹션 내 요소들도 수직 배열로 변경 */
     align-items: stretch !important; /* 모든 요소들이 섹션의 너비에 맞게 늘어남 */
     gap: 2rem !important; 
-
+  }
   .titlesection {
-    margin-left: 0 !important; /* 수직 배열에서는 좌측 여백 제거 */
+    margin-left: 1vw !important; /* 수직 배열에서는 좌측 여백 제거 */
     margin-bottom: 20px !important; /* 타이틀 섹션과 다른 요소들 사이에 여백 추가 */
     display: flex !important; /* 플렉스를 사용해 수평 배열로 변경 */
     flex-direction: column !important; /* 수직으로 배열 */
@@ -220,26 +225,23 @@
   }
 
   .cardItem {
-    width: 90% !important; /* 각 카드가 수직 배열에서 전체 너비를 차지하도록 설정 */
-    height: auto !important;
+    width: 98% !important; /* 각 카드가 수직 배열에서 전체 너비를 차지하도록 설정 */
+    height: 85% !important;
   }
 
   .cardItem img {
     width: 100%;
-    height: 60%;
+    height: 70%;
   }
   .card_text {
-    font-size: 3vw !important;
+    font-size: 2.2vw !important;
     font-weight: 600;
+    text-align: left;
   }
   
   .card_tag span{
-    padding-left: 5vw;
     gap: 4vw;
-    margin-top: 4vh;  
-  }
-
-  .card_tag span {
+    margin-bottom: 1.2vh;
     padding: 1vw 3vw;   
     font-size: 2vw;   
   }
@@ -247,7 +249,7 @@
   .titlesection h2 {
     font-size: 7vw !important; /* 제목 크기 유지 */
   }
-}
+
 .cardsContainer {
   overflow: hidden; /* 넘치는 내용 숨기기 */
 }
@@ -256,9 +258,6 @@
   display: none; /* 기본적으로 모든 카드 항목을 숨김 */
 }
 
-/* 각 article의 첫 번째 카드 항목만 보이도록 설정 */
-.firstSection .cardList li:nth-child(1),
-.secondSection .cardList li:nth-child(1) {
-  display: block !important; /* 첫 번째 카드 항목만 보이도록 설정 */
-}
+
+
 }

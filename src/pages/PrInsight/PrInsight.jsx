@@ -71,7 +71,7 @@ function PrInsight() {
             />
           </a>
         </div>
-        <div className="cardsContainer">
+        <div className="cardContainer">
           <ul className="cardList">
             <li className="cardItem">
               <img
