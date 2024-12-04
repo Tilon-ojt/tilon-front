@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../components/EditProfile.css';
+import './EditProfile.css';
 
 function EditProfile() {
     const [email, setEmail] = useState("");  // 이메일 상태 관리
@@ -62,7 +62,7 @@ function EditProfile() {
     return (
         <div className='edit-prof'>
             <h2>내 정보 수정</h2>
-            <hr style={{ width: '100%' }} />
+            <hr />
             <div className='user-info'>
                 <div className='info-item'>
                     <label>이름 </label>

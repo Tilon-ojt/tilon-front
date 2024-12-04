@@ -1,0 +1,9 @@
+.insight-container {
+    background-color: rgb(255, 255, 255);
+    width: 90%;
+    padding: 0 5%;
+    height: calc(100vh - 50px);
+    overflow: auto;
+    position: relative;
+
+}

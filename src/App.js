@@ -1,11 +1,11 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import TilonHomepage from "./pages/TilonHomepage";
-import Loginpage from "./components/Loginpage";
-import PrInsight from './pages/PrInsight/PrInsight';
+import TilonHomepage from "./pages/Home/TilonHomepage.jsx";
+import Loginpage from "./pages/Admin/Login/Loginpage.jsx";
+import PrInsight from './pages/Home/PrInsight/PrInsight.jsx';
 
 
-import AdminHome from './admin/adminhome/AdminHome.jsx';
-import Adminpage from './pages/Adminpage';
+import AdminHome from './pages/Admin/Home/AdminHome.jsx';
+import Adminpage from './pages/Admin/AdminList/Adminpage.jsx';
 import { Provider } from 'react-redux';
 import store from './store';
 
@@ -14,11 +14,11 @@ function App() {
     <BrowserRouter>
       <Provider store={store}>
         <Routes>
-          <Route path="/home" element={<TilonHomepage />}></Route>
-          <Route path="/login/admin" element={<Loginpage />}></Route>
-          <Route path="/prsection" element={<PrInsight />}></Route>
-          <Route path="/admin/page" element={<Adminpage />}></Route>
-          <Route path="/home/admin" element={<AdminHome />}></Route>
+          <Route path="/" element={<TilonHomepage />}></Route>
+          <Route path="/admin/login" element={<Loginpage />}></Route>
+          {/* <Route path="/prsection" element={<PrInsight />}></Route> */}
+          {/* <Route path="/admin/page" element={<Adminpage />}></Route> */}
+          <Route path="/admin" element={<AdminHome />}></Route>
         </Routes>
       </Provider>
     </BrowserRouter>

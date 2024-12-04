@@ -1,6 +1,6 @@
-.edit-prof {
-    width: 90%;
-    height: 90%;
+.create-news {
+    width: 60%;
+    height: 70%;
     margin: 0 auto;
     margin-top: 45px;
     border: 1px solid #ccc;
@@ -17,7 +17,7 @@
     
     }
     
-    .user-info {
+    .news-info {
         display: flex;
         gap: 20px;
         width: 80%;
@@ -31,7 +31,7 @@
     .info-item {
         margin-bottom: 15px;
         display: flex;
-        align-items: center;
+        align-items: flex-start;
     
         .tally {
             margin-right: 50px;
@@ -53,26 +53,38 @@
             font-size: large;
         }
         
-        input[type="email"] {
-            width: 350px;
-            padding: 10px;
-            margin-top: 5px;
+        input[type="text"] {
+            width: 400px;
+            height: 30px;
+            padding-left: 10px;
             border: 1px solid #ccc;
         }
 
-        input[type="password"] {
-            width: 350px;
-            padding: 10px;
-            margin-top: 5px;
+        input[type="url"] {
+            width: 400px;
+            height: 30px;
+            padding-left: 10px;
             border: 1px solid #ccc;
-            border-radius: 4px;
+        }
+
+        
+        input[type="file"] {
+            padding-top: 5px;
         }
     }
-    
-    .submit-btn {
-        width: 630px;
+
+}
+
+.btn{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    .u {
+        width: 80px;
         padding: 10px;
-        margin-left: 30px;
         background-color: #537eaf;
         color: white;
         border: none;
@@ -80,10 +92,44 @@
         cursor: pointer;
     }
     
-    .submit-btn:hover {
+    .u:hover {
         background-color: #3e6591;
+    }
+
+    .r {
+        width: 80px;
+        padding: 10px;
+        background-color: lightgray;
+        /* color: white; */
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    
+    .r:hover {
+        background-color: gray;
     }
 
 }
 
 
+.thumbnail-preview{
+    /* border: 1px solid red; */
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+
+    width: 300px;
+    
+    >span{
+        /* border: 1px solid blue; */
+        width: 80px;
+        height: 20px;
+        font-size: 10px;
+    }
+    
+    >img{
+        width:200px;
+        height: auto;
+    }
+}

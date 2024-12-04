@@ -17,7 +17,12 @@ function NewsList({onNavigate}){
             </div>
 
             <div className='news'>
-                <div onClick={()=>onNavigate('EditNews')}>news</div>
+                <div className='list'>
+                    <div onClick={()=>onNavigate('EditNews')}> news </div>
+                    <div onClick={()=>onNavigate('EditNews')}> news </div>
+                    <div onClick={()=>onNavigate('EditNews')}> news </div>
+                    <div onClick={()=>onNavigate('EditNews')}> news </div>
+                </div>
             </div>
         </div>
     );
