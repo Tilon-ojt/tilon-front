@@ -21,8 +21,9 @@ function PrInsight() {
         <div className="cardsContainer">
           <ul className="cardList">
             <li className="cardItem">
+              <a href="https://tilon.com/inside/board?seq=1773&type=article" className='card_link'>
               <img
-                src="pr_1.jpg"
+                src="https://tilon.com/downloads/2008876d-17a2-46fb-adaa-324e929767f7.jpg"
                 alt="틸론, ‘디스테이션X’로 소버린 클라우드 시대 연다"
               />
               <p className="card_text">틸론, ‘디스테이션X’로 소버린 클라우드 시대 연다…고도화된 보안과 유연성 강화</p>
@@ -30,28 +31,33 @@ function PrInsight() {
                 <span>#틸론</span>
                 <span>#Sovereign</span>
               </span>
+              </a>
+              
             </li>
             <li className="cardItem">
+              <a href="https://tilon.com/inside/board?seq=1772&type=article" className='card_link'>
               <img
-                src="pr_2.jpg"
-                alt="틸론, 소버린 클라우드 환경을 위한 차세대 VDI 솔루션 '디스테이션X' 공개"
-              />
+                src="https://tilon.com/downloads/03afc518-bd75-41fd-9ed4-c66504c01df8.jpg"
+                alt="틸론, 소버린 클라우드 환경을 위한 차세대 VDI 솔루션 '디스테이션X' 공개"/>
               <p className="card_text">틸론, 소버린 클라우드 환경을 위한 차세대 VDI 솔루션 '디스테이션X' 공개</p>
               <span className="card_tag">
                 <span>#DstationX</span>
                 <span>#Estation</span>
               </span>
+              </a>
+              
             </li>
             <li className="cardItem">
+              <a href="https://tilon.com/inside/board?seq=1771&type=article" className='card_link'>
               <img
-                src="pr_3.jpg"
-                alt="틸론, 2024 이브릿지학회 (사)추계학술대회서 행정안전부 장관상 수상"
-              />
+                src="https://tilon.com/downloads/92a61f32-1d52-4747-b1c7-d7bb88013cc4.jpg"
+                alt="틸론, 2024 이브릿지학회 (사)추계학술대회서 행정안전부 장관상 수상"/>
               <p className="card_text">틸론, 2024 이브릿지학회 (사)추계학술대회서 행정안전부 장관상 수상</p>
               <span className="card_tag">
                 <span>#DstationX</span>
                 <span>#Estation</span>
               </span>
+              </a>
             </li>
           </ul>
         </div>
@@ -71,9 +77,10 @@ function PrInsight() {
             />
           </a>
         </div>
-        <div className="cardContainer">
+        <div className="cardsContainer">
           <ul className="cardList">
             <li className="cardItem">
+              <a href="https://tilon.com/inside/board?seq=273&type=insight" className='card_link'>
               <img
                 src="https://tilon.com/downloads/6134f14e-9a13-420c-8ac5-9a1b3dc2a4bd.jpg"
                 alt="제주의 디지털 혁신 이끌고 지속 가능한 미래 만드는 데 일조할 것"
@@ -83,8 +90,11 @@ function PrInsight() {
                 <span>#넷제로IDC</span>
                 <span>#틸론</span>
               </span>
+              </a>
+              
             </li>
             <li className="cardItem">
+              <a href="https://tilon.com/inside/board?seq=272&type=insight" className='card_link'>
               <img
                 src="https://tilon.com/downloads/8d339863-bcbe-44fb-a530-3b75387d6c90.jpg"
                 alt="탈VM웨어로 VDI·DaaS 시장 격변"
@@ -94,8 +104,12 @@ function PrInsight() {
                 <span>#VDI</span>
                 <span>#Daas</span>
               </span>
+              </a>
+              
             </li>
             <li className="cardItem">
+              <a href="https://tilon.com/inside/board?seq=271&type=insight" className='card_link'>
+              </a>
               <img
                 src="https://tilon.com/downloads/af29deae-116c-4b0e-8087-9d4260c987d2.jpg"
                 alt="최백준 틸론 대표 “VDI는 디지털 역량 강화의 핵심” [K-SaaS 리더스]"
