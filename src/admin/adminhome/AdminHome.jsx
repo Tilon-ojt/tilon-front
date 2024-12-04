@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { LogOut } from 'lucide-react';
 import '../adminhome/AdminHome.css';
 
 import NewsList from '../components/news/NewsList.jsx';
 import EditNews from '../components/news/EditNews.jsx';
+import EditProfile from '../components/EditProfile.jsx';
 
 function AdminHome() {
     const [adminComp, setAdminComp] = useState('Profile');
@@ -10,9 +12,11 @@ function AdminHome() {
     const renderComponent = () => {
         switch (adminComp) {
             case 'News':
-                return <NewsList onNavigate={(c)=>setAdminComp(c)}/>;
+                return <NewsList onNavigate={(c) => setAdminComp(c)} />;
             case 'EditNews':
-                return <EditNews/>
+                return <EditNews />
+            case 'My':
+                return <EditProfile />
             default:
                 return <div>반갑습니다!</div>;
         }
@@ -27,21 +31,21 @@ function AdminHome() {
                 />
                 <div>
                     <span>~님 안녕하세요!</span>
-                    <img alt='logout'/>
+                    <LogOut size={40} className='logout-icon' />
                 </div>
             </nav>
 
             <div className='admin-home-space'>
                 <side>
                     <ul>
-                        <li>내 정보 수정</li>
-                        <hr/>
+                        <li onClick={() => setAdminComp('My')}>내 정보 수정</li>
+                        <hr />
                         <li onClick={() => setAdminComp('News')}>News</li>
-                        <hr/>
+                        <hr />
                         <li>PR</li>
-                        <hr/>
+                        <hr />
                         <li>INSIGHT</li>
-                        <hr/>
+                        <hr />
                     </ul>
                 </side>
 
