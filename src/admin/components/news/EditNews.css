@@ -8,24 +8,14 @@
     justify-content: flex-start;
     align-items: center;
 
-    >nav{
-        border-bottom: 1px solid black;
-        width: 80%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    >nav>span{
-        margin: 20px 0 10px 0;
-        font-size: 18px;
-        font-weight: bold;
+    >h2{
+        margin-top: 40px;
     }
 }
 
 .edit-news >div{
     /* border: 1px solid red; */
-    width: 80%;
+    width: 50%;
     height: 100%;
     margin-top: 20px;
     margin-bottom: 20px;
@@ -36,37 +26,45 @@
     gap: 20px;
 }
 
-.edit-news-title{
-    border: 1px solid green;
-    width: 100%;
-    height: 5%;
-}
 
-.edit-news-img{
-    border: 1px solid green;
+.edit-news >div >div{
+    /* border: 1px solid green; */
     width: 100%;
-    height: 5%;
-}
-
-.edit-news-txtarea{
-    border: 1px solid green;
-    width: 100%;
-    height: 70%;
+    height: 30px;
 
     display: flex;
     flex-direction: row;
 
+
     >div{
-        width:auto;
-        border: 1px solid yellow;
-        font-size: 13px;
+        width:100px;
+        height: 100%;
+        /* border: 2px solid red; */
+
+        /* background-color: lightblue; */
+        font-size: 14px;
+
+        display: inherit;
+        justify-content: flex-start;
+        align-items: center;
+
+    }
+}
+
+.edit-news >div >div >.input{
+    border: 1px solid orange;
+    height: 100%;
+    width: 100%;
+
+    >input{
+        width: 100%;
+        height: 100%;
     }
 }
 
 .edit-news-btn{
-    border: 1px solid green;
     width: 100%;
-    height: 5%;
+    height: 3%;
 
     display: flex;
     flex-direction: row;
@@ -76,7 +74,14 @@
     gap: 10px;
 
     >button{
-        border: 1px solid black;
+        border: 1px solid lightgrey;
+        width: 70px;
+        height: 30px;
+        /* border-radius: 5px; */
     }
 }
 
+.u{
+    background-color: red;
+    color: white;
+}

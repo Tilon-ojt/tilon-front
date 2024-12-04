@@ -12,6 +12,10 @@ function NewsList({onNavigate}){
                 </div>
             </nav>
 
+            <div>
+                <button onClick={()=>onNavigate('CreateNews')}>추가</button>
+            </div>
+
             <div className='news'>
                 <div onClick={()=>onNavigate('EditNews')}>news</div>
             </div>

@@ -3,6 +3,8 @@ import '../adminhome/AdminHome.css';
 
 import NewsList from '../components/news/NewsList.jsx';
 import EditNews from '../components/news/EditNews.jsx';
+import CreateNews from '../components/news/CreateNews.jsx';
+
 
 function AdminHome() {
     const [adminComp, setAdminComp] = useState('Profile');
@@ -12,7 +14,9 @@ function AdminHome() {
             case 'News':
                 return <NewsList onNavigate={(c)=>setAdminComp(c)}/>;
             case 'EditNews':
-                return <EditNews/>
+                return <EditNews/>            
+            case 'CreateNews':
+                return <CreateNews/>
             default:
                 return <div>반갑습니다!</div>;
         }

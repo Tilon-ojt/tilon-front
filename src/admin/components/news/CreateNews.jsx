@@ -1,15 +1,17 @@
 import '../news/EditNews.css';
 
-function EditNews(){
+function CreateNews(){
     return(
         <div className="edit-news">
-            <h2>뉴스 수정</h2>
+            <h2>뉴스 추가</h2>
 
             <div>
                 {/* 수정 가능한 내용 */}
                 <div> 
                     <div>제목:</div>
-                    <div className='input'></div>
+                    <div className='input'>
+                        <input placeholder='제목을 입력하세요'></input>
+                    </div>
                 </div>
                 <div>
                     <div>썸네일:</div>
@@ -31,4 +33,4 @@ function EditNews(){
     );
 }
 
-export default EditNews;
+export default CreateNews;
