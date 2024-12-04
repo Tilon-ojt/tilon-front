@@ -1,5 +1,6 @@
 .totalSection {
   width: 100%;
+  height: 100vh; /* 화면의 전체 높이를 사용하도록 설정 */
   overflow-x: hidden;
   padding: 10vw 5vw;
   box-sizing: border-box;
@@ -21,8 +22,9 @@
   padding: 0 0 2rem;
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   align-items: flex-start;
-  gap: 1vw;
+  gap: 2vw; /* 수평 간격 조정 */
   width: 100%;
 }
 
@@ -32,46 +34,16 @@
   justify-content: space-between;
   align-items: flex-start;
   padding: 0;
-  margin-left: 10vw;
   width: 45%;
 }
 
-.subtitle {
-  font-size: 0.9vw;
-  color: white;
-  display: block;
-  font-family: "Pretendard", sans-serif;
-  margin: 0px 0px 3vh;
-  letter-spacing: -0.1em;
-}
-
-.Prlink {
-  display: flex;
-  align-items: center;
-  font-family: "Pretendard", sans-serif;
-  color: white;
-  font-size: 0.8vw;
-  text-decoration: none;
-  padding: 0.8vw 1.5vw;
-  border: 1px solid #fff;
-  border-radius: 40px;
-  box-sizing: border-box;
-  font-weight: 500;
-  transition: all 0.3s ease;
-}
-
-.arrow {
-  display: block;
-  width: 1vw;
-  height: 1vh;
-  margin: 0.5vh 0 0 1vh;
-}
-
 .cardsContainer {
-  justify-content: center;
-  margin: 0 auto;
-  flex-wrap: wrap;
-  width: 100%;
+  display: flex; /* 수평 정렬을 위해 추가 */
+  justify-content: space-between; /* 카드들 간의 간격을 일정하게 유지 */
+  gap: 1.5vw; /* 카드들 간의 간격을 설정 */
+  width: 50%;
+  flex-wrap: nowrap; /* 카드들이 세로로 쌓이지 않도록 설정 */
+  overflow: hidden; /* 내부 카드들 overflow 처리 */
 }
 
 .cardList {
@@ -80,7 +52,7 @@
   display: flex;
   gap: 2vw;
   justify-content: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap; /* 수직 정렬을 방지 */
   width: 100%;
 }
 
@@ -92,6 +64,7 @@
   text-align: center;
   min-width: 200px;
   margin-bottom: 2rem;
+  box-sizing: border-box; /* 카드 크기가 정확히 맞도록 설정 */
 }
 
 .cardItem img {
@@ -175,6 +148,7 @@
     flex-direction: column !important;
     align-items: center;
     padding: 5vw;
+    height: auto; /* 작은 화면에서는 높이를 자동으로 설정 */
   }
 
   .firstSection .cardList li:nth-child(1),
