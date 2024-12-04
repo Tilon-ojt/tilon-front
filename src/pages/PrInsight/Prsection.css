@@ -7,213 +7,206 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  
 }
 
-.headtitle{
-    font-size: 3vw;
-    text-align: right;
-    color:white;
-    font-family: "Pretendard", sans-serif;
-    margin: 0px 0px 1vh;
-    line-height: 1.2;
+.headtitle {
+  font-size: 3vw;
+  text-align: right;
+  color: white;
+  font-family: "Pretendard", sans-serif;
+  margin: 0px 0px 1vh;
+  line-height: 1.2;
 }
 
 .firstSection, .secondSection {
-    padding: 0 0 2rem;
-    display: flex; /*가로 방향 배치*/
-    font-family: "Pretendard", sans-serif;
-    align-items: flex-start;
-    gap: 1vw;
-    box-sizing: border-box;
-    width: 100%;
-  }
-
-
-  .titlesection{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 0;
-    margin-left: 10vw;
-  }
-  
-  .subtitle {
-    font-size: 0.9vw;
-    color: white;
-    display: block;
-    font-family: "Pretendard", sans-serif;
-    margin: 0px 0px 3vh;
-    letter-spacing: -0.1em; /*텍스트간 공백 줄이기*/
-  }
-  
-  .Prlink {
-    display: flex;
-    align-items: center;
-    font-family: "Pretendard", sans-serif;
-    color: white;
-    font-size: 0.8vw;
-    text-decoration: none;
-    padding: 0.8vw 1.5vw;
-    border: 1px solid #fff;
-    border-radius: 40px;
-    box-sizing: border-box;
-    font-weight: 500;
-    transition: all 0.3s ease;
-  }
-
-  .arrow {
-    display: block;
-    width: 1vw;
-    height: 1vh;
-    margin: 0.5vh 0 0 1vh;
-  }
-  
-  .cardsContainer{
-    justify-content: center;
-    margin: 0 auto;
-    flex-wrap: wrap;
-  }
-  
-  
-  .cardList {
-    padding: 0;
-    margin: 0;
-    display: flex;
-    gap: 2vw; /* 각 카드 간 간격 */
-    justify-content: center;
-    
-  }
-  
-  .cardItem {
-    width: 15vw;
-    height: 30vh;
-    background-color: #fff;
-    border-radius: 10px;
-    text-align: center;
-    min-width: 200px;
-    
-  }
-  
-  .cardItem img {
-    width: 100%;
-    aspect-ratio: 16/9; /* 이미지 비율 고정 */
-    object-fit: cover; /* 크기 조정 시 비율 유지 */
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-  }
-  
-  .card_text {
-    padding: 0.5rem;
-    font-size: 0.9em;
-    line-height: 1.4;
-    text-align: left;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    text-overflow: ellipsis;
-    max-height: calc(1.4em * 2); /* 두 줄 높이 고정 */
-    letter-spacing: -0.05em;
-  }
-  
-
-  .card_link {
-    text-decoration: none; /* 밑줄 제거 */
-  }
-
-  .card_link {
-    color: inherit; /* 방문한 링크도 색상 변경되지 않도록 */
-  }
-
-  
-  .card_tag {
-    display: flex;
-    justify-content: left;
-    padding-left: 1.2vw;
-    color: #7b7b7b;
-    margin-top: -1.5vh;
-    gap: 1.3vw;
-    width: 100%;
-    align-self: flex-start; /* 첫 번째 태그가 상단에 맞춰지도록 설정 */
-  }
-  
-  .card_tag span {
-    border: 1px solid #7b7b7b;   
-    padding: 0.1vw 0.4vw;            
-    border-radius: 20px;          
-    font-size: 0.8vw;              
-    color: #fff;               
-    display: inline-block;        /* 인라인 블록 요소로 표시 */
-    background-color:#404040;
+  padding: 0 0 2rem;
+  display: flex;
+  flex-direction: column; /* 기본적으로 세로로 배치 */
+  align-items: flex-start;
+  gap: 1vw;
+  width: 100%;
 }
-  
+
+.titlesection {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0;
+  margin-left: 10vw;
+}
+
+.subtitle {
+  font-size: 0.9vw;
+  color: white;
+  display: block;
+  font-family: "Pretendard", sans-serif;
+  margin: 0px 0px 3vh;
+  letter-spacing: -0.1em;
+}
+
+.Prlink {
+  display: flex;
+  align-items: center;
+  font-family: "Pretendard", sans-serif;
+  color: white;
+  font-size: 0.8vw;
+  text-decoration: none;
+  padding: 0.8vw 1.5vw;
+  border: 1px solid #fff;
+  border-radius: 40px;
+  box-sizing: border-box;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.arrow {
+  display: block;
+  width: 1vw;
+  height: 1vh;
+  margin: 0.5vh 0 0 1vh;
+}
+
+.cardsContainer {
+  justify-content: center;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.cardList {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 2vw;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.cardItem {
+  width: 15vw;
+  height: 30vh;
+  background-color: #fff;
+  border-radius: 10px;
+  text-align: center;
+  min-width: 200px;
+  margin-bottom: 2rem;
+}
+
+.cardItem img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.card_text {
+  padding: 0.5rem;
+  font-size: 0.9em;
+  line-height: 1.4;
+  text-align: left;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  text-overflow: ellipsis;
+  max-height: calc(1.4em * 2);
+  letter-spacing: -0.05em;
+}
+
+.card_link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.card_tag {
+  display: flex;
+  justify-content: left;
+  padding-left: 1.2vw;
+  color: #7b7b7b;
+  margin-top: -1.5vh;
+  gap: 1.3vw;
+  width: 100%;
+  align-self: flex-start;
+}
+
+.card_tag span {
+  border: 1px solid #7b7b7b;
+  padding: 0.1vw 0.4vw;
+  border-radius: 20px;
+  font-size: 0.8vw;
+  color: #fff;
+  display: inline-block;
+  background-color: #404040;
+}
 
 @media only screen and (max-width: 1024px) {
-
   .Prlink {
-    font-size: 0.6rem; /* 텍스트 크기 줄이기 */
-    padding: 0.6rem; /* 내부 패딩 줄이기 */
+    font-size: 0.6rem;
+    padding: 0.6rem;
     white-space: nowrap;
   }
 
   .cardList {
     display: flex;
     padding-left: 1vw;
-    gap: 1.5rem; /* 카드 간 간격 조정 */
+    gap: 1.5rem;
   }
 
   .cardItem {
-    width: 45vw; /* 반응형 크기 조정 */
+    width: 45vw;
     height: auto;
   }
 
-  .card_text{
+  .card_text {
     font-size: 0.8rem;
   }
 
   .firstSection .cardList li:nth-child(n+3),
   .secondSection .cardList li:nth-child(n+3) {
-    display: none; /* 세 번째 카드부터는 숨기기 */
+    display: none;
   }
 }
 
 @media only screen and (max-width: 768px) {
   .totalSection {
-    flex-direction: column !important; /* 수직 배열로 변경 */
+    flex-direction: column !important;
     align-items: center;
     padding: 5vw;
   }
-  /* 각 article의 첫 번째 카드 항목만 보이도록 설정 */
+
   .firstSection .cardList li:nth-child(1),
   .secondSection .cardList li:nth-child(1) {
-  display: block !important; /* 첫 번째 카드 항목만 보이도록 설정 */
-}
+    display: block !important;
+  }
 
   .firstSection, .secondSection {
-    width: 100% !important; 
+    width: 100% !important;
     padding: 0 0 2rem !important;
-    flex-direction: column !important; /* 섹션 내 요소들도 수직 배열로 변경 */
-    align-items: stretch !important; /* 모든 요소들이 섹션의 너비에 맞게 늘어남 */
-    gap: 2rem !important; 
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 2rem !important;
   }
+
   .titlesection {
-    margin-left: 1vw !important; /* 수직 배열에서는 좌측 여백 제거 */
-    margin-bottom: 20px !important; /* 타이틀 섹션과 다른 요소들 사이에 여백 추가 */
-    display: flex !important; /* 플렉스를 사용해 수평 배열로 변경 */
-    flex-direction: column !important; /* 수직으로 배열 */
-    align-items: flex-start !important; /* 텍스트 왼쪽 정렬 */
+    margin-left: 1vw !important;
+    margin-bottom: 20px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
   }
 
   .subtitle, .Prlink {
-    text-align: inline-block !important; /* 수평 정렬 */
+    text-align: inline-block !important;
   }
-  
+
   .subtitle {
     font-size: 1rem;
     margin-bottom: 0px !important;
   }
+
   .Prlink {
     font-size: 0.6rem !important;
     padding: 0.5rem 1.2rem !important;
@@ -226,14 +219,14 @@
 
   .cardList {
     display: grid;
-    grid-template-columns: 1fr; /* 한 줄에 하나의 카드만 표시 */
-    flex-direction: column; /* 카드 리스트를 수직 배열로 변경 */
-    gap: 1rem; /* 카드 간 간격을 수직으로 설정 */
-    width: 100%; /* 카드 리스트가 부모 요소의 너비를 채우도록 설정 */
+    grid-template-columns: 1fr;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
   }
 
   .cardItem {
-    width: 98% ; /* 각 카드가 수직 배열에서 전체 너비를 차지하도록 설정 */
+    width: 98%;
     height: 85%;
   }
 
@@ -241,30 +234,28 @@
     width: 100%;
     height: 70%;
   }
+
   .card_text {
     font-size: 2.3vw;
     text-align: left;
   }
-  
-  .card_tag span{
+
+  .card_tag span {
     gap: 4vw;
     margin-bottom: 1.2vh;
-    padding: 0.6vw 0.8vw;   
-    font-size: 1.2vw;   
+    padding: 0.6vw 0.8vw;
+    font-size: 1.2vw;
   }
 
   .titlesection h2 {
-    font-size: 7vw !important; /* 제목 크기 유지 */
+    font-size: 7vw !important;
   }
 
-.cardsContainer {
-  overflow: hidden; /* 넘치는 내용 숨기기 */
-}
+  .cardsContainer {
+    overflow: hidden;
+  }
 
-.cardList li {
-  display: none; /* 기본적으로 모든 카드 항목을 숨김 */
-}
-
-
-
+  .cardList li {
+    display: none;
+  }
 }
