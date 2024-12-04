@@ -1,10 +1,22 @@
 import { Menu, X } from 'lucide-react';
 import "./Header.css"
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { CLOSE_MENU, OPEN_MENU } from '../../../reducer/HeaderBar';
+
 
 function Header() {
 
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const isShow = useSelector((state) => state.headerbar.isShow);
+
+    const dispatch = useDispatch();
+    const closeShow = () => {
+        dispatch({ type: CLOSE_MENU });
+    };
+
+    const openShow = () => {
+        dispatch({ type: OPEN_MENU });
+    };
+
 
     return (
         <div>
@@ -14,7 +26,7 @@ function Header() {
                     <img src="https://www.tilon.com/dist/pc_logo.png?a30e64d3cafa9a2c5cbf7b217ccc9aba" alt="Tilon Logo" className="tilon-logo" />
                 </div>
                 <button
-                    onClick={() => setIsMenuOpen(true)}
+                    onClick={openShow}
                     className="menu-icon-button"
                 >
                     <Menu className='menu-icon' />
@@ -22,9 +34,9 @@ function Header() {
             </header>
 
             {/* 사이드 네비게이션 메뉴 */}
-            <div className={`sidebar ${isMenuOpen ? 'open' : ''}`}>
+            <div className={`sidebar ${isShow ? 'open' : ''}`}>
                 <button
-                    onClick={() => setIsMenuOpen(false)}
+                    onClick={closeShow}
                     className="close-btn"
                 >
                     <X className='close-icon' />
@@ -34,7 +46,7 @@ function Header() {
                         <p className='nav-title'>Company</p>
                         <ul>
                             <li>
-                                <a href="#">
+                                <a href="https://www.tilon.com/company/info">
                                     <p>회사소개</p>
                                 </a>
                             </li>
