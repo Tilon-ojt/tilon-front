@@ -1,31 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../api/axios';
+import api from '../../../api/axios';
 import "./Loginpage.css";
 
 function Loginpage() {
 
-    
-    const [userID, setUserID] = useState("");
-    const [userPW, setUserPW] = useState("");
+
+    const [empno, setUserID] = useState("");
+    const [password, setUserPW] = useState("");
     const navigate = useNavigate();
 
     //로그인 버튼 눌렀을 때
     const handleLogin = async () => {
-        console.log(`입력된 ID : ${userID} PW : ${userPW}`);
-        
+
+        console.log(`empno: ${empno}, password: ${password}`);
+
+
         try {
-            const response = await api.post("tlion/login/admin", {
-                userID,
-                userPW,
+            const response = await api.post("user/login", {
+                empno,
+                password,
             });
-            // console.log("로그인 성공:", response.data);
+            console.log("로그인 성공:", response.data);
+            console.log("로그인 아이디:", response.data.adminId);
+            console.log("로그인 토큰:", response.data.token);
 
             // JWT 저장
-            const { jwt } = response.data;
-            localStorage.setItem("jwt", jwt);
+            const { token } = response.data;
+            localStorage.setItem("jwt", token);
+            console.log("저장된 JWT:", localStorage.getItem("jwt"));
 
-            navigate("/home"); // 메인 페이지로 이동
+
+            if (response.data.adminId = 4) {
+                navigate("/admin/page"); // 슈퍼계정 페이지로 이동
+            } else {
+                navigate("/home/admin"); // 메인 페이지로 이동
+            }
+
         } catch (error) {
             console.error("로그인 실패:", error);
 

@@ -1,14 +1,42 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { LogOut } from 'lucide-react';
-import '../adminhome/AdminHome.css';
+import './AdminHome.css';
 
-import NewsList from '../components/news/NewsList.jsx';
-import EditNews from '../components/news/EditNews.jsx';
-import EditProfile from '../components/EditProfile.jsx';
-import CreateNews from '../components/news/CreateNews.jsx';
+import NewsList from '../news/NewsList.jsx';
+import EditNews from '../news/EditNews.jsx';
+import EditProfile from '../MyInfo/EditProfile.jsx';
+import CreateNews from '../news/CreateNews.jsx';
+import Insight from '../Insight/Insight.jsx';
 
 
 function AdminHome() {
+
+    // useEffect(() => {
+    //     // 로컬 스토리지에서 JWT 가져오기
+    //     const jwt = localStorage.getItem("jwt");
+    
+    //     if (!jwt) {
+    //       console.error("JWT가 존재하지 않습니다. 다시 로그인해주세요.");
+    //       return;
+    //     }
+    
+    //     // // JWT를 사용해 서버에서 사용자 데이터 가져오기
+    //     // const fetchUserData = async () => {
+    //     //   try {
+    //     //     const response = await api.get("/user/data", {
+    //     //       headers: {
+    //     //         Authorization: `Bearer ${jwt}`, // Authorization 헤더에 JWT 추가
+    //     //       },
+    //     //     });
+    //     //     setUserData(response.data); // 사용자 데이터 상태에 저장
+    //     //   } catch (error) {
+    //     //     console.error("사용자 데이터를 가져오는데 실패했습니다:", error);
+    //     //   }
+    //     // };
+    
+    //     // fetchUserData();
+    //   }, []);
+
     const [adminComp, setAdminComp] = useState('Profile');
 
     const renderComponent = () => {
@@ -16,11 +44,13 @@ function AdminHome() {
             case 'News':
                 return <NewsList onNavigate={(c) => setAdminComp(c)} />;
             case 'EditNews':
-                return <EditNews/>            
+                return <EditNews />
             case 'CreateNews':
-                return <CreateNews/>
+                return <CreateNews />
             case 'My':
                 return <EditProfile />
+            case 'INSIGHT':
+                return <Insight />
             default:
                 return <div>반갑습니다!</div>;
         }
@@ -48,7 +78,7 @@ function AdminHome() {
                         <hr />
                         <li>PR</li>
                         <hr />
-                        <li>INSIGHT</li>
+                        <li onClick={() => setAdminComp('INSIGHT')}>INSIGHT</li>
                         <hr />
                     </ul>
                 </side>

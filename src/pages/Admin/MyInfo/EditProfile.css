@@ -1,18 +1,9 @@
 .edit-prof {
-    width: 90%;
-    height: 90%;
-    margin: 0 auto;
-    margin-top: 45px;
-    border: 1px solid #ccc;
     border-radius: 8px;
-    background-color: #f9f9f9;
-    display: flex;
-    flex-direction: column;
 
     h2 {
         color: #537eaf;
         padding: 10px;
-        padding-top: 40px;
         padding-left: 30px;
     
     }

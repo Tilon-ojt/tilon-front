@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Header from './Header';
-import Banner from './Banner';
+import Header from './Header/Header';
+import Banner from './Banner/Banner';
 import './TilonHomepage.css';
 import Footer from './Footer/Footer';
 import News from './News/News';

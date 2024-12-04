@@ -96,8 +96,8 @@ function AdminInfoBox({ adminInfo }) {
                                     onChange={() => handleCheckboxChange(info.id)}
                                 />
                             </td>
-                            <td>{info.name}</td>
-                            <td>{info.employeeId}</td>
+                            <td>{info.adminName}</td>
+                            <td>{info.empno}</td>
                             <td>{info.email}</td>
                         </tr>
                     ))}
