@@ -100,6 +100,8 @@ const TilonHomepage = () => {
       />
       <Banner />
       <Header />
+      <Header />
+      <Header />
 
       <div className="section">
         <News />
