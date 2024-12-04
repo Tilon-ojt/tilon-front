@@ -21,7 +21,7 @@
 .firstSection, .secondSection {
   padding: 0 0 2rem;
   display: flex;
-  flex-direction: column; /* 기본적으로 세로로 배치 */
+  flex-direction: row;
   align-items: flex-start;
   gap: 1vw;
   width: 100%;
@@ -34,6 +34,7 @@
   align-items: flex-start;
   padding: 0;
   margin-left: 10vw;
+  width: 45%;
 }
 
 .subtitle {
