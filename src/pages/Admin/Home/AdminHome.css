@@ -82,6 +82,10 @@
 
 .admin-component{
     /* border: 1px solid red; */
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
     height: inherit;
     width: 100%;
       

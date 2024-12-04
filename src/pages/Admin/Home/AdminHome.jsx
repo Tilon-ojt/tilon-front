@@ -44,9 +44,9 @@ function AdminHome() {
             case 'News':
                 return <NewsList onNavigate={(c) => setAdminComp(c)} />;
             case 'EditNews':
-                return <EditNews />
+                return <EditNews onNavigate={(c) => setAdminComp(c)}/>            
             case 'CreateNews':
-                return <CreateNews />
+                return <CreateNews onNavigate={(c) => setAdminComp(c)}/>
             case 'My':
                 return <EditProfile />
             case 'INSIGHT':
