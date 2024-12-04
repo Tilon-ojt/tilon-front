@@ -5,8 +5,6 @@ import PrInsight from './pages/PrInsight/PrInsight';
 
 
 import AdminHome from './admin/adminhome/AdminHome.jsx';
-import EditProfile from './admin/components/EditProfile.jsx';
-import EditPr from './admin/components/EditPr.jsx';
 import Adminpage from './pages/Adminpage';
 import { Provider } from 'react-redux';
 import store from './store';
@@ -21,9 +19,7 @@ function App() {
           <Route path="/prsection" element={<PrInsight />}></Route>
           <Route path="/admin/page" element={<Adminpage />}></Route>
           <Route path="/home/admin" element={<AdminHome />}></Route>
-          <Route path="/edit-profile/admin" element={<EditProfile />}></Route>
-          <Route path="/edit-pr/admin" element={<EditPr/>}></Route>
-          </Routes>
+        </Routes>
       </Provider>
     </BrowserRouter>
   );

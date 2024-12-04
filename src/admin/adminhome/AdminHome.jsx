@@ -1,45 +1,62 @@
+import React, { useState } from 'react';
+import { LogOut } from 'lucide-react';
 import '../adminhome/AdminHome.css';
 
-function AdminHome(){
-    return(
+import NewsList from '../components/news/NewsList.jsx';
+import EditNews from '../components/news/EditNews.jsx';
+import EditProfile from '../components/EditProfile.jsx';
+import CreateNews from '../components/news/CreateNews.jsx';
+
+
+function AdminHome() {
+    const [adminComp, setAdminComp] = useState('Profile');
+
+    const renderComponent = () => {
+        switch (adminComp) {
+            case 'News':
+                return <NewsList onNavigate={(c) => setAdminComp(c)} />;
+            case 'EditNews':
+                return <EditNews/>            
+            case 'CreateNews':
+                return <CreateNews/>
+            case 'My':
+                return <EditProfile />
+            default:
+                return <div>반갑습니다!</div>;
+        }
+    };
+
+    return (
         <div className='admin-home'>
-            <div className='admin-nav'>
-                <div className='nav-logo'>
-                    <img
-                        alt='tilon-logo'
-                        src='https://www.tilon.com/dist/pc_logo.png?a30e64d3cafa9a2c5cbf7b217ccc9aba'
-                    />
+            <nav>
+                <img
+                    alt='logo'
+                    src='https://www.tilon.com/dist/pc_logo.png?a30e64d3cafa9a2c5cbf7b217ccc9aba'
+                />
+                <div>
+                    <span>~님 안녕하세요!</span>
+                    <LogOut size={40} className='logout-icon' />
                 </div>
-                <div className='txt-icon'>
-                    <span>hi님 반갑습니다!</span>
-                    <div>
-                        <img
-                            alt='log-out'
-                        />
-                    </div>
-                </div>
-            </div>
+            </nav>
 
-            <div className='admin-page'>
-                <div className='admin-side'>
+            <div className='admin-home-space'>
+                <side>
                     <ul>
-                        <li> <a href='#'>내 정보 수정</a> </li>
-                        <hr/>
-                        <li> <a href='#'>뉴스</a> </li>
-                        <hr/>
-                        <li> <a href='#'>PR</a> </li>
-                        <hr/>
-                        <li> <a href='#'>INSIGHT</a> </li>
-                        <hr/>
+                        <li onClick={() => setAdminComp('My')}>내 정보 수정</li>
+                        <hr />
+                        <li onClick={() => setAdminComp('News')}>News</li>
+                        <hr />
+                        <li>PR</li>
+                        <hr />
+                        <li>INSIGHT</li>
+                        <hr />
                     </ul>
-                </div>
+                </side>
 
-                <div className='admin-screen'>
-                    <div></div>
+                <div className='admin-component'>
+                    {renderComponent()}
                 </div>
-
             </div>
-
         </div>
     );
 }

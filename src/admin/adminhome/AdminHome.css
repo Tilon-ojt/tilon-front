@@ -1,114 +1,88 @@
 .admin-home{
     /* border: 1px solid red; */
     height: 100vh;
-}
 
-.admin-nav{
-    
-    border-right: 2px solid rgb(60, 72, 77);
-    background-color: rgb(70, 103, 114);
-    height: 50px;
-    display: flex;
-    flex-direction: row;
-
-    justify-content: space-between;
-
-    .nav-logo{
-        /* border: 1px solid green; */
-        width: 110px;
-        height: 100%;
-        padding-left: 10px;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        > img{
-            width: 100px;
-            height: auto;
-        }
-    }
-
-    .txt-icon{
-        /* border: 1px solid green; */
-        width: 300px;
-        height: 100%;
-        padding-left: 10px;
-
+    >nav{
+        height: 50px;
+        background-color: black;
         display: flex;
         flex-direction: row;
-        justify-content: flex-end;
+        justify-content: space-between;
         align-items: center;
-        gap: 20px;
+    }
+
+    >nav >img{
+        color: white;
+        margin-left: 10px;
+        height: 20px;
+    }
+
+    >nav>div{
+        /* border: 1px solid red; */
+        width: 300px;
+        height: 30px;
+        margin-right: 10px;
+
+        display: inherit;
+        flex-direction: inherit;
+        justify-content: flex-end;
+        align-items: inherit;
+
+        gap: 15px;
 
         >span{
             color: white;
-            font-size: 17px;
         }
 
-        >div{
-            /* border: 1px solid green; */
-            width: 45px;
-            height: 45px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-right: 5px;
+        >img{
+            border: 1px solid white;
+            color: aliceblue;
+            font-size: 10px;
+            width: 30px;
+            height: inherit;
         }
     }
 
+    .logout-icon {
+        color: white;
+    }
 }
 
-.admin-page{
-    /* border-bottom: 3px solid lightblue; */
-    height: 95%;
+.admin-home > div{
+    /* border: 3px solid blue; */
+    height: calc(100vh - 50px);
 
     display: flex;
     flex-direction: row;
 
-    .admin-side{
-        /* border: 1px solid green; */
+    >side{
+        /* border: 3px solid blue; */
+        background-color: lightgray;
         width: 250px;
-        border-right: 1px solid rgb(70, 103, 114);
-        >ul{
-            padding-left: 0;
-            margin: 0;
-        }
-
-        >ul>hr{
-            opacity: 80%;
-        }
-
-        >ul > li{
-            /* border: 1px solid orange; */
-            height: 30px;
-            list-style: none;
-            margin: 10px;
-            
-        }
-
-        >ul>li>a{
-            text-decoration: none;
-            color: black;
-            font-size: 17px;
-        }
-    }
-
-    .admin-screen{
-        /* border: 1px solid green; */
-        width: 90%;
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: rgba(180, 198, 204, 0.473);
-
-        /* background-color: lightgray; */
-
-        >div{
-            width: 95%;
-            height: 90%;
-            background-color: white;
-        }
     }
 }
+
+.admin-home > div > side{
+    >ul{
+        margin: 0;
+        padding: 0;
+    }
+
+    >ul >li{
+        list-style: none;
+        text-decoration: none;
+        margin: 10px;
+        cursor: pointer;
+    }
+
+    >ul>hr{
+        opacity: 80%;
+    }
+}
+
+.admin-component{
+    /* border: 1px solid red; */
+    height: inherit;
+    width: 100%;
+}
+
