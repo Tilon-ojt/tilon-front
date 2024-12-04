@@ -42,11 +42,15 @@
             height: inherit;
         }
     }
+
+    .logout-icon {
+        color: white;
+    }
 }
 
 .admin-home > div{
     /* border: 3px solid blue; */
-    height: 100vh;
+    height: calc(100vh - 50px);
 
     display: flex;
     flex-direction: row;
@@ -81,3 +85,4 @@
     height: inherit;
     width: 100%;
 }
+
