@@ -1,5 +1,5 @@
-import React from "react";
-import "./Prsection.css";
+import React from 'react';
+import './Prsection.css';
 
 function PrInsight() {
   return (

@@ -5,7 +5,6 @@ import PrInsight from './pages/PrInsight/PrInsight';
 
 
 import AdminHome from './admin/adminhome/AdminHome.jsx';
-
 import Adminpage from './pages/Adminpage';
 import { Provider } from 'react-redux';
 import store from './store';
