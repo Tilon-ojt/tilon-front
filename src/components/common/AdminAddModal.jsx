@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { CLOSE_MODAL } from "../reducer/AdminModal";
+import { CLOSE_MODAL } from "../../reducer/AdminModal";
 import { useDispatch } from "react-redux";
 
 import "./AdminAddModal.css";
-import api from "../api/axios";
+import api from "../../api/axios";
 
 function AdminAddModal({}) {
     // 입력 데이터 상태 관리

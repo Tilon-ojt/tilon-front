@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { LogOut } from 'lucide-react';
-import AdminInfoBox from '../../../components/AdminInfoBox';
+import UserList from './UserList';
 import api from '../../../api/axios';
 
-import "./Adminpage.css";
+import "./UserListPage.css";
 
-function Adminpage() {
+function UserListPage() {
     // 더미 데이터 설정 (나중에 Axios로 대체 예정)
     const [adminInfo, setAdminInfo] = useState([
         // { id: 1, name: "홍길동", employeeId: "12345", email: "hong@tilon.com", department: "개발팀", position: "팀장" },
@@ -65,10 +65,10 @@ function Adminpage() {
             </header>
             <div className='admin-info'>
                 {/* AdminInfoBox에 adminInfo 배열 전달 */}
-                <AdminInfoBox adminInfo={adminInfo} />
+                <UserList adminInfo={adminInfo} />
             </div>
         </div>
     );
 }
 
-export default Adminpage;
+export default UserListPage;
