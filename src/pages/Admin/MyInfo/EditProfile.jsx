@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import api from '../../../api/axios';
+import styled from 'styled-components';
 import './EditProfile.css';
+import useAuth from '../../../hooks/useAuth';
 
 function EditProfile() {
-    const [email, setEmail] = useState("");  // 이메일 상태 관리
-    const [password, setPassword] = useState("");  // 변경 비밀번호 상태 관리
-    const [confirmPassword, setConfirmPassword] = useState("");  // 변경 비밀번호 확인 상태 관리
+
+    useAuth();  // 로그인 검증
+
+    const [password, setPassword] = useState(""); // 현재 비밀번호
+    const [newPassword, setNewPassword] = useState(""); // 변경 비밀번호
+    const [confirmNewPassword, setConfirmNewPassword] = useState(""); // 변경 비밀번호 확인
+
     const [userInfo, setUserInfo] = useState({
         name: "",   // 유저 이름
         employeeId: "",  // 사번
@@ -19,100 +26,105 @@ function EditProfile() {
             employeeId: "123456", // 예시 사번
             currentPassword: "9999", // 예시 현재 비밀번호
         };
-        
+
         setUserInfo(fetchedUserInfo);
-        setEmail(fetchedUserInfo.email || "");  // 이메일이 있을 경우 설정
+
     }, []);
 
-    // 이메일 입력 변경 핸들러
-    const emailHandler = (e) => {
-        setEmail(e.target.value);  // 입력 값으로 이메일 상태 업데이트
-    };
-
-    // 비밀번호 입력 변경 핸들러
-    const passwordHandler = (e) => {
-        setPassword(e.target.value);  // 입력 값으로 비밀번호 상태 업데이트
-    };
-
-    // 비밀번호 확인 입력 변경 핸들러
-    const confirmPasswordHandler = (e) => {
-        setConfirmPassword(e.target.value);  // 입력 값으로 비밀번호 확인 상태 업데이트
-    };
-
-    const handleSubmit = () => {
-        // 비밀번호가 일치하는지 확인
-        if (password !== confirmPassword) {
-            alert("비밀번호가 일치하지 않습니다.");
+    const handleSubmit = async () => {
+        // 새 비밀번호와 확인용 비밀번호가 일치하는지 확인
+        if (newPassword !== confirmNewPassword) {
+            alert("새 비밀번호가 일치하지 않습니다.");
             return;
         }
-    
-        // 이메일 형식 검증 (정규식 사용)
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        if (!emailRegex.test(email)) {
-            alert("이메일 형식이 올바르지 않습니다.");
-            return;
+
+        try {
+            // 현재 비밀번호 확인 요청
+            const verifyResponse = await api.post("/api/verify-password", {
+                currentPassword: password,
+            });
+
+            if (verifyResponse.status === 200) {
+                console.log("현재 비밀번호 인증 성공");
+            } else {
+                alert("현재 비밀번호가 올바르지 않습니다.");
+                return;
+            }
+
+            // 새 비밀번호 변경 요청
+            const updateResponse = await api.post("/api/change-password", {
+                newPassword: newPassword,
+            });
+
+            if (updateResponse.status === 200) {
+                alert("비밀번호가 성공적으로 변경되었습니다.");
+                setPassword(""); // 입력값 초기화
+                setNewPassword("");
+                setConfirmNewPassword("");
+            } else {
+                alert("비밀번호 변경에 실패했습니다.");
+            }
+        } catch (error) {
+            console.error("비밀번호 변경 오류:", error);
+            alert("오류가 발생했습니다. 다시 시도해주세요.");
         }
-    
-        // 이메일과 비밀번호 업데이트 로직 (예: API 호출 등)
-        alert(`이메일이 수정되었습니다: ${email}`);
-        // 실제로는 서버에 이메일과 비밀번호를 전송하는 로직 추가
     };
-    
 
     return (
-        <div className='edit-prof'>
-            <h2>내 정보 수정</h2>
-            <hr />
-            <div className='user-info'>
-                <div className='info-item'>
-                    <label>이름 </label>
-                    <label className='tally' />
-                    <span>{userInfo.name}</span>
+        <Container>
+            <div className='edit-prof'>
+                <h2>개인정보 수정</h2>
+                <div className='user-info'>
+                    <div className='info-item'>
+                        <label>이름 </label>
+                        <label className='tally' />
+                        <span>{userInfo.name}</span>
+                    </div>
+                    <div className='info-item'>
+                        <label>사번 </label>
+                        <label className='tally' />
+                        <span>{userInfo.employeeId}</span>
+                    </div>
+                    <div className="info-item">
+                        <label>현재 비밀번호</label>
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder="현재 비밀번호"
+                        />
+                    </div>
+                    <div className="info-item">
+                        <label>새 비밀번호</label>
+                        <input
+                            type="password"
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            placeholder="변경할 비밀번호"
+                        />
+                    </div>
+                    <div className="info-item">
+                        <label>새 비밀번호 확인</label>
+                        <input
+                            type="password"
+                            value={confirmNewPassword}
+                            onChange={(e) => setConfirmNewPassword(e.target.value)}
+                            placeholder="비밀번호 확인"
+                        />
+                    </div>
                 </div>
-                <div className='info-item'>
-                    <label>사번 </label>
-                    <label className='tally' />
-                    <span>{userInfo.employeeId}</span>
-                </div>
-                <div className='info-item'>
-                    <label>이메일 </label>
-                    <label className='tally' />
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={emailHandler}
-                        placeholder="이메일을 추가해주세요"
-                    />
-                </div>
-                <div className='info-item'>
-                    <label>현재 비밀번호 </label>
-                    <label className='tally' />
-                    <span>{userInfo.currentPassword}</span>
-                </div>
-                <div className='info-item'>
-                    <label>변경 비밀번호 </label>
-                    <label className='tally' />
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={passwordHandler}
-                        placeholder="변경할 비밀번호"
-                    />
-                </div>
-                <div className='info-item'>
-                    <label>변경 비밀번호 확인 </label>
-                    <label className='tally' />
-                    <input
-                        type="password"
-                        value={confirmPassword}
-                        onChange={confirmPasswordHandler}
-                        placeholder="비밀번호 확인"
-                    />
-                </div>
+                <button className='submit-btn' onClick={handleSubmit}>수정</button>
             </div>
-            <button className='submit-btn' onClick={handleSubmit}>수정</button>
-        </div>
+        </Container>
     );
 }
 
 export default EditProfile;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 62px);
+  margin-left:300px;
+  margin-top:62px;
+`;

@@ -16,13 +16,13 @@ function UserList({ adminInfo }) {
     const [currentPage, setCurrentPage] = useState(1);
     const [currentItems, setCurrentItems] = useState([]);
     const [selectedIds, setSelectedIds] = useState([]); // 선택된 체크박스 ID 관리
-    const itemsPerPage = 10;
+    const itemsPerPage = 14;
 
     useEffect(() => {
         // 현재 페이지에 해당하는 항목들 계산
-        const indexOfLastItem = currentPage * itemsPerPage; // 1 * 10 = 10 / 2 * 10 = 20
-        const indexOfFirstItem = indexOfLastItem - itemsPerPage; // 10 - 10 = 0 / 20 - 10 = 10
-        setCurrentItems(adminInfo.slice(indexOfFirstItem, indexOfLastItem)); // 0, 10 (0부터 10개) / 10, 20
+        const indexOfLastItem = currentPage * itemsPerPage; // 1 * 14 = 14 / 2 * 14 = 28
+        const indexOfFirstItem = indexOfLastItem - itemsPerPage; // 14 - 14 = 0 / 28 - 14 = 14
+        setCurrentItems(adminInfo.slice(indexOfFirstItem, indexOfLastItem)); // 0, 14 (0부터 10개) / 14, 28
     }, [currentPage, adminInfo]); // adminInfo도 의존성으로 추가
 
     // 체크박스 클릭 핸들러
@@ -81,24 +81,24 @@ function UserList({ adminInfo }) {
                     <tr>
                         <th></th>
                         <th>이름</th>
-                        <th>사번</th>
-                        <th>이메일</th>
+                        <th>아이디</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     {currentItems.map((info) => (
-                        <tr key={info.id}>
+                        <tr key={info.adminId}>
                             <td style={{ width: '20px' }}>
                                 <input
                                     type="checkbox"
                                     className="info-checkbox"
-                                    checked={selectedIds.includes(info.id)}
-                                    onChange={() => handleCheckboxChange(info.id)}
+                                    checked={selectedIds.includes(info.adminId)}
+                                    onChange={() => handleCheckboxChange(info.adminId)}
                                 />
                             </td>
-                            <td>{info.adminName}</td>
-                            <td>{info.empno}</td>
-                            <td>{info.email}</td>
+                            <td>{info.nickName}</td>
+                            <td>{info.empName}</td>
+                            <td>{info.updatedAt}</td>
                         </tr>
                     ))}
                 </tbody>

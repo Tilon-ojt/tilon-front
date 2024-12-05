@@ -1,14 +1,23 @@
-import styled from "styled-components";
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { jwtDecode } from 'jwt-decode';
+import Sidebar from '../../../components/common/Sidebar';
+import Navbar from '../../../components/common/Navbar';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import store from '../../../store';
+import useAuth from '../../../hooks/useAuth';
 
-import Sidebar from "../../../components/common/Sidebar";
-import Navbar from "../../../components/common/Navbar";
-
-// AdminLogin 컴포넌트
 function AdminMain() {
+
+  useAuth();  // 로그인 검증
+
+  const token = useSelector((state) => state.auth.token);
+  const decodedToken = jwtDecode(token);
+  console.log(`디코드된 jwt: ${JSON.stringify(decodedToken, null, 2)}`);
+  
   return (
     <Container>
-      <Sidebar/>
-      <Navbar/>
       <Title>AdminXXXX</Title>
     </Container>
   );
@@ -20,12 +29,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;  /* 화면을 꽉 채우도록 설정 */
-
-  margin-left:20%;
+  margin-left:300px;
   margin-top:62px;
-
-  background-color: #f4f4f4;
-
 `;
 
 const Title = styled.h1`

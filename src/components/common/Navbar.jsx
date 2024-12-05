@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import { jwtDecode } from 'jwt-decode';
+import React from 'react';
+import { useSelector } from 'react-redux';
+// import { useState } from 'react';
 import styled from 'styled-components';
 
 function Navbar() {
@@ -10,14 +13,23 @@ function Navbar() {
     // alert('로그아웃!')
   };
 
+  
+  const token = useSelector((state) => state.auth.token);
+  const decodedToken = jwtDecode(token);
+  console.log(`디코드된 jwt: ${JSON.stringify(decodedToken, null, 2)}`);
+
   return (
-    <Navbarontainer>
-        
-      {/* 로그아웃 이미지 아이콘 */}
-      <LogoutIcon onClick={handleLogout}>
-        <img src="path_to_your_logout_icon.png" alt="Logout" />
-      </LogoutIcon>
-    </Navbarontainer>
+    <Container>
+        <IdTxt>
+            <span> {decodedToken.empName}님 안녕하세요</span>
+            {/* <span> {Id}님 안녕하세요</span> */}
+        </IdTxt>
+        {/* 로그아웃 이미지 아이콘 */}
+        <LogoutIcon onClick={handleLogout}>
+            <img src="https://cdn1.iconfinder.com/data/icons/heroicons-ui/24/logout-512.png" alt="Logout" /> 
+            {/* 아이콘 그냥 임의로 넣어 둠 다음에 수정 */}
+        </LogoutIcon>
+    </Container>
   );
 }
 
@@ -25,73 +37,45 @@ function Navbar() {
 export default Navbar;
 
 // styled-components로 스타일 정의
-const Navbarontainer = styled.div`
+const Container = styled.div`
 
-  border-bottom: 2px solid gray;
+  border-bottom: 2px solid #f5f5f5;
   position: fixed; /* 위쪽에 고정 */
   top: 0;
-  left: 0;
+  left: 300px;
   width: 100%;  /* 사이드바 너비 */
   height: 62px; /* 전체 화면 높이 */
   background: white ;
-  margin-left:20%;
-  color: white;
-
-  ul {
-    list-style-type: none;
-    padding: 0;
+  span{
+    color: black;
   }
-
-  li {
-    }
-
-  a {
-    text-decoration: none;
-    color: #333;
-    font-size: 16px;
-    color:white;
-    &:hover {
-      color: #007bff;
-    }
   }
 `;
 
-// 로고 이미지
-const Logo = styled.image`
-  img{
-    height: 30px;
-    width: auto;
-    margin-left: 20px;
-  }
-`
 
-// 하위 메뉴 스타일
-const SubMenu = styled.ul`
-  list-style-type: none;
-  padding-left: 20px;  /* 하위 메뉴를 들여쓰기 */
-  margin-top: 10px;
-  background-color: #e9ecef;  /* 하위 메뉴 배경 색 */
-  
-  li {
-    margin-bottom: 10px;
+const IdTxt = styled.div`
 
+ border: 1px solid red;
+
+  position: fixed;
+  left: 70%;
+  cursor: pointer;
+
+  span {
+    color: blue;
   }
 
-  a {
-    color: #333;
-    font-size: 14px;
-    &:hover {
-      color: #007bff;
-    }
+  &:hover img {
+    opacity: 0.7;  /* 호버 시 아이콘 불투명도 감소 */
   }
 `;
-
 // 로그아웃 아이콘 스타일
 const LogoutIcon = styled.div`
-  position: absolute;
-  bottom: 40px;  /* 화면 아래쪽 40px 위치 */
+
+ border: 1px solid red;
+
+  position: fixed;
   left: 50%;
-  transform: translateX(50%);  /* 가운데 정렬 */
   cursor: pointer;
 
   img {
@@ -103,4 +87,3 @@ const LogoutIcon = styled.div`
     opacity: 0.7;  /* 호버 시 아이콘 불투명도 감소 */
   }
 `;
-
