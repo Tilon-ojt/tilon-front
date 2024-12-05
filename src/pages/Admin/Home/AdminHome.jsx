@@ -6,6 +6,7 @@ import NewsList from '../news/NewsList.jsx';
 import EditNews from '../news/EditNews.jsx';
 import EditProfile from '../MyInfo/EditProfile.jsx';
 import CreateNews from '../news/CreateNews.jsx';
+import EditPr from '../Pr/EditPr.jsx';
 import Insight from '../Insight/Insight.jsx';
 
 
@@ -51,6 +52,8 @@ function AdminHome() {
                 return <EditProfile />
             case 'INSIGHT':
                 return <Insight />
+            case 'EditPr' :
+                return <EditPr/>
             default:
                 return <div>반갑습니다!</div>;
         }
@@ -75,8 +78,8 @@ function AdminHome() {
                         <li onClick={() => setAdminComp('My')}>내 정보 수정</li>
                         <hr />
                         <li onClick={() => setAdminComp('News')}>News</li>
-                        <hr />
-                        <li>PR</li>
+                        <hr />                       
+                        <li onClick={() => setAdminComp('Pr')}>PR</li>         
                         <hr />
                         <li onClick={() => setAdminComp('INSIGHT')}>INSIGHT</li>
                         <hr />

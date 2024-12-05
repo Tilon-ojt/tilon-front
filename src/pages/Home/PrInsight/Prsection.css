@@ -35,6 +35,7 @@
   align-items: flex-start;
   padding: 0;
   width: 45%;
+  color:#fff;
 }
 
 .cardsContainer {
@@ -179,6 +180,7 @@
   .subtitle {
     font-size: 1rem;
     margin-bottom: 0px !important;
+  
   }
 
   .Prlink {
