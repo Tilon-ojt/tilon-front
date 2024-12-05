@@ -4,7 +4,11 @@ import styled from "styled-components";
 function AdminNews() {
   return (
     <Container>
-      <Title>News</Title>
+      <Header>
+        <Title>News</Title>
+        <Button>Add</Button>
+      </Header>
+      <List></List>
     </Container>
   );
 }
@@ -19,11 +23,33 @@ const Container = styled.div`
   margin-top:62px;
 `;
 
+const Header = styled.div`
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align=content: center;
+  padding: 10px 20px;
+  border: 1px solid red;
+  gap: 20px;
+`;
+
 const Title = styled.h1`
   font-size: 2rem;
   color: #333;
+`;
+
+const Button =styled.button`
+    height: 20px;
+`
+
+
+const List = styled.div`
   display:flex;
-  padding: 20px;
+  flex-direction: row;
+  justify-content: space-between;
+  align=content: center;
+  padding: 10px 20px;
   border: 1px solid red;
+  gap: 20px;
 `;
 export default AdminNews;

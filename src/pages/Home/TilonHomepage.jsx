@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 // import Header from './Header/Header';
-import Header from '../../components/elemnet/Header/Header.jsx';
+import Header from '../../components/common/Header/Header.jsx';
 import Banner from './Banner/Banner';
 import './TilonHomepage.css';
 
-import Footer from '../../components/elemnet/Footer/Footer.jsx';
+import Footer from '../../components/common/Footer/Footer.jsx';
 
 import News from './News/News';
 import PrInsight from './PrInsight/PrInsight';
