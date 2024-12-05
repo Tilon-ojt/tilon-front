@@ -1,11 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
-// import Home from './atilon/Home';
-// import AdminHome from './atilon/AdminHome';
-// import AdminLogin from './atilon/AdminLogin';
-
 import TilonHomePage from './pages/Home/TilonHomepage';
+
+import Sidebar from './components/common/Sidebar';
+import Navbar from './components/common/Navbar';
 
 import AdminLogin from './pages/Admin/Login/Loginpage';
 import AdminMain from './pages/Admin/AdminMain/AdminMain';

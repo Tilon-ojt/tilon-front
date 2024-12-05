@@ -30,6 +30,7 @@ const Container = styled.div`
   flex-direction: column;
   height: 100vh;  /* 화면을 꽉 채우도록 설정 */
   margin-left:300px;
+  margin-left:300px;
   margin-top:62px;
 `;
 
