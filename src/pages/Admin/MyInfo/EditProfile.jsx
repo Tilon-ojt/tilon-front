@@ -1,45 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../../api/axios';
 import styled from 'styled-components';
-import './EditProfile.css';
 import useAuth from '../../../hooks/useAuth';
 
 function EditProfile() {
 
-    // useAuth();  // 로그인 검증
+    //원래는 커스텀훅으로 로그인되어있는지 확인
+    // 그리고나서 jwt디코드 하고 정보 뿌려주기
 
-    const [password, setPassword] = useState(""); // 현재 비밀번호
-    const [newPassword, setNewPassword] = useState(""); // 변경 비밀번호
-    const [confirmNewPassword, setConfirmNewPassword] = useState(""); // 변경 비밀번호 확인
+    const [password, setPassword] = useState(""); 
+    const [newPassword, setNewPassword] = useState("");
+    const [confirmNewPassword, setConfirmNewPassword] = useState("");
 
     const [userInfo, setUserInfo] = useState({
-        name: "",   // 유저 이름
-        employeeId: "",  // 사번
-        currentPassword: "" // 현재 비밀번호
+        name: "",
+        employeeId: "",
+        currentPassword: ""
     });
 
-    // 유저 정보를 받아오는 함수 (예시로 가정)
     useEffect(() => {
-        // 실제 데이터는 API나 props로 받아오게 될 것
         const fetchedUserInfo = {
-            name: "홍길동", // 예시 이름
-            employeeId: "123456", // 예시 사번
-            currentPassword: "9999", // 예시 현재 비밀번호
+            name: "홍길동",
+            employeeId: "123456",
+            currentPassword: "9999"
         };
-
         setUserInfo(fetchedUserInfo);
-
     }, []);
 
     const handleSubmit = async () => {
-        // 새 비밀번호와 확인용 비밀번호가 일치하는지 확인
         if (newPassword !== confirmNewPassword) {
             alert("새 비밀번호가 일치하지 않습니다.");
             return;
         }
 
         try {
-            // 현재 비밀번호 확인 요청
             const verifyResponse = await api.post("/api/verify-password", {
                 currentPassword: password,
             });
@@ -51,14 +45,13 @@ function EditProfile() {
                 return;
             }
 
-            // 새 비밀번호 변경 요청
             const updateResponse = await api.post("/api/change-password", {
                 newPassword: newPassword,
             });
 
             if (updateResponse.status === 200) {
                 alert("비밀번호가 성공적으로 변경되었습니다.");
-                setPassword(""); // 입력값 초기화
+                setPassword(""); 
                 setNewPassword("");
                 setConfirmNewPassword("");
             } else {
@@ -72,17 +65,15 @@ function EditProfile() {
 
     return (
         <Container>
-            <div className='edit-prof'>
-                <h2>개인정보 수정</h2>
-                <div className='user-info'>
-                    <div className='info-item'>
-                        <label>이름 </label>
-                        <label className='tally' />
+            <EditProfileCard>
+                <h2>회원 정보 수정</h2>
+                <div className="user-info">
+                    <div className="info-item">
+                        <label>이름</label>
                         <span>{userInfo.name}</span>
                     </div>
-                    <div className='info-item'>
-                        <label>사번 </label>
-                        <label className='tally' />
+                    <div className="info-item">
+                        <label>아이디</label>
                         <span>{userInfo.employeeId}</span>
                     </div>
                     <div className="info-item">
@@ -91,7 +82,7 @@ function EditProfile() {
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            placeholder="현재 비밀번호"
+                            placeholder="현재 비밀번호를 입력하세요"
                         />
                     </div>
                     <div className="info-item">
@@ -100,7 +91,7 @@ function EditProfile() {
                             type="password"
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
-                            placeholder="변경할 비밀번호"
+                            placeholder="새 비밀번호를 입력하세요"
                         />
                     </div>
                     <div className="info-item">
@@ -109,12 +100,12 @@ function EditProfile() {
                             type="password"
                             value={confirmNewPassword}
                             onChange={(e) => setConfirmNewPassword(e.target.value)}
-                            placeholder="비밀번호 확인"
+                            placeholder="새 비밀번호를 다시 입력하세요"
                         />
                     </div>
                 </div>
-                <button className='submit-btn' onClick={handleSubmit}>수정</button>
-            </div>
+                <button className="submit-btn" onClick={handleSubmit}>수정</button>
+            </EditProfileCard>
         </Container>
     );
 }
@@ -123,8 +114,82 @@ export default EditProfile;
 
 const Container = styled.div`
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center; 
   height: calc(100vh - 62px);
   margin-left:300px;
   margin-top:62px;
+`;
+
+const EditProfileCard = styled.div`
+  background-color: #fff;
+  width: 450px;
+  border-radius: 12px;
+  border: 1px solid #cccccccc;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 40px 30px;
+  text-align: center;
+ 
+
+  h2 {
+    margin-bottom: 30px;
+    font-size: 1.8rem;
+    color: #333;
+  }
+
+  .user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .info-item {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      label {
+        font-size: 0.9rem;
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #555;
+      }
+
+      span {
+        font-size: 0.9rem;
+        color: #777;
+      }
+
+      input {
+        width: 95%;
+        padding: 10px;
+        font-size: 0.9rem;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        transition: all 0.3s;
+
+        &:focus {
+          border-color: #5a9cfb;
+          outline: none;
+          box-shadow: 0 0 4px rgba(90, 156, 251, 0.5);
+        }
+      }
+    }
+  }
+
+  .submit-btn {
+    margin-top: 20px;
+    padding: 12px 20px;
+    width: 100%;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #5a9cfb;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: #478eea;
+    }
+  }
 `;

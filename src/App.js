@@ -8,8 +8,6 @@ import Navbar from './components/common/Navbar';
 
 import AdminLogin from './pages/Admin/Login/Loginpage';
 import AdminMain from './pages/Admin/AdminMain/AdminMain';
-import Sidebar from './components/common/Sidebar';
-import Navbar from './components/common/Navbar';
 import { Provider } from 'react-redux';
 import UserListPage from './pages/Admin/UserListPage/UserListPage';
 import EditProfile from './pages/Admin/MyInfo/EditProfile';
@@ -37,7 +35,7 @@ function App() {
                 <Navbar />
                 <Routes>
                   <Route path="" element={<AdminMain />} />
-                  <Route path="/userList" element={<UserListPage />} />
+                  <Route path="/user" element={<UserListPage />} />
                   <Route path="/myInfo" element={<EditProfile />} />
                   <Route path="/news" element={<AdminNews />} />
                   {/* 추가적인 하위 경로 */}

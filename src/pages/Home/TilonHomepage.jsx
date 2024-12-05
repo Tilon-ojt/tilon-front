@@ -1,11 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-// import Header from './Header/Header';
 import Header from '../../components/common/Header/Header.jsx';
 import Banner from './Banner/Banner';
 import './TilonHomepage.css';
 
 import Footer from '../../components/common/Footer/Footer.jsx';
-
 import News from './News/News';
 import PrInsight from './PrInsight/PrInsight';
 
@@ -13,6 +11,7 @@ const TilonHomepage = () => {
   const isScrolling = useRef(false);
   const [showChevron, setShowChevron] = useState(false); // 버튼 보이기 상태
   const [isWideScreen, setIsWideScreen] = useState(window.innerWidth > 770);
+  const [isScrollingFromButton, setIsScrollingFromButton] = useState(false); // 버튼 클릭 상태 추적
 
   // 각 섹션의 ref 생성 (Banner 포함)
   const sectionRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
@@ -29,15 +28,8 @@ const TilonHomepage = () => {
   }, []);
 
   useEffect(() => {
-    const handleScroll = (e) => {
-      if (!isWideScreen) return;
-
-      // 스크롤을 내리면 버튼 보이기, 최상단에서만 숨기기
-      if (window.scrollY > 50) {
-        setShowChevron(true);
-      } else {
-        setShowChevron(false);
-      }
+    const handleWheel = (e) => {
+      if (!isWideScreen || isScrollingFromButton) return; // 버튼 클릭 중이면 스크롤 처리하지 않음
 
       e.preventDefault();
       if (isScrolling.current) return;
@@ -82,21 +74,35 @@ const TilonHomepage = () => {
       }
     };
 
-    window.addEventListener('wheel', handleScroll, { passive: false });
-    window.addEventListener('scroll', handleScroll, { passive: true }); // 스크롤 이벤트 추가
+    const handleScroll = (e) => {
+            // 스크롤을 내리면 버튼 보이기, 최상단에서만 숨기기
+            if (window.scrollY > 50) {
+              setShowChevron(true);
+            } else {
+              setShowChevron(false);
+            }
+    }
+
+    window.addEventListener('wheel', handleWheel, { passive: false });
+    window.addEventListener('scroll', handleScroll);
 
     return () => {
       window.removeEventListener('wheel', handleScroll);
-      window.removeEventListener('scroll', handleScroll); // 스크롤 이벤트 제거
+      window.removeEventListener('scroll', handleWheel);
     };
-  }, [isWideScreen, sectionRefs]);
+  }, [isWideScreen, isScrollingFromButton, sectionRefs]);
 
   const handleIconClick = () => {
+    setIsScrollingFromButton(true); // 버튼 클릭 시 상태 변경
     window.scrollTo({
       top: 0,
       behavior: 'smooth',
     });
     setShowChevron(false);
+
+    setTimeout(() => {
+      setIsScrollingFromButton(false); // 스크롤 처리 완료 후 상태 초기화
+    }, 1000); // 스크롤 효과가 완료될 때까지 기다림
   };
 
   return (

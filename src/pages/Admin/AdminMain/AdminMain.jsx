@@ -10,11 +10,7 @@ import useAuth from '../../../hooks/useAuth';
 
 function AdminMain() {
 
-  // useAuth();  // 로그인 검증
-
-  const token = useSelector((state) => state.auth.token);
-  const decodedToken = jwtDecode(token);
-  console.log(`디코드된 jwt: ${JSON.stringify(decodedToken, null, 2)}`);
+  // const decodedToken = useAuth(); // 디코드된 JWT 데이터를 받음
   
   return (
     <Container>
@@ -28,8 +24,7 @@ function AdminMain() {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;  /* 화면을 꽉 채우도록 설정 */
-  margin-left:300px;
+  height: calc(100vh - 62px);
   margin-left:300px;
   margin-top:62px;
 `;

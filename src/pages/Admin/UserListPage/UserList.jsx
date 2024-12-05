@@ -3,10 +3,11 @@ import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import AdminAddModal from "../../../components/common/AdminAddModal";
 import { OPEN_MODAL } from '../../../reducer/AdminModal';
+import api from '../../../api/axios';
 
 import './UserList.css';
 
-function UserList({ adminInfo }) {
+function UserList({ adminInfo, getUserList }) {
     const isShow = useSelector((state) => state.adminModal.isShow);
     const dispatch = useDispatch();
     const openModal = () => {
@@ -59,9 +60,18 @@ function UserList({ adminInfo }) {
         pageNumbers.push(i);
     }
 
-    const deleteUesr = () => {
+    const deleteUesr = async() => {
         console.log(`삭제될 유저 번호 : ${selectedIds}`);
-        
+        try {
+            const response = await api.post('user/delete', {
+                selectedIds
+            });
+            console.log('삭제 성공:', response.data);
+            getUserList();
+
+          } catch (error) {
+            console.error('삭제 실패:', error);
+          }
     }
 
     return (
@@ -82,7 +92,7 @@ function UserList({ adminInfo }) {
                         <th></th>
                         <th>이름</th>
                         <th>아이디</th>
-                        <th></th>
+                        <th>가입날짜</th>
                     </tr>
                 </thead>
                 <tbody>

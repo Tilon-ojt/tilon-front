@@ -2,13 +2,22 @@ import { Menu, X } from 'lucide-react';
 import "./Header.css"
 import { useDispatch, useSelector } from 'react-redux';
 import { CLOSE_MENU, OPEN_MENU } from '../../../reducer/HeaderBar';
-
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 function Header() {
-
+    const location = useLocation();
+    const navigate = useNavigate();
     const isShow = useSelector((state) => state.headerbar.isShow);
-
     const dispatch = useDispatch();
+
+    // location.state로부터 메뉴 상태를 복원
+    useEffect(() => {
+        if (location.state?.menuIsOpen) {
+            dispatch({ type: OPEN_MENU });
+        }
+    }, [location.pathname]);
+
     const closeShow = () => {
         dispatch({ type: CLOSE_MENU });
     };
@@ -17,10 +26,15 @@ function Header() {
         dispatch({ type: OPEN_MENU });
     };
 
+    // 회사소개 링크 클릭 핸들러
+    const handleCompanyInfoClick = (e) => {
+        e.preventDefault();
+        // 현재 메뉴 상태를 location state에 포함하여 페이지 이동
+        navigate('/company/info', { state: { menuIsOpen: isShow } });
+    };
 
     return (
         <div>
-            {/* 헤더 */}
             <header className="header">
                 <div className="logo-container">
                     <img src="https://www.tilon.com/dist/pc_logo.png?a30e64d3cafa9a2c5cbf7b217ccc9aba" alt="Tilon Logo" className="tilon-logo" />
@@ -46,7 +60,7 @@ function Header() {
                         <p className='nav-title'>Company</p>
                         <ul>
                             <li>
-                                <a href="https://www.tilon.com/company/info">
+                                <a href="https://www.tilon.com/company/info" onClick={handleCompanyInfoClick}>
                                     <p>회사소개</p>
                                 </a>
                             </li>

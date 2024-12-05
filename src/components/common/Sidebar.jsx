@@ -5,11 +5,11 @@ import styled from 'styled-components';
 function Sidebar() {
   const menuItems = [
     { label: 'Main Page', link: '/admin' },
-    { label: '내 정보 수정', link: '/admin/settings' },
+    { label: '회원 정보 수정', link: '/admin/myinfo' },
     { label: 'News', link: '/admin/news' },
     { label: 'PR', link: '/admin/pr' },
     { label: 'Insight', link: '/admin/insight' },
-    { label: '관리자 계정', link: '/admin/user' }, // super만 보이게 수정 필요
+    { label: '유저 관리', link: '/admin/user' }, // super만 보이게 수정 필요
   ];
 
   return (
