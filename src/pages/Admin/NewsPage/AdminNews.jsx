@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import TheInput from "../../../components/element/TheInput";
 
 // AdminLogin 컴포넌트
 function AdminNews() {
@@ -6,7 +7,7 @@ function AdminNews() {
     <Container>
       <Header>
         <Title>News</Title>
-        <Button>Add</Button>
+        <TheInput/>
       </Header>
       <List></List>
     </Container>
@@ -33,14 +34,10 @@ const Header = styled.div`
   gap: 20px;
 `;
 
-const Title = styled.h1`
+const Title = styled.span`
   font-size: 2rem;
   color: #333;
 `;
-
-const Button =styled.button`
-    height: 20px;
-`
 
 
 const List = styled.div`
@@ -52,4 +49,5 @@ const List = styled.div`
   border: 1px solid red;
   gap: 20px;
 `;
+
 export default AdminNews;
