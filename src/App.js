@@ -10,7 +10,7 @@ import AdminLogin from './pages/Admin/Login/Loginpage';
 import AdminMain from './pages/Admin/AdminMain/AdminMain';
 
 import AdminNews from './pages/Admin/NewsPage/AdminNews';
-
+import CreateNews from './pages/Admin/NewsPage/CreateNews';
 
 function App() {
   return (
@@ -33,6 +33,7 @@ function App() {
                     <Route path="" element={<AdminMain />} />
                     {/* 추가적인 하위 경로 */}
                     <Route path="/news" element={<AdminNews />} />
+                    <Route path="/news/create" element={<CreateNews />} />
                 </Routes>
               </>
           }

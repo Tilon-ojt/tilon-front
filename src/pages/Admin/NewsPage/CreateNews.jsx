@@ -1,23 +1,25 @@
 import styled from "styled-components";
-import TheSearch from "../../../components/element/TheSearch";
-import AddBtn from "../../../components/element/TheButtonAddEdit";
-import DelBtn from "../../../components/element/TheButtonDel";
+import TheButtonAdd from "../../../components/element/TheButtonAddEdit";
+import TheButtonSubmit from "../../../components/element/TheButtonSubmit";
+import TheButtonCancel from "../../../components/element/TheButtonCancel";
 
 // AdminNews 컴포넌트
-function AdminNews() {
+function CreateNews() {
   return (
     <Container>
       <Header>
-        <Title>News</Title>
-        <TheSearch />
-        <BtnContainer>
-          <AddBtn title={"Add new NEWS"} link={"/admin/news/create"} />
-          <DelBtn title={"NEWS"}/>
-        </BtnContainer>
+        <Title>CreateNews</Title>
       </Header>
       <List>
         {/* 리스트 항목을 추가할 영역 */}
       </List>
+
+      <Btn>
+        <TheButtonAdd title={"수정하기"} link={"/admin/news/edit"}/>
+        <TheButtonSubmit title={"저장"}/>
+        <TheButtonSubmit title={"수정완료"}/>
+        <TheButtonCancel link={"/admin/news"}/>
+      </Btn>
     </Container>
   );
 }
@@ -49,10 +51,10 @@ const Title = styled.span`
   font-weight: bold;
 `;
 
-const BtnContainer = styled.div`
+const Btn = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 10px;
+  gap:20px;
 `;
 
 const List = styled.div`
@@ -66,6 +68,4 @@ const List = styled.div`
   background-color: #fff; 
 `;
 
-export default AdminNews;
-
-
+export default CreateNews;
