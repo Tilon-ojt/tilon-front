@@ -10,7 +10,7 @@ import useAuth from '../../../hooks/useAuth';
 
 function AdminMain() {
 
-  useAuth();  // 로그인 검증
+  // useAuth();  // 로그인 검증
 
   const token = useSelector((state) => state.auth.token);
   const decodedToken = jwtDecode(token);

@@ -6,7 +6,7 @@ import useAuth from '../../../hooks/useAuth';
 
 function EditProfile() {
 
-    useAuth();  // 로그인 검증
+    // useAuth();  // 로그인 검증
 
     const [password, setPassword] = useState(""); // 현재 비밀번호
     const [newPassword, setNewPassword] = useState(""); // 변경 비밀번호

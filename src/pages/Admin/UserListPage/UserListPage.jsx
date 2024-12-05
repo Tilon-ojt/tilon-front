@@ -13,7 +13,7 @@ import useAuth from '../../../hooks/useAuth';
 
 function UserListPage() {
 
-    useAuth();  // 로그인 검증
+    // useAuth();  // 로그인 검증
     const [adminInfo, setAdminInfo] = useState([]);
 
     // const navigate = useNavigate();
