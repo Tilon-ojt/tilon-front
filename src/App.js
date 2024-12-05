@@ -14,6 +14,7 @@ import { Provider } from 'react-redux';
 import UserListPage from './pages/Admin/UserListPage/UserListPage';
 import EditProfile from './pages/Admin/MyInfo/EditProfile';
 import store from './store';
+import AdminNews from './pages/Admin/NewsPage/AdminNews';
 
 function App() {
 
@@ -38,6 +39,7 @@ function App() {
                   <Route path="" element={<AdminMain />} />
                   <Route path="/userList" element={<UserListPage />} />
                   <Route path="/myInfo" element={<EditProfile />} />
+                  <Route path="/news" element={<AdminNews />} />
                   {/* 추가적인 하위 경로 */}
                 </Routes>
               </>
