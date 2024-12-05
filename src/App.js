@@ -9,6 +9,8 @@ import Navbar from './components/common/Navbar';
 import AdminLogin from './pages/Admin/Login/Loginpage';
 import AdminMain from './pages/Admin/AdminMain/AdminMain';
 
+import AdminNews from './pages/Admin/NewsPage/AdminNews';
+
 
 function App() {
   return (
@@ -30,6 +32,7 @@ function App() {
                 <Routes>
                     <Route path="" element={<AdminMain />} />
                     {/* 추가적인 하위 경로 */}
+                    <Route path="/news" element={<AdminNews />} />
                 </Routes>
               </>
           }
