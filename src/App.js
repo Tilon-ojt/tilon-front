@@ -17,8 +17,8 @@ function App() {
           <Route path="/" element={<TilonHomepage />}></Route>
           <Route path="/admin/login" element={<Loginpage />}></Route>
           {/* <Route path="/prsection" element={<PrInsight />}></Route> */}
-          {/* <Route path="/admin/page" element={<Adminpage />}></Route> */}
-          <Route path="/admin" element={<AdminHome />}></Route>
+          {/* <Route path="/admin/home" element={<Adminpage />}></Route> */}
+          <Route path="/admin/home" element={<AdminHome />}></Route>
         </Routes>
       </Provider>
     </BrowserRouter>
