@@ -1,8 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Header from '../../components/elemnet/Header/Header';
+// import Header from './Header/Header';
+import Header from '../../components/elemnet/Header/Header.jsx';
 import Banner from './Banner/Banner';
 import './TilonHomepage.css';
-import Footer from '../../components/elemnet/Footer/Footer';
+
+import Footer from '../../components/elemnet/Footer/Footer.jsx';
+
 import News from './News/News';
 import PrInsight from './PrInsight/PrInsight';
 
