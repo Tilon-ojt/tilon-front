@@ -20,7 +20,7 @@ function Sidebar() {
           src="https://www.tilon.com/dist/pc_logo.png?a30e64d3cafa9a2c5cbf7b217ccc9aba"
         />
       </Logo>
-      <Divider />
+      <Divider/>
       <Menu>
         {menuItems.map((item, index) => (
           <MenuItem key={index}>
@@ -41,7 +41,7 @@ const Container = styled.div`
   left: 0;
   width: 300px;
   height: 100vh;
-  background: #171036;
+  background: #1D253A;
   padding-top: 20px;
 `;
 
@@ -56,7 +56,6 @@ const Logo = styled.div`
 const Divider = styled.hr`
   border: none;
   border-top: 1px solid rgba(255, 255, 255, 0.5);
-  margin: 20px 0;
 `;
 
 const Menu = styled.ul`
@@ -66,12 +65,13 @@ const Menu = styled.ul`
 
 const MenuItem = styled.li`
   margin-bottom: 20px;
-  padding: 5px 20px;
+  margin-right: 20px;
+  padding: 10px 20px;
   transition: background-color 0.3s;
 
   &:hover {
-    background-color: #333;
-    border-left: 5px solid white;
+    background-color: #27324E;
+    border-left: 5px solid #5060FD;
   }
 `;
 
