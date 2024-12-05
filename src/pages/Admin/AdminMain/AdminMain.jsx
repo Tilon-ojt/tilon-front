@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { LogOut } from 'lucide-react';
-import './AdminHome.css';
+import './AdminMain.css';
 
 import NewsList from '../news/NewsList.jsx';
 import EditNews from '../news/EditNews.jsx';
@@ -10,7 +10,7 @@ import EditPr from '../Pr/EditPr.jsx';
 import Insight from '../Insight/Insight.jsx';
 
 
-function AdminHome() {
+function AdminMain() {
 
     // useEffect(() => {
     //     // 로컬 스토리지에서 JWT 가져오기
@@ -94,4 +94,4 @@ function AdminHome() {
     );
 }
 
-export default AdminHome;
+export default AdminMain;

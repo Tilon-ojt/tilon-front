@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
-import AdminAddModal from "./AdminAddModal";
-import { OPEN_MODAL } from '../reducer/AdminModal';
+import AdminAddModal from "../../../components/common/AdminAddModal";
+import { OPEN_MODAL } from '../../../reducer/AdminModal';
 
-import './AdminInfoBox.css';
+import './UserList.css';
 
-function AdminInfoBox({ adminInfo }) {
+function UserList({ adminInfo }) {
     const isShow = useSelector((state) => state.adminModal.isShow);
     const dispatch = useDispatch();
     const openModal = () => {
@@ -130,4 +130,4 @@ function AdminInfoBox({ adminInfo }) {
     );
 }
 
-export default AdminInfoBox;
+export default UserList;
