@@ -25,8 +25,9 @@ function Sidebar() {
       </Logo>              
       <hr />
       <ul>
-        <li><a href="/admin">Dashboard</a></li>
-        <li><a href="/admin/settings">관리자 수정</a></li>
+      <li><a href="/admin">메인 페이지</a></li>
+        <li><a href="/admin">내 정보 수정</a></li>
+        <li><a href="/admin/settings">유저관리</a></li>
 
         {/* 내용 수정 클릭 시 하위 메뉴 토글 */}
         <li>
