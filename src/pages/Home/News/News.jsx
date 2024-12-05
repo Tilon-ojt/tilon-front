@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import './News.css';
 import api from '../../../api/axios';
 
+import styled from 'styled-components';
+
 function News() {
     const cardRefs = useRef([]);
     const [newsData, setNewsData] = useState([]);
