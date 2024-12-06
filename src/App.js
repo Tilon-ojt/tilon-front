@@ -99,12 +99,7 @@ function App() {
         </Routes>
       </Router>
     </Provider>
-            }
-            
-          />
-        </Routes>
-      </Router>
-    </Provider>
+
   );
 }
 
