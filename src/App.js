@@ -47,14 +47,15 @@
 
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Provider } from 'react-redux'; // react-redux에서 Provider 임포트
-import store from './store'; // 생성한 Redux store 임포트
+import { Provider } from 'react-redux';  // Import Provider from react-redux
+import store from './store';  // Make sure store is correctly imported
 
-import TilonHomePage from './pages/Home/TilonHomepage';
+import TilonHomepage from './pages/Home/TilonHomepage';
 import Sidebar from './components/common/Sidebar';
 import Navbar from './components/common/Navbar';
 
-import AdminLogin from './pages/Admin/Login/Loginpage';
+import PostEditor from './pages/Admin/PostEdit/PostEditor';
+import Loginpage from './pages/Admin/Login/Loginpage';  // Fix import name to match the component
 import AdminMain from './pages/Admin/AdminMain/AdminMain';
 import AdminNews from './pages/Admin/NewsPage/AdminNews';
 import CreateNews from './pages/Admin/NewsPage/CreateNews';
@@ -62,14 +63,16 @@ import EditNews from './pages/Admin/NewsPage/EditNews';
 
 function App() {
   return (
-    <Provider store={store}>  {/* Provider로 앱을 감싸고, Redux store 전달 */}
+    <Provider store={store}>  {/* Redux Provider */}
       <Router>
-        <Routes>
+        <Routes>  {/* Main Routes for App */}
           {/* 메인 홈 경로 */}
-          <Route path="/" element={<TilonHomePage />} />
+          <Route path="/" element={<TilonHomepage />} />
 
           {/* 관리자 로그인 */}
-          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/login" element={<Loginpage />} />
+
+          
 
           {/* 관리자 페이지 - Sidebar와 Navbar가 필요한 경로 */}
           <Route
@@ -82,13 +85,22 @@ function App() {
                   {/* 관리자 메인 */}
                   <Route path="" element={<AdminMain />} />
                   
+
                   {/* 관리자 뉴스 관리 */}
                   <Route path="news" element={<AdminNews />} />
                   <Route path="news/create" element={<CreateNews />} />
                   <Route path="news/edit/:id" element={<EditNews />} />
+
+                  <Route path="/edit" element={<PostEditor/>}/>
                 </Routes>
               </>
             }
+          />
+        </Routes>
+      </Router>
+    </Provider>
+            }
+            
           />
         </Routes>
       </Router>
