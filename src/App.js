@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import TilonHomePage from './pages/Home/TilonHomepage';
@@ -14,7 +14,31 @@ import EditProfile from './pages/Admin/MyInfo/EditProfile';
 import store from './store';
 import AdminNews from './pages/Admin/NewsPage/AdminNews';
 
+export const setupAuthManager = () => {
+  window.addEventListener('beforeunload', (event) => {
+    // 브라우저가 실제로 닫히는 경우에만 토큰 삭제
+    let closingTime = new Date().getTime();
+    localStorage.setItem('lastActivity', closingTime.toString());
+    
+    setTimeout(() => {
+      let currentTime = new Date().getTime();
+      let lastActivity = parseInt(localStorage.getItem('lastActivity') || '0');
+      
+      // 마지막 활동 시간과 현재 시간의 차이가 100ms 이상이면 토큰 삭제
+      // 새로고침이나 페이지 이동의 경우 100ms 이내에 새로운 페이지가 로드되므로 토큰유지
+      if (currentTime - lastActivity >= 100) {
+        localStorage.removeItem('jwt');
+        localStorage.removeItem('lastActivity');
+      }
+    }, 100);
+  });
+};
+
 function App() {
+
+  useEffect(() => {
+    setupAuthManager();
+  }, []);
 
   return (
     <Router>

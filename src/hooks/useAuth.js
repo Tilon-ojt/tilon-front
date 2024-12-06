@@ -8,6 +8,9 @@ const useAuth = () => {
   const token = useSelector((state) => state.auth.token);
   const [decodedToken, setDecodedToken] = useState(null);
 
+  console.log(`useAuth 실행: ${token}`);
+  
+
   useEffect(() => {
     if (!token) {
       alert('로그인이 필요합니다.');
@@ -25,6 +28,8 @@ const useAuth = () => {
         navigate('/admin/login');
       } else {
         setDecodedToken(decoded); // 디코드된 토큰 저장
+        console.log(`디코드된 토큰: ${decodedToken}`);
+        
       }
     } catch (error) {
       console.error('JWT 디코딩 실패:', error);

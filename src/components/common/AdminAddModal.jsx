@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CLOSE_MODAL } from "../../reducer/AdminModal";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import api from "../../api/axios";
 
-function AdminAddModal() {
+function AdminAddModal( {getUserList} ) {
+
     const [nickName, setNickName] = useState("");
     const [empName, setEmpName] = useState("");
 
     const dispatch = useDispatch();
+    const token = useSelector((state) => state.auth.token);
 
     const handleNickNameChange = (e) => {
         setNickName(e.target.value);
@@ -31,17 +33,28 @@ function AdminAddModal() {
     const userInput = async () => {
         console.log(`닉네임: ${nickName}, 아이디: ${empName}`);
 
-        // try {
-        //     const response = await api.post("/admin/accounts", { nickName, empName });
+        try {
+            const response = await api.post("/admin/accounts", { nickName, empName }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                  },
 
-        //     if (response.status === 200) {
-        //         console.log("정상 처리되었습니다.");
-        //     } else {
-        //         console.log("오류가 발생했습니다.");
-        //     }
-        // } catch (error) {
-        //     console.log("에러:", error);
-        // }
+            });
+
+            if (response.status === 200) {
+                dispatch({ type: CLOSE_MODAL });
+                alert("아이디 생성 성공");
+                getUserList();
+                console.log("정상 처리되었습니다.");
+            } else {
+                dispatch({ type: CLOSE_MODAL });
+                alert("아이디 생성 실패");
+                console.log("오류가 발생했습니다.");
+            }
+        } catch (error) {
+            console.log("에러:", error);
+        }
     };
 
     return (

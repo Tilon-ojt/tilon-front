@@ -13,12 +13,10 @@ import useAuth from '../../../hooks/useAuth';
 
 function UserListPage() {
 
-    // useAuth();  // 로그인 검증
+    const decodedToken = useAuth(); // 디코드된 JWT 데이터를 받음
     const [adminInfo, setAdminInfo] = useState([]);
     
-    // const token = useSelector((state) => state.auth.token);
-    // const decodedToken = jwtDecode(token);
-    // console.log(`디코드된 jwt: ${JSON.stringify(decodedToken, null, 2)}`);
+    console.log(`디코드된 jwt: ${JSON.stringify(decodedToken, null, 2)}`);
 
     useEffect(() => {
         getUserList();

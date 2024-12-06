@@ -8,6 +8,7 @@ import api from '../../../api/axios';
 import './UserList.css';
 
 function UserList({ adminInfo, getUserList }) {
+
     const isShow = useSelector((state) => state.adminModal.isShow);
     const dispatch = useDispatch();
     const openModal = () => {
@@ -16,7 +17,7 @@ function UserList({ adminInfo, getUserList }) {
 
     const [currentPage, setCurrentPage] = useState(1);
     const [currentItems, setCurrentItems] = useState([]);
-    const [selectedIds, setSelectedIds] = useState([]); // 선택된 체크박스 ID 관리
+    const [adminIds, setAdminIds] = useState([]); // 선택된 체크박스 ID 관리
     const itemsPerPage = 14;
 
     useEffect(() => {
@@ -30,7 +31,7 @@ function UserList({ adminInfo, getUserList }) {
     // 이미 선택된 목록에 있는지 확인 후 없으면 추가하고 있으면 선택해제 시킴
     // 상태 업데이트 함수(set~)는 콜백 함수로 현재 상태값을 전달
     const handleCheckboxChange = (id) => {
-        setSelectedIds((prevSelected) =>
+        setAdminIds((prevSelected) =>
             prevSelected.includes(id)
                 ? prevSelected.filter((selectedId) => selectedId !== id) // 선택 해제
                 : [...prevSelected, id] // 선택 추가
@@ -60,19 +61,26 @@ function UserList({ adminInfo, getUserList }) {
         pageNumbers.push(i);
     }
 
-    const deleteUesr = async() => {
-        console.log(`삭제될 유저 번호 : ${selectedIds}`);
+    const token = useSelector((state) => state.auth.token);
+
+    const deleteUesr = async () => {
+        console.log(`삭제될 유저 번호: ${JSON.stringify(adminIds, null, 2)}`);
         try {
-            const response = await api.post('user/delete', {
-                selectedIds
-            });
+            const response = await api.delete('/admin/account', {
+                data: { adminIds }, // DELETE 요청 본문에 JSON 데이터로 전달
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            }
+            );
             console.log('삭제 성공:', response.data);
             getUserList();
 
-          } catch (error) {
+        } catch (error) {
             console.error('삭제 실패:', error);
-          }
-    }
+        }
+    };
 
     return (
         <div className="admin-info-box">
@@ -102,7 +110,7 @@ function UserList({ adminInfo, getUserList }) {
                                 <input
                                     type="checkbox"
                                     className="info-checkbox"
-                                    checked={selectedIds.includes(info.adminId)}
+                                    checked={adminIds.includes(info.adminId)}
                                     onChange={() => handleCheckboxChange(info.adminId)}
                                 />
                             </td>
@@ -135,7 +143,7 @@ function UserList({ adminInfo, getUserList }) {
                     <ChevronRight />
                 </button>
             </div>
-            {isShow ? <AdminAddModal /> : null}
+            {isShow ? <AdminAddModal getUserList={getUserList}/> : null}
         </div>
     );
 }
