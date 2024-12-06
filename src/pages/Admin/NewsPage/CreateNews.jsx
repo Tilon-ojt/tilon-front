@@ -46,7 +46,7 @@ function CreateNews() {
 
         <Input>
           <span>썸네일</span>
-          <input type="file" onChange={handleThumbnailChange} />
+          <input type="file" accept="image/*" onChange={handleThumbnailChange} />
           {thumbnail && (
               <RemoveBtn onClick={handleRemoveThumbnail}>×</RemoveBtn>
           )}
