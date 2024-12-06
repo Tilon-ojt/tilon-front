@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import TheSearch from "../../../components/element/TheSearch";
-import AddBtn from "../../../components/element/TheButtonAddEdit";
-import DelBtn from "../../../components/element/TheButtonDel";
+import Btn from "../../../components/element/TheNewsButton";
 
 // AdminNews 컴포넌트
 function AdminNews() {
@@ -11,8 +10,9 @@ function AdminNews() {
         <Title>News</Title>
         <TheSearch />
         <BtnContainer>
-          <AddBtn title={"Add new NEWS"} link={"/admin/news/create"} />
-          <DelBtn title={"NEWS"}/>
+          <Btn type="NavigateN" label={"Create new News"}/>
+          <Btn type="DeleteN" label={"Delete News"}/>
+          {/* <Btn type="CancelN" label={"취소"}/> */}
         </BtnContainer>
       </Header>
       <List>
