@@ -75,12 +75,10 @@
 }
 
 .cardList {
-  padding: 0;
-  margin: 0;
   display: flex;
-  gap: 2vw;
-  justify-content: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap; /* 기본적으로 수평 정렬 유지 */
+  gap: 1.5rem;
+  justify-content: flex-start; /* 필요한 경우 사용 */
   width: 100%;
 }
 
@@ -151,6 +149,7 @@
 
   .cardList {
     display: flex;
+    flex-direction: row;
     padding-left: 1vw;
     gap: 1.5rem;
   }
@@ -158,6 +157,7 @@
   .cardItem {
     width: 45vw;
     height: auto;
+    
   }
 
   .card_text {
@@ -227,7 +227,7 @@
 
   .cardItem {
     width: 98%;
-    height: 85%;
+    height: auto;
   }
 
   .cardItem img {
