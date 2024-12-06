@@ -23,12 +23,18 @@ function Loginpage() {
       // JWT 저장
       const { token } = response.data;
       dispatch(setToken(token)); // Redux 상태에 저장
-      localStorage.setItem('jwt', token); // 로컬 스토리지에도 저장
+      // localStorage.setItem('jwt', token); // 로컬 스토리지에도 저장
       console.log('Redux 상태 확인:', store.getState().auth.token); // 상태 확인
 
       navigate('/admin');
     } catch (error) {
       console.error('로그인 실패:', error);
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleLogin();
     }
   };
 
@@ -44,11 +50,17 @@ function Loginpage() {
         <input
           type="text"
           placeholder="아이디"
-          onChange={(e) => setEmpName(e.target.value)} />
+          value={empName}
+          onChange={(e) => setEmpName(e.target.value)}
+          onKeyDown={handleKeyPress} // 엔터 키 입력 감지
+        />
         <input
           type="password"
           placeholder="비밀번호"
-          onChange={(e) => setPassword(e.target.value)} />
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          onKeyDown={handleKeyPress} // 엔터 키 입력 감지
+        />
         <button
           className="login-btn"
           onClick={handleLogin}>

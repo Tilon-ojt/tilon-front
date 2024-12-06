@@ -1,5 +1,6 @@
 import React from 'react';
 import './Prsection.css';
+import axios from 'axios';
 
 function PrInsight() {
   return (
