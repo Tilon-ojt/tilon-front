@@ -1,16 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import TheSearch from "../../../components/element/TheSearch";
-import Btn from "../../../components/element/TheNewsButton";
-import TheTable2 from "../../../components/element/TheTable";
+// import TheSearch from "../../../components/element/TheSearch";
+// import Btn from "../../../components/element/TheNewsButton";
+// import TheTable2 from "../../../components/element/TheTable";
 import React, { useState, useEffect } from 'react';
+import TheSearch from "../element/TheSearch";
+import TheNewsButton from "../element/TheNewsButton";
 
 // AdminNews 컴포넌트
-function AdminNews() {
-  const navigate = useNavigate(); // useNavigate 훅 사용
+function TestLayout({title}) {
+//   const navigate = useNavigate(); // useNavigate 훅 사용
 
-  const thead = ['no','Title', 'URL'];
-  const [adminInfo, setAdminInfo] = useState([]);
+//   const thead = ['no','Title', 'URL'];
+//   const [adminInfo, setAdminInfo] = useState([]);
 
   // 예제 데이터 (뉴스 리스트)
   const exampleNewsList = [
@@ -22,28 +24,17 @@ function AdminNews() {
   return (
     <Container>
       <Header>
-        <Title>News</Title>
-        <TheSearch />
+        <Title>{title}</Title>
+        {/* <TheSearch /> */}
+        <TheSearch/>
         <BtnContainer>
-          <Btn type="NavigateN" label="Create new News" />
-          <Btn type="DeleteN" label="Delete News" />
+          <TheNewsButton type="NavigateN" label="Create new News" />
+          {/* <Btn type="DeleteN" label="Delete News" /> */}
         </BtnContainer>
       </Header>
 
       <List>
-        <TheTable2 thead={thead}>
-                  
-                  {
-                      adminInfo?.map((item, idx) => 
-                          <tr key={idx}>
-                              <td>{item?.empName}</td>
-                              <td>{item?.empName}</td>
-                              <td>{item?.empName}</td>
 
-                          </tr>
-                      )
-                  }
-          </TheTable2>
       </List>
     </Container>
   );
@@ -130,4 +121,4 @@ const ItemContent = styled.div`
   width: 100%;
 `
 
-export default AdminNews;
+export default TestLayout;

@@ -63,31 +63,33 @@ import AdminNews from './pages/Admin/NewsPage/AdminNews';
 import CreateNews from './pages/Admin/NewsPage/CreateNews';
 import EditNews from './pages/Admin/NewsPage/EditNews';
 
-export const setupAuthManager = () => {
-  window.addEventListener('beforeunload', (event) => {
-    // 브라우저가 실제로 닫히는 경우에만 토큰 삭제
-    let closingTime = new Date().getTime();
-    localStorage.setItem('lastActivity', closingTime.toString());
+import Test from './pages/Admin/Test';
+
+// export const setupAuthManager = () => {
+//   window.addEventListener('beforeunload', (event) => {
+//     // 브라우저가 실제로 닫히는 경우에만 토큰 삭제
+//     let closingTime = new Date().getTime();
+//     localStorage.setItem('lastActivity', closingTime.toString());
     
-    setTimeout(() => {
-      let currentTime = new Date().getTime();
-      let lastActivity = parseInt(localStorage.getItem('lastActivity') || '0');
+//     setTimeout(() => {
+//       let currentTime = new Date().getTime();
+//       let lastActivity = parseInt(localStorage.getItem('lastActivity') || '0');
       
-      // 마지막 활동 시간과 현재 시간의 차이가 100ms 이상이면 토큰 삭제
-      // 새로고침이나 페이지 이동의 경우 100ms 이내에 새로운 페이지가 로드되므로 토큰유지
-      if (currentTime - lastActivity >= 100) {
-        localStorage.removeItem('jwt');
-        localStorage.removeItem('lastActivity');
-      }
-    }, 100);
-  });
-};
+//       // 마지막 활동 시간과 현재 시간의 차이가 100ms 이상이면 토큰 삭제
+//       // 새로고침이나 페이지 이동의 경우 100ms 이내에 새로운 페이지가 로드되므로 토큰유지
+//       if (currentTime - lastActivity >= 100) {
+//         localStorage.removeItem('jwt');
+//         localStorage.removeItem('lastActivity');
+//       }
+//     }, 100);
+//   });
+// };
 
 function App() {
 
-  useEffect(() => {
-    setupAuthManager();
-  }, []);
+  // useEffect(() => {
+  //   setupAuthManager();
+  // }, []);
 
   return (
     <Router>
@@ -109,14 +111,16 @@ function App() {
                 <Sidebar />
                 <Navbar />
                 <Routes>
-                  <Route path="" element={<AdminMain />} />
                   <Route path="/user" element={<UserListPage />} />
                   <Route path="/myInfo" element={<EditProfile />} />
-                  <Route path="/news" element={<AdminNews />} />
+                  <Route path="" element={<AdminNews />} />
                   <Route path="news/create" element={<CreateNews />} />
                   <Route path="news/edit/:id" element={<EditNews />} />
 
                   <Route path="/edit" element={<PostEditor/>}/>
+
+                  <Route path="/test" element={<Test/>}/>
+
                   {/* 추가적인 하위 경로 */}
                 </Routes>
               </>
@@ -129,4 +133,3 @@ function App() {
 }
 
 export default App;
-
