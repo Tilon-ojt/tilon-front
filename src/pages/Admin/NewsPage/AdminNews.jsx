@@ -9,7 +9,7 @@ function AdminNews() {
 
   // 예제 데이터 (뉴스 리스트)
   const exampleNewsList = [
-    { id: "1", title: "First News", thumbnail: null, url: "https://example.com/1" },
+    { id: "1", title: "First News", thumbnail:null, url: "https://example.com/1" },
     { id: "2", title: "Second News", thumbnail: null, url: "https://example.com/2" },
     { id: "3", title: "Third News", thumbnail: null, url: "https://example.com/3" },
   ];
