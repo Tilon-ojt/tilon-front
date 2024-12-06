@@ -15,8 +15,6 @@ import Navbar from "../../../components/common/Navbar";
 function AdminMain() {
   return (
     <Container>
-      <Sidebar/>
-      <Navbar/>
       <Title>AdminXXXX</Title>
     </Container>
   );
@@ -28,12 +26,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;  /* 화면을 꽉 채우도록 설정 */
-
-  margin-left:20%;
+  margin-left:300px;
   margin-top:62px;
-
-  background-color: #f4f4f4;
-
 `;
 
 const Title = styled.h1`
