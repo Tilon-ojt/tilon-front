@@ -58,6 +58,7 @@ import AdminLogin from './pages/Admin/Login/Loginpage';
 import AdminMain from './pages/Admin/AdminMain/AdminMain';
 import AdminNews from './pages/Admin/NewsPage/AdminNews';
 import CreateNews from './pages/Admin/NewsPage/CreateNews';
+import EditNews from './pages/Admin/NewsPage/EditNews';
 
 function App() {
   return (
@@ -84,6 +85,7 @@ function App() {
                   {/* 관리자 뉴스 관리 */}
                   <Route path="news" element={<AdminNews />} />
                   <Route path="news/create" element={<CreateNews />} />
+                  <Route path="news/edit/:id" element={<EditNews />} />
                 </Routes>
               </>
             }

@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom"; // useNavigate 추가
+import { useNavigate } from "react-router-dom"; 
 import styled from "styled-components";
 
 // 액션 import
