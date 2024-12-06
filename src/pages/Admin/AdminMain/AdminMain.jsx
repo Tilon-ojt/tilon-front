@@ -1,5 +1,13 @@
 import styled from "styled-components";
 
+import NewsList from '../news/NewsList.jsx';
+import EditNews from '../news/EditNews.jsx';
+import EditProfile from '../MyInfo/EditProfile.jsx';
+import CreateNews from '../news/CreateNews.jsx';
+import EditPr from '../Pr/EditPr.jsx';
+import Insight from '../Insight/Insight.jsx';
+
+
 import Sidebar from "../../../components/common/Sidebar";
 import Navbar from "../../../components/common/Navbar";
 
