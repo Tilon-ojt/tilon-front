@@ -45,8 +45,6 @@ import React, { useEffect } from 'react';
 // }
 
 // export default App;
-
-import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';  // Import Provider from react-redux
 import store from './store';  // Make sure store is correctly imported
@@ -58,10 +56,9 @@ import Navbar from './components/common/Navbar';
 import PostEditor from './pages/Admin/PostEdit/PostEditor';
 import Loginpage from './pages/Admin/Login/Loginpage';  // Fix import name to match the component
 import AdminMain from './pages/Admin/AdminMain/AdminMain';
-import { Provider } from 'react-redux';
 import UserListPage from './pages/Admin/UserListPage/UserListPage';
 import EditProfile from './pages/Admin/MyInfo/EditProfile';
-import store from './store';
+
 import AdminNews from './pages/Admin/NewsPage/AdminNews';
 import CreateNews from './pages/Admin/NewsPage/CreateNews';
 import EditNews from './pages/Admin/NewsPage/EditNews';
@@ -97,10 +94,10 @@ function App() {
       <Provider store={store}>
         <Routes>
           {/* 메인 홈 경로 */}
-          <Route path="/" element={<TilonHomePage />} />
+          <Route path="/" element={<TilonHomepage />} />
 
           {/* 관리자 로그인 */}
-          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/login" element={<Loginpage />} />
 
           {/* 관리자 페이지 - Sidebar를 특정 경로에만 렌더링 */}
           <Route

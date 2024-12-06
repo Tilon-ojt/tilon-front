@@ -10,8 +10,11 @@ import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import useAuth from '../../../hooks/useAuth';
+import TheTable2 from '../../../components/element/TheTable2';
 
 function UserListPage() {
+
+    const thead = ['사용자','id', '비고'];
 
     const decodedToken = useAuth(); // 디코드된 JWT 데이터를 받음
     const [adminInfo, setAdminInfo] = useState([]);
@@ -45,6 +48,19 @@ function UserListPage() {
 
     return (
         <Container>
+            <TheTable2 thead={thead}>
+                
+                        {
+                            adminInfo?.map((item, idx) => 
+                                <tr key={idx}>
+                                    <td>{item?.empName}</td>
+                                    <td>{item?.empName}</td>
+                                    <td>{item?.empName}</td>
+
+                                </tr>
+                            )
+                        }
+                </TheTable2>
             <UserList adminInfo={adminInfo} getUserList={getUserList}/>
         </Container>
     );
