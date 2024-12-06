@@ -1,19 +1,35 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Link } from 'react-router-dom'; // Link 임포트
-import useAuth from '../../hooks/useAuth';
+import React from "react";
+import styled from "styled-components";
+import { Link } from "react-router-dom"; // Link 임포트
+import useAuth from "../../hooks/useAuth";
 
 // Sidebar 컴포넌트
 function Sidebar() {
   const decodedToken = useAuth(); // 디코드된 JWT 데이터를 받음
 
   const menuItems = [
-    { label: 'Main Page', link: '/admin', roles: ['ROLE_ADMIN', 'ROLE_SUPER_ADMIN'] },
-    { label: '회원 정보 수정', link: '/admin/myinfo', roles: ['ROLE_ADMIN'] },
-    { label: 'News', link: '/admin/news', roles: ['ROLE_ADMIN', 'ROLE_SUPER_ADMIN'] },
-    { label: 'PR', link: '/admin/pr', roles: ['ROLE_ADMIN', 'ROLE_SUPER_ADMIN'] },
-    { label: 'Insight', link: '/admin/insight', roles: ['ROLE_ADMIN', 'ROLE_SUPER_ADMIN'] },
-    { label: '유저 관리', link: '/admin/user', roles: ['ROLE_SUPER_ADMIN'] },
+    {
+      label: "Main Page",
+      link: "/admin",
+      roles: ["ROLE_ADMIN", "ROLE_SUPER_ADMIN"],
+    },
+    { label: "회원 정보 수정", link: "/admin/myinfo", roles: ["ROLE_ADMIN"] },
+    {
+      label: "News",
+      link: "/admin/news",
+      roles: ["ROLE_ADMIN", "ROLE_SUPER_ADMIN"],
+    },
+    {
+      label: "PR",
+      link: "/admin/pr",
+      roles: ["ROLE_ADMIN", "ROLE_SUPER_ADMIN"],
+    },
+    {
+      label: "Insight",
+      link: "/admin/insight",
+      roles: ["ROLE_ADMIN", "ROLE_SUPER_ADMIN"],
+    },
+    { label: "유저 관리", link: "/admin/user", roles: ["ROLE_SUPER_ADMIN"] },
   ];
 
   return (
@@ -27,10 +43,11 @@ function Sidebar() {
       <Divider />
       <Menu>
         {menuItems
-          .filter(item => item.roles.includes(decodedToken?.role)) // 역할에 맞는 메뉴만 필터링
+          .filter((item) => item.roles.includes(decodedToken?.role)) // 역할에 맞는 메뉴만 필터링
           .map((item, index) => (
             <MenuItem key={index}>
-              <MenuLink to={item.link}>{item.label}</MenuLink> {/* Link로 변경 */}
+              <MenuLink to={item.link}>{item.label}</MenuLink>{" "}
+              {/* Link로 변경 */}
             </MenuItem>
           ))}
       </Menu>
@@ -81,7 +98,8 @@ const MenuItem = styled.li`
   }
 `;
 
-const MenuLink = styled(Link)`  // a 태그 대신 Link 컴포넌트 사용
+const MenuLink = styled(Link)`
+  // a 태그 대신 Link 컴포넌트 사용
   text-decoration: none;
   color: lightgray;
   font-size: 22px;

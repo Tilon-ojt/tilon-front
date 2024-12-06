@@ -9,7 +9,7 @@ import store from '../../../store';
 import useAuth from '../../../hooks/useAuth';
 
 function AdminMain() {
-  const decodedToken = useAuth(); // 디코드된 JWT 데이터를 받음
+  const decodedToken = useAuth(); // 디코드된 JWT 데이터를 받음?
   console.log(`디코드된 jwt: ${JSON.stringify(decodedToken, null, 2)}`);
 
   return (
