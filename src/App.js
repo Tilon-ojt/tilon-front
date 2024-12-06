@@ -93,6 +93,8 @@ function App() {
     <Router>
       <Provider store={store}>
         <Routes>
+        <Route path="/edit" element={<PostEditor/>}/>
+        
           {/* 메인 홈 경로 */}
           <Route path="/" element={<TilonHomepage />} />
 
@@ -116,7 +118,7 @@ function App() {
                   <Route path="news/create" element={<CreateNews />} />
                   <Route path="news/edit/:id" element={<EditNews />} />
 
-                  <Route path="/edit" element={<PostEditor/>}/>
+                  
                   {/* 추가적인 하위 경로 */}
                 </Routes>
               </>
