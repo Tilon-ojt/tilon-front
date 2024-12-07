@@ -4,6 +4,10 @@
 import styled from "styled-components";
 
 function TheSearch(){
+
+    const clickHandler=()=>{
+        alert("click!");
+    }
     return(
         <Container>
             <Input placeholder="Search...."/>
@@ -11,6 +15,7 @@ function TheSearch(){
                 <img
                     alt="search"
                     src="https://icons.veryicon.com/png/o/education-technology/education-app/search-137.png"
+                    onClick={clickHandler}
                 />
             </Btn>
         </Container>

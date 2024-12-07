@@ -107,7 +107,8 @@ function Sidebar() {
     { label: '회원 정보 수정', link: '/admin/myinfo' },
     { label: '유저 관리', link: '/admin/user' },
 
-    { label: '테스트', link: '/admin/test' },
+    { label: '관리자 관리(유저관리테스트용)', link: '/admin/admin' },
+
 
   ];
 

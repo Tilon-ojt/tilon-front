@@ -60,10 +60,16 @@ import UserListPage from './pages/Admin/UserListPage/UserListPage';
 import EditProfile from './pages/Admin/MyInfo/EditProfile';
 
 import AdminNews from './pages/Admin/NewsPage/AdminNews';
-import CreateNews from './pages/Admin/NewsPage/CreateNews';
-import EditNews from './pages/Admin/NewsPage/EditNews';
+import NewsDetail from './pages/Admin/NewsPage/NewsDetail';
+import NewsCreate from './pages/Admin/NewsPage/NewsCreate';
+import NewsEdit from './pages/Admin/NewsPage/NewsEdit';
 
-import Test from './pages/Admin/Test';
+
+import AdminPr from './pages/Admin/Pr/AdminPr';
+import AdminInsight from './pages/Admin/Insight/AdminInsight';
+import AdminAdmin from './pages/Admin/AdminAdmin';
+
+
 
 // export const setupAuthManager = () => {
 //   window.addEventListener('beforeunload', (event) => {
@@ -113,13 +119,21 @@ function App() {
                 <Routes>
                   <Route path="/user" element={<UserListPage />} />
                   <Route path="/myInfo" element={<EditProfile />} />
+
+
                   <Route path="" element={<AdminNews />} />
-                  <Route path="news/create" element={<CreateNews />} />
-                  <Route path="news/edit/:id" element={<EditNews />} />
+
+                  <Route path="/news" element={<NewsDetail />} />
+                  <Route path="/news/create" element={<NewsCreate />} />
+                  <Route path="/news/edit" element={<NewsEdit />} />
+
+
+                  <Route path="/pr" element={<AdminPr />} />
+                  <Route path="/insight" element={<AdminInsight />} />
+                  <Route path="/admin" element={<AdminAdmin />} />
+
 
                   <Route path="/edit" element={<PostEditor/>}/>
-
-                  <Route path="/test" element={<Test/>}/>
 
                   {/* 추가적인 하위 경로 */}
                 </Routes>
