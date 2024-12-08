@@ -6,9 +6,10 @@ import TheTable from "../../../components/element/TheTable";
 function AdminNews() {
 
 
-  const thead = ["No", "Title", "URL"];
+  const thead = ["no", "Title", "URL"];
   const columnWidths = ["10px", "10px", "200px", "300px"]; // 각 열의 너비 설정
-
+  
+  //Test Data
   const tbody = [
     [1, "News 1", "/news-1"],
     [2, "News 2", "/news-2"],
@@ -67,10 +68,14 @@ function AdminNews() {
         <TheTable
          thead={thead} 
          columnWidths={columnWidths}
-         withCheckbox={true}>
+         withCheckbox={true}
+         isNavigate={true}
+         href={`/admin/news/`}
+        >
           {tbody.map((row) => (
             row.map((cell, idx) => <Td key={idx}>{cell}</Td>)
           ))}
+
         </TheTable>
       }
     />

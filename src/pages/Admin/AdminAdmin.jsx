@@ -47,7 +47,7 @@ function AdminAdmin() {
       }
       
       childrenTable={
-        <TheTable thead={thead} withCheckbox={true}>
+        <TheTable thead={thead} withCheckbox={true} isNavigate={false}>
           {tbody.map((row) => (
             row.map((cell, idx) => <Td key={idx}>{cell}</Td>)
           ))}

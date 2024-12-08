@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 const TheLayout = ({
   title, 
+  children,
   cildrenBtn
 }) => {
   return (
@@ -9,7 +10,7 @@ const TheLayout = ({
       <Header>
         <Title>{title}</Title>
       </Header>
-      <ContentContainer></ContentContainer>
+      <ContentContainer>{children}</ContentContainer>
       <BtnContainer>{cildrenBtn}</BtnContainer>
     </Container>
   );
@@ -21,7 +22,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
 
-  height: calc(100vh - 62px);
+  /* height: calc(100vh - 62px); */
   padding: 20px;
   box-sizing: border-box;
 
@@ -42,13 +43,13 @@ const Title = styled.h1`
   font-weight: bold;
 `;
 
-
-
 const ContentContainer = styled.div`
     /* border: 1px solid red; */
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  width: 50%;
+  margin: 0 10px 30px 0;
+  gap: 20px;
 `;
 
 const BtnContainer = styled.div`

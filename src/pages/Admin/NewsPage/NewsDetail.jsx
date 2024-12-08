@@ -5,7 +5,7 @@ function NewsCreate(){
 
     return(
         <TheNewsLayout
-            title="XX번째 뉴스"
+            title="뉴스"
             cildrenBtn={
                 <>
                     <TheButton
