@@ -76,6 +76,7 @@ import AdminNews from "./pages/Admin/NewsPage/AdminNews";
 import CreateNews from "./pages/Admin/NewsPage/CreateNews";
 import EditNews from "./pages/Admin/NewsPage/EditNews";
 import PrivateRoute from "./components/PrivateRoute"; // PrivateRoute 임포트
+import UserListPage2 from "./components/TestTable.jsx/UserListPage2";
 
 function App() {
   return (
@@ -98,7 +99,7 @@ function App() {
                 <Routes>
                   <Route
                     path="/user"
-                    element={<PrivateRoute element={<UserListPage />} />}
+                    element={<PrivateRoute element={<UserListPage2 />} />}
                   />
                   <Route
                     path="/myInfo"
