@@ -133,7 +133,7 @@ function App() {
                   <Route path="/myInfo" element={<EditProfile />} />
 
 
-                  <Route path="" element={<AdminNews />} />
+                  <Route path="/news" element={<AdminNews />} />
 
                   <Route path="/news/:postId" element={<NewsDetail />} />
                   <Route path="/news/create" element={<NewsCreate />} />
