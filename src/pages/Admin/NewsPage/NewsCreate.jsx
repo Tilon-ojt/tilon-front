@@ -46,7 +46,7 @@ function NewsCreate() {
     //취소 버튼
     const cancelHandler=()=>{
         alert("작성을 취소하시겠습니까?");
-        navigate("/admin/");
+        navigate("/admin/news");
     }
 
     return (

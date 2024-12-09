@@ -6,34 +6,7 @@ import TheButton from "../../../components/element/TheButton";
 import TheTable from "../../../components/element/TheTable";
 import { useNavigate } from "react-router-dom";
 
-// AdminNews 컴포넌트
-// function AdminNews({ token }) {
-//   const navigate = useNavigate(); // useNavigate 훅 사용
-//   console.log(`전달받은 토큰: ${JSON.stringify(token, null, 2)}`);
-
-//   // 예제 데이터 (뉴스 리스트)
-//   const exampleNewsList = [
-//     {
-//       id: "1",
-//       title: "First News",
-//       thumbnail: null,
-//       url: "https://example.com/1",
-//     },
-//     {
-//       id: "2",
-//       title: "Second News",
-//       thumbnail: null,
-//       url: "https://example.com/2",
-//     },
-//     {
-//       id: "3",
-//       title: "Third News",
-//       thumbnail: null,
-//       url: "https://example.com/3",
-//     },
-//   ];
-// }
-function AdminNews({token}) {
+function AdminNews() {
   const thead = ["", "no", "Title", "Link", "latest update"];
   const columnwidths = ["2%", "3%", "35%", "40%", "20%"];
 
@@ -59,7 +32,7 @@ function AdminNews({token}) {
           postId: item.postId,
           title: item.title,
           url: item.link || "-",
-          latestDate: format(new Date(item.updated_at), "yyyy-MM-dd HH:mm"),
+          latestDate: format(new Date(item.updatedAt), "yyyy-MM-dd HH:mm"),
         }));
         setTbody(newsData);
 
