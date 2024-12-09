@@ -3,7 +3,7 @@ import { ChevronRight, ChevronLeft } from "lucide-react";
 import TheTable2 from "./TheTable2";
 import styled from "styled-components";
 
-function TheList({
+function TheList2({
   title,
   thead,
   data,
@@ -115,7 +115,7 @@ function TheList({
   );
 }
 
-export default TheList;
+export default TheList2;
 
 // 스타일 컴포넌트
 const Container = styled.div`

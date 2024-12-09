@@ -1,14 +1,15 @@
-import AdminAddModal from "../../../components/common/AdminAddModal";
-import TheButton2 from "../../../components/element/TheButton2";
-import TheList from "../../../components/element/TheList";
-import { OPEN_MODAL } from "../../../reducer/AdminModal";
-import { useDispatch, useSelector } from "react-redux";
 import React, { useState, useEffect } from "react";
-import api from "../../../api/axios";
+import { useDispatch, useSelector } from "react-redux";
+import api from "../../api/axios";
+import { OPEN_MODAL } from "../../reducer/AdminModal";
+import TheButton2 from "../element/TheButton2";
+import TheTable2 from "../element/TheTable2";
 import styled from "styled-components";
-import "./UserListPage.css";
+import { ChevronRight, ChevronLeft } from "lucide-react";
+import AdminAddModal from "../../components/common/AdminAddModal";
+import "./UserListPage2.css";
 
-function UserListPage({ token }) {
+function UserListPage2({ token }) {
   const isShow = useSelector((state) => state.adminModal.isShow);
   const dispatch = useDispatch();
   const openModal = () => {
@@ -16,8 +17,8 @@ function UserListPage({ token }) {
   };
 
   const [adminInfo, setAdminInfo] = useState([]);
-  const [adminIds, setAdminIds] = useState([]);
-  const [selectedUsers, setSelectedUsers] = useState({}); // selectedUsers 상태 추가
+  const [adminIds, setAdminIds] = useState([]); // 선택된 사용자 ID
+  const [selectedUsers, setSelectedUsers] = useState({}); // 선택된 사용자 상태
 
   console.log(`전달받은 jwt: ${JSON.stringify(token, null, 2)}`);
 
@@ -56,7 +57,6 @@ function UserListPage({ token }) {
   const deleteUesr = async () => {
     const isConfirmed = window.confirm("선택한 사용자를 삭제하시겠습니까?");
     if (isConfirmed) {
-      // console.log(`삭제될 유저 번호: ${JSON.stringify(adminIds, null, 2)}`);
       console.log(`삭제될 유저 번호: ${adminIds}`);
 
       try {
@@ -112,9 +112,30 @@ function UserListPage({ token }) {
     }
   };
 
+  // 페이지네이션 관련 함수
+  const itemsPerPage = 10;
+  const [currentPage, setCurrentPage] = useState(1);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = adminInfo.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(adminInfo.length / itemsPerPage);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const handlePrevPage = () =>
+    currentPage > 1 && setCurrentPage(currentPage - 1);
+  const handleNextPage = () =>
+    currentPage < totalPages && setCurrentPage(currentPage + 1);
+
+  // 체크박스 변경 처리
+  const handleCheckboxChange = (id) => {
+    setSelectedUsers((prev) => ({
+      ...prev,
+      [id]: !prev[id], // 개별 ID의 상태 반전
+    }));
+  };
+
   return (
     <Container>
-      {/* <UserList adminInfo={adminInfo} getUserList={getUserList} /> */}
       <ButtonContainer>
         <TheButton2 $primary onClick={openModal}>
           추가
@@ -126,23 +147,56 @@ function UserListPage({ token }) {
           비밀번호 초기화
         </TheButton2>
       </ButtonContainer>
-      <TheList
-        title="유저 관리"
+      <Title>유저 관리</Title>
+      <TheTable2
         thead={["", "번호", "이름", "아이디", "가입날짜"]}
-        data={adminInfo}
-        itemsPerPage={10}
-        columns={["adminId", "nickname", "empName", "updatedAt"]}
-        onSelectionChange={handleSelectionChange} // 부모 컴포넌트로 선택된 아이디 전달
-        idColumn={"adminId"}
-        selectedUsers={selectedUsers} // selectedUsers를 자식 컴포넌트에 전달
+        data={currentItems.map((item) => ({
+          checkbox: (
+            <input
+              type="checkbox"
+              checked={selectedUsers[item.adminId] || false}
+              onChange={() => handleCheckboxChange(item.adminId)}
+            />
+          ),
+          adminId: item.adminId,
+          nickname: item.nickname,
+          empName: item.empName,
+          updatedAt: item.updatedAt,
+        }))}
       />
-      {isShow ? <AdminAddModal getUserList={getUserList} /> : null}
+      <Pagination>
+        <ChevronLeft
+          onClick={handlePrevPage}
+          style={{
+            cursor: "pointer",
+            visibility: currentPage > 1 ? "visible" : "hidden",
+          }}
+        />
+        {[...Array(totalPages)].map((_, index) => (
+          <PageButton
+            key={index}
+            onClick={() => paginate(index + 1)}
+            className={currentPage === index + 1 ? "active" : ""}
+          >
+            {index + 1}
+          </PageButton>
+        ))}
+        <ChevronRight
+          onClick={handleNextPage}
+          style={{
+            cursor: "pointer",
+            visibility: currentPage < totalPages ? "visible" : "hidden",
+          }}
+        />
+      </Pagination>
+      {isShow && <AdminAddModal getUserList={getUserList} />}
     </Container>
   );
 }
 
-export default UserListPage;
+export default UserListPage2;
 
+// 스타일 컴포넌트
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -159,4 +213,35 @@ const ButtonContainer = styled.div`
   right: 20px;
   gap: 10px;
   z-index: 10;
+`;
+
+const Title = styled.h2`
+  color: black;
+  align-self: flex-start;
+  font-size: 24px;
+  margin-bottom: 20px;
+  margin-top: 0;
+`;
+
+const Pagination = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: absolute;
+  bottom: -20px;
+`;
+
+const PageButton = styled.button`
+  margin: 0 5px;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  border-radius: 50%;
+  &.active {
+    background-color: #007bff;
+    color: white;
+  }
+  &:hover {
+    background-color: #ddd;
+  }
 `;

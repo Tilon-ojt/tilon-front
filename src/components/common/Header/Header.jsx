@@ -21,7 +21,7 @@ function Header({ headerBackground }) {
   const navigate = useNavigate();
 
   const clicktest = () => {
-    navigate("/admin");
+    navigate("/admin/news");
   };
 
   return (
