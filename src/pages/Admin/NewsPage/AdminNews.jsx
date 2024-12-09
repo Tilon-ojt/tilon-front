@@ -18,6 +18,7 @@ function AdminNews() {
   useEffect(() => {
     const fetchNews = async () => {
       try {
+        console.log("Fetching news data...");
         const token = localStorage.getItem("token");
         const response = await axios.get("/admin/post?category=NEWS", {
           headers: {
@@ -33,9 +34,12 @@ function AdminNews() {
           latestDate: format(new Date(item.updated_at), "yyyy-MM-dd HH:mm"),
         }));
         setTbody(newsData);
+
+        console.log("Fetched news data:", newsData);
       } catch (error) {
         console.error("Failed to fetch news:", error);
         alert("데이터를 불러오지 못했습니다.");
+        console.error("Fetch error:", error.message);
       }
     };
 
@@ -43,39 +47,42 @@ function AdminNews() {
   }, []);
 
   const searchHandler = (e) => {
+    console.log("Search button clicked");
     alert("Search!");
   };
 
   const goToCreateHandler = () => {
+    console.log("Navigate to create news page");
     navigate(`/admin/news/create`);
   };
 
   const goToEditHandler = (postId) => {
+    console.log(`Navigate to edit page for postId: ${postId}`);
     navigate(`/admin/news/${postId}`);
-    console.log(`/admin/news/${postId}`);
   };
 
   const Td = ({ children, onClick }) => <td onClick={onClick}>{children}</td>;
 
   // 뉴스 삭제 버튼 핸들러
   const deleteHandler = async () => {
+    console.log("Delete button clicked");
 
-    // 체크 안 하고 클릭 시
     if (selectedRows.length === 0) {
+      console.log("No news items selected for deletion");
       alert("삭제할 항목을 선택하세요.");
       return;
     }
-    
-    // 체크 후 클릭 시
+
     if (!window.confirm("선택한 항목을 삭제하시겠습니까?")) {
+      console.log("User cancelled the delete confirmation dialog");
       return;
     }
-  
+
     try {
       const token = localStorage.getItem("token");
-  
-      // 선택된 각 postId에 대해 DELETE 요청
+
       for (const postId of selectedRows) {
+        console.log(`Deleting news item with postId: ${postId}`);
         await axios.delete(`/admin/post/${postId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -83,20 +90,20 @@ function AdminNews() {
           },
         });
       }
-  
-      // 로컬 상태 업데이트
+
       setTbody((prevData) =>
         prevData.filter((newsItem) => !selectedRows.includes(newsItem.postId))
       );
       setSelectedRows([]);
-  
+
+      console.log("Selected news items have been deleted.");
       alert("선택한 항목이 삭제되었습니다.");
     } catch (error) {
       console.error("Failed to delete news:", error);
+      console.error("Delete error:", error.message);
       alert("삭제에 실패했습니다. 다시 시도해주세요.");
     }
   };
-  
 
   return (
     <TheLayout
@@ -128,7 +135,10 @@ function AdminNews() {
           columnWidths={columnWidths}
           withCheckbox={true}
           selectedRows={selectedRows}
-          setSelectedRows={setSelectedRows}
+          setSelectedRows={(rows) => {
+            console.log("Selected rows updated:", rows);
+            setSelectedRows(rows);
+          }}
         >
           {tbody.map((row) => (
             <React.Fragment key={row.postId}>
@@ -137,9 +147,10 @@ function AdminNews() {
                   type="checkbox"
                   checked={selectedRows.includes(row.postId)}
                   onChange={() => {
+                    console.log(`Checkbox toggled for postId: ${row.postId}`);
                     setSelectedRows((prevSelected) =>
                       prevSelected.includes(row.postId)
-                        ? prevSelected.filter((selected) => selected !== row.postId)
+                        ? prevSelected.filter((id) => id !== row.postId)
                         : [...prevSelected, row.postId]
                     );
                   }}
