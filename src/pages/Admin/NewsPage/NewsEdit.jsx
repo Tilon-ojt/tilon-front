@@ -1,8 +1,8 @@
-import styled from "styled-components";
 import TheButton from "../../../components/element/TheButton";
 import TheNewsLayout from "../../../components/element/TheNewsLayout";
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useRef } from "react";
+import TheNewsCELayout from "../../../components/element/TheNewsCELayout";
 
 const testImg = "https://image.utoimage.com/preview/cp872722/2022/12/202212008462_500.jpg";
 
@@ -44,59 +44,29 @@ function NewsEdit() {
     }
   };
 
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     alert(`뉴스 수정 완료!\n제목: ${title}\n링크: ${url}`);
+  //취소 버튼
+  const cancelHandler=()=>{
+      alert("작성을 취소하시겠습니까?");
+      navigate("/admin/");
+  }
 
-//     // 여기에 수정된 정보를 저장하는 기능 필요
-//     navigate("/admin");
-//   };
-
-  const isAlert = () => {
-    alert("작성을 취소하고 기존 페이지로 돌아갑니다.");
-    navigate("/admin");
-  };
 
   return (
     <TheNewsLayout
       title={`no.${newsItem.id} 뉴스 수정`}
       children={
         <>
-          <ThumnailImg>
-            <img alt="썸네일 이미지" src={thumbnailSrc} />
-          </ThumnailImg>
-
-          <Input>
-            <span>썸네일 이미지</span>
-            <input
-              type="file"
-              accept="image/*"
-              ref={fileInputRef}
-              onChange={thumbnailHandler}
+            <TheNewsCELayout
+                title={title}
+                setTitle={setTitle}
+                url={url}
+                setUrl={setUrl}
+                thumbnailSrc={thumbnailSrc}
+                setThumbnailSrc={setThumbnailSrc}
+                onChange={thumbnailHandler}
+                onClick={clearThumbnailHandler}
+                ref={fileInputRef}
             />
-            <button onClick={clearThumbnailHandler}>✖</button>
-          </Input>
-
-          <Input>
-            <span>뉴스 제목</span>
-            <input
-              type="text"
-              placeholder="제목 입력"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-          </Input>
-
-          <Input>
-            <span>연결 링크</span>
-            <input
-              type="url"
-              placeholder="URL 입력"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-            />
-          </Input>
-
         </>
       }
       cildrenBtn={
@@ -112,12 +82,11 @@ function NewsEdit() {
           />
           <TheButton
             label={"취소"}
-            role={"navigate"}
             color={"black"}
             bgColor={"#e3e3e3"}
             width={"150px"}
             height={"35px"}
-            onClick={isAlert}
+            onClick={cancelHandler}
           />
         </>
       }
@@ -125,62 +94,5 @@ function NewsEdit() {
   );
 }
 
-const ThumnailImg = styled.div`
-  height: 300px;
-  height: auto;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-
-  img {
-    border: 2px solid lightgray;
-    width: 400px;
-    border-radius: 10px;
-    margin-bottom: 10px;
-  }
-`;
-
-const Input = styled.div`
-  height: 25px;
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  gap: 20px;
-
-  span {
-    border-right: 2px solid lightgray;
-    width: 130px;
-  }
-
-  input[type="file"] {
-    width: 65%;
-    height: 100%;
-  }
-  input[type="text"],
-  input[type="url"] {
-    width: 70%;
-    height: 100%;
-    padding: 0 5px;
-    border: 1px solid lightgray;
-    border-radius: 5px;
-
-    &:focus {
-      outline: none;
-      border: 1.5px solid lightgray;
-    }
-  }
-
-  button {
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        font-size: 14px;
-
-        &:hover {
-            background: #f5f5f5;
-            border-radius: 100%;
-        }
-    }
-`;
 
 export default NewsEdit;

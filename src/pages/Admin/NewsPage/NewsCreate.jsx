@@ -1,14 +1,20 @@
-import styled from "styled-components";
 import TheButton from "../../../components/element/TheButton";
 import TheNewsLayout from "../../../components/element/TheNewsLayout";
 import { useState, useRef } from "react";
+import TheNewsCELayout from "../../../components/element/TheNewsCELayout";
+import { useNavigate } from "react-router-dom";
 
 function NewsCreate() {
+
+    const navigate = useNavigate();
+
     const placeholdImg =
         "https://community.softr.io/uploads/db9110/original/2X/7/74e6e7e382d0ff5d7773ca9a87e6f6f8817a68a6.jpeg";
-
-    const [thumbnailSrc, setThumbnailSrc] = useState(placeholdImg);
-    const fileInputRef = useRef(null);
+        
+        const [thumbnailSrc, setThumbnailSrc] = useState(placeholdImg);
+        const [title, setTitle] = useState("");
+        const [url, setUrl] = useState("");
+        const fileInputRef = useRef(null);
 
     // 썸네일 설정
     const thumbnailHandler = (e) => {
@@ -30,46 +36,34 @@ function NewsCreate() {
         }
     };
 
-    const isAlert = () => {
-        alert("작성을 취소하고 기존 페이지로 돌아갑니다.");
-    };
+    //취소 버튼
+    const cancelHandler=()=>{
+        alert("작성을 취소하시겠습니까?");
+        navigate("/admin/");
+    }
 
     return (
         <TheNewsLayout
             title="뉴스 작성"
             children={
                 <>
-                    <ThumnailImg>
-                        <img alt="썸네일 이미지" src={thumbnailSrc} />
-                    </ThumnailImg>
-
-                    <Input>
-                        <span>썸네일 이미지 </span>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            ref={fileInputRef}
-                            onChange={thumbnailHandler}
-                        />
-                        <button onClick={clearThumbnailHandler}>✖</button>
-                    </Input>
-
-                    <Input>
-                        <span>뉴스 제목 </span>
-                        <input type="text" placeholder="제목을 입력하세요." />
-                    </Input>
-
-                    <Input>
-                        <span>연결 링크 </span>
-                        <input type="url" placeholder="연결 링크를 입력하세요." />
-                    </Input>
+                    <TheNewsCELayout
+                        title={title}
+                        setTitle={setTitle}
+                        url={url}
+                        setUrl={setUrl}
+                        thumbnailSrc={thumbnailSrc}
+                        setThumbnailSrc={setThumbnailSrc}
+                        onChange={thumbnailHandler}
+                        onClick={clearThumbnailHandler}
+                        ref={fileInputRef}
+                    />
                 </>
             }
             cildrenBtn={
                 <>
                     <TheButton
                         label={"저장 완료"}
-                        role={"submit"}
                         color={"white"}
                         bgColor={"#5060fb"}
                         width={"150px"}
@@ -77,78 +71,16 @@ function NewsCreate() {
                     />
                     <TheButton
                         label={"취소"}
-                        role={"navigate"}
                         color={"black"}
                         bgColor={"#e3e3e3"}
                         width={"150px"}
                         height={"35px"}
-                        href={"/admin"}
-                        onClick={isAlert}
+                        onClick={cancelHandler}
                     />
                 </>
             }
         />
     );
 }
-
-const ThumnailImg = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    img {
-        border: 2px solid lightgray;
-        width: 400px;
-        border-radius: 10px;
-        margin-bottom: 10px;
-    }
-`;
-
-const Input = styled.div`
-    height: 25px;
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    gap: 20px;
-
-    /* border: 2px solid red; */
-
-    span {
-        border-right: 2px solid lightgray;
-        width: 130px;
-    }
-
-    input[type="file"]{
-        width: 65%;
-        height: 100%;
-    }
-
-    input[type="text"],
-    input[type="url"]{
-        width: 70%;
-        height: 100%;
-        padding: 0 5px;
-
-        border: 1px solid lightgray;
-        border-radius: 5px;
-
-        &:focus{
-            outline: none;
-            border: 1.5px solid lightgray;
-        }
-    }
-
-    button {
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        font-size: 14px;
-
-        &:hover {
-            background: #f5f5f5;
-            border-radius: 100%;
-        }
-    }
-`;
 
 export default NewsCreate;

@@ -19,14 +19,21 @@ function AdminNews() {
 
   const navigate = useNavigate();
 
-  const clickHandler = (id) => {
-    navigate(`/admin/news/${id}`);
+
+
+  const goToCreateHandler = (id) => {
+    navigate(`/admin/news/create`);
   };
 
-  // const Td =({children})=><td onClick={clickHandler}>{children}</td>
+
+  const goToEditHandler = (id) => {
+    navigate(`/admin/news/${id}`);
+  };
+  
   const Td = ({ children, onClick }) => (
     <td onClick={onClick}>{children}</td>
   );
+
   return (
     <TheLayout
       title={"News"}
@@ -35,12 +42,11 @@ function AdminNews() {
         <>
           <TheButton
             label="Add new News"
-            role="navigate"
             color="white"
             bgColor="#5060fb"
             width="150px"
             height="40px"
-            href="/admin/news/create"
+            onClick={goToCreateHandler}
           />
           <TheButton
             label="Delete News"
@@ -59,9 +65,9 @@ function AdminNews() {
           withCheckbox={true}>
           {tbody.map((row) => (
             <>
-              <Td onClick={() => clickHandler(row.id)}>{row.id}</Td>
-              <Td onClick={() => clickHandler(row.id)}>{row.title}</Td>
-              <Td onClick={() => clickHandler(row.id)}>{row.url}</Td>
+              <Td onClick={() => goToEditHandler(row.id)}>{row.id}</Td>
+              <Td onClick={() => goToEditHandler(row.id)}>{row.title}</Td>
+              <Td onClick={() => goToEditHandler(row.id)}>{row.url}</Td>
             </>
           ))}
         </TheTable>

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import TheNewsLayout from "../../../components/element/TheNewsLayout";
 import TheButton from "../../../components/element/TheButton";
 
@@ -15,11 +15,18 @@ const tbody = [
 ];
 
 function NewsDetail() {
+
+  const navigate = useNavigate();
   const { id } = useParams();
 
   const newsItem = tbody.find((item) => item.id === Number(id));
 
-  if (!newsItem) return <div>뉴스가 존재하지 않습니다.</div>;
+  // if (!newsItem) return <div>뉴스가 존재하지 않습니다.</div>;
+
+  // 수정하기 버튼
+  const goToEditHandler=()=>{
+    navigate(`/admin/news/edit/${newsItem.id}`);
+  }
 
   return (
     <TheNewsLayout
@@ -46,12 +53,11 @@ function NewsDetail() {
       cildrenBtn={
         <TheButton
           label="수정하기"
-          role="navigate"
           color="white"
           bgColor="#5060fb"
           width="300px"
           height="40px"
-          href={`/admin/news/edit/${newsItem.id}`}
+          onClick={goToEditHandler}
         />
       }
     />
