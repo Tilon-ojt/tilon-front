@@ -83,7 +83,7 @@ const Input = styled.input`
 
 const Btn = styled.div`
  img{
-     width: 30px;
+    width: 30px;
     height: 30px;
 
     opacity: 0.7;

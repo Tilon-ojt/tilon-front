@@ -3,10 +3,10 @@ import styled from "styled-components";
 const TheTable = ({
   children,
   thead = [],
-  columnWidths = [], // 각 열의 너비 배열
+  columnwidths = [], // 각 열의 너비 배열
 }) => {
   return (
-    <TableEl columnWidths={columnWidths}>
+    <TableEl columnwidths={columnwidths}>
       <thead>
         <tr>
           {thead?.map((item, idx) => (
@@ -51,9 +51,9 @@ const TableEl = styled.table`
     border: 1px solid #ddd;
   }
 
-  ${({ columnWidths }) =>
-    columnWidths.length > 0 &&
-    columnWidths.map(
+  ${({ columnwidths }) =>
+    columnwidths.length > 0 &&
+  columnwidths.map(
       (width, idx) => `
         & th:nth-child(${idx + 1}),
         & td:nth-child(${idx + 1}) {

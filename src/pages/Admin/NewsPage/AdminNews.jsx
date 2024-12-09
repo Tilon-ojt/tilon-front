@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 function AdminNews() {
   const thead = ["", "no", "Title", "Link", "latest update"];
-  const columnWidths = ["2%", "3%", "35%", "40%", "20%"];
+  const columnwidths = ["2%", "3%", "35%", "40%", "20%"];
 
   const [selectedRows, setSelectedRows] = useState([]);
   const [tbody, setTbody] = useState([]);
@@ -20,6 +20,7 @@ function AdminNews() {
       try {
         console.log("Fetching news data...");
         const token = localStorage.getItem("token");
+        console.log("Token:", token);
         const response = await axios.get("/admin/post?category=NEWS", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -83,9 +84,9 @@ function AdminNews() {
 
       for (const postId of selectedRows) {
         console.log(`Deleting news item with postId: ${postId}`);
-        await axios.delete(`/admin/post/${postId}`, {
+        await axios.delete(`/admin/post/category=News/${postId}`, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization:` Bearer ${token}`,
             "Content-Type": "application/json",
           },
         });
@@ -132,7 +133,7 @@ function AdminNews() {
       childrenTable={
         <TheTable
           thead={thead}
-          columnWidths={columnWidths}
+          columnwidths={columnwidths}
           withCheckbox={true}
           selectedRows={selectedRows}
           setSelectedRows={(rows) => {
@@ -168,4 +169,4 @@ function AdminNews() {
   );
 }
 
-export default AdminNews;
+export default AdminNews; 
