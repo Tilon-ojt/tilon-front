@@ -55,7 +55,7 @@ import Navbar from './components/common/Navbar';
 
 import PostEditor from './pages/Admin/PostEdit/PostEditor';
 import Loginpage from './pages/Admin/Login/Loginpage';  // Fix import name to match the component
-import AdminMain from './pages/Admin/AdminMain/AdminMain';
+// import AdminMain from './pages/Admin/AdminMain/AdminMain';
 import UserListPage from './pages/Admin/UserListPage/UserListPage';
 import EditProfile from './pages/Admin/MyInfo/EditProfile';
 
@@ -123,9 +123,9 @@ function App() {
 
                   <Route path="" element={<AdminNews />} />
 
-                  <Route path="/news/:id" element={<NewsDetail />} />
+                  <Route path="/news/:postId" element={<NewsDetail />} />
                   <Route path="/news/create" element={<NewsCreate />} />
-                  <Route path="/news/edit/:id" element={<NewsEdit />} />
+                  <Route path="/news/edit/:postId" element={<NewsEdit />} />
 
 
                   <Route path="/pr" element={<AdminPr />} />
