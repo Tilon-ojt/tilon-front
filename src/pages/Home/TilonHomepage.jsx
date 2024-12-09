@@ -1,18 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react';
-import Header from '../../components/common/Header/Header.jsx';
-import Banner from './Banner/Banner';
-import './TilonHomepage.css';
+import React, { useEffect, useRef, useState } from "react";
+import Header from "../../components/common/Header/Header.jsx";
+import Banner from "./Banner/Banner";
+import "./TilonHomepage.css";
 
-import Footer from '../../components/common/Footer/Footer.jsx';
-import News from './News/News';
-import PrInsight from './PrInsight/PrInsight';
-import NewsHome from './News/NewsHome.jsx';
+import Footer from "../../components/common/Footer/Footer.jsx";
+import News from "./News/News";
+import PrInsight from "./PrInsight/PrInsight";
 
 const TilonHomepage = () => {
   const isScrolling = useRef(false);
   const [showChevron, setShowChevron] = useState(false); // 버튼 보이기 상태
   const [isWideScreen, setIsWideScreen] = useState(window.innerWidth > 770);
   const [isScrollingFromButton, setIsScrollingFromButton] = useState(false); // 버튼 클릭 상태 추적
+  const [headerBackground, setHeaderBackground] = useState(false);
 
   // 각 섹션의 ref 생성 (Banner 포함)
   const sectionRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
@@ -23,9 +23,9 @@ const TilonHomepage = () => {
       setIsWideScreen(window.innerWidth > 770);
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
-    return () => window.removeEventListener('resize', handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const TilonHomepage = () => {
         isScrolling.current = true;
 
         sectionRefs[sectionRefs.length - 2].current.scrollIntoView({
-          behavior: 'smooth',
+          behavior: "smooth",
         });
 
         setTimeout(() => {
@@ -66,7 +66,7 @@ const TilonHomepage = () => {
         isScrolling.current = true;
 
         sectionRefs[nextSectionIndex].current.scrollIntoView({
-          behavior: 'smooth',
+          behavior: "smooth",
         });
 
         setTimeout(() => {
@@ -76,20 +76,22 @@ const TilonHomepage = () => {
     };
 
     const handleScroll = (e) => {
-            // 스크롤을 내리면 버튼 보이기, 최상단에서만 숨기기
-            if (window.scrollY > 50) {
-              setShowChevron(true);
-            } else {
-              setShowChevron(false);
-            }
-    }
+      // 스크롤을 내리면 버튼 보이기, 최상단에서만 숨기기
+      if (window.scrollY > 50) {
+        setShowChevron(true);
+        setHeaderBackground(true);
+      } else {
+        setShowChevron(false);
+        setHeaderBackground(false);
+      }
+    };
 
-    window.addEventListener('wheel', handleWheel, { passive: false });
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
-      window.removeEventListener('wheel', handleScroll);
-      window.removeEventListener('scroll', handleWheel);
+      window.removeEventListener("wheel", handleScroll);
+      window.removeEventListener("scroll", handleWheel);
     };
   }, [isWideScreen, isScrollingFromButton, sectionRefs]);
 
@@ -97,7 +99,7 @@ const TilonHomepage = () => {
     setIsScrollingFromButton(true); // 버튼 클릭 시 상태 변경
     window.scrollTo({
       top: 0,
-      behavior: 'smooth',
+      behavior: "smooth",
     });
     setShowChevron(false);
 
@@ -110,10 +112,10 @@ const TilonHomepage = () => {
     <div className="homepage">
       <button
         size={45}
-        className={`top-icon ${showChevron ? 'visible' : 'hidden'}`}
+        className={`top-icon ${showChevron ? "visible" : "hidden"}`}
         onClick={handleIconClick}
       />
-      <Header />
+      <Header headerBackground={headerBackground} />
 
       <div className="section" ref={sectionRefs[0]}>
         <Banner />
@@ -125,7 +127,11 @@ const TilonHomepage = () => {
       <div className="section" ref={sectionRefs[2]}>
         <PrInsight />
       </div>
-      <footer className="footer-section" ref={sectionRefs[3]} style={{ width: '100%', height: '250px' }}>
+      <footer
+        className="footer-section"
+        ref={sectionRefs[3]}
+        style={{ width: "100%", height: "250px" }}
+      >
         <Footer />
       </footer>
     </div>

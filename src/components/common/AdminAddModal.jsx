@@ -4,179 +4,191 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import api from "../../api/axios";
 
-function AdminAddModal( {getUserList} ) {
+function AdminAddModal({ getUserList }) {
+  const [nickname, setnickname] = useState("");
+  const [empName, setEmpName] = useState("");
 
-    const [nickName, setNickName] = useState("");
-    const [empName, setEmpName] = useState("");
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.auth.token);
 
-    const dispatch = useDispatch();
-    const token = useSelector((state) => state.auth.token);
+  const handlenicknameChange = (e) => {
+    setnickname(e.target.value);
+  };
 
-    const handleNickNameChange = (e) => {
-        setNickName(e.target.value);
-    };
+  // 아아디 유효성검사
+  const handleEmpNameChange = (e) => {
+    const value = e.target.value; // 사용자가 입력한 값을 가져옴
+    // 입력값이 영문자 및 숫자로만 이루어졌는지 검사
+    if (/^[a-zA-Z0-9]*$/.test(value)) {
+      setEmpName(value); // 조건이 참이면 상태 업데이트
+    }
+  };
 
-    const handleEmpNameChange = (e) => {
-        setEmpName(e.target.value);
-    };
+  const closeModal = () => {
+    dispatch({ type: CLOSE_MODAL });
+  };
 
-    const closeModal = () => {
-        dispatch({ type: CLOSE_MODAL });
-    };
+  const submitHandler = () => {
+    if (!nickname.trim() || !empName.trim()) {
+      alert("이름과 아이디를 모두 입력해주세요.");
+      return;
+    }
+    console.log({ nickname, empName });
+    userInput(); // 유저 저장 함수 호출
+  };
 
-    const submitHandler = () => {
-        console.log({ nickName, empName });
-        userInput(); // 유저 저장 함수 호출
-    };
+  // 유저 저장
+  const userInput = async () => {
+    console.log(`닉네임: ${nickname}, 아이디: ${empName}`);
 
-    // 유저 저장
-    const userInput = async () => {
-        console.log(`닉네임: ${nickName}, 아이디: ${empName}`);
-
-        try {
-            const response = await api.post("/admin/accounts", { nickName, empName }, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                  },
-
-            });
-
-            if (response.status === 200) {
-                dispatch({ type: CLOSE_MODAL });
-                alert("아이디 생성 성공");
-                getUserList();
-                console.log("정상 처리되었습니다.");
-            } else {
-                dispatch({ type: CLOSE_MODAL });
-                alert("아이디 생성 실패");
-                console.log("오류가 발생했습니다.");
-            }
-        } catch (error) {
-            console.log("에러:", error);
+    try {
+      const response = await api.post(
+        "/admin/accounts",
+        { nickname, empName },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         }
-    };
+      );
+      console.log(response.data);
 
-    return (
-        <ModalOverlay>
-            <ModalContainer>
-                <ModalTitle>관리자 추가</ModalTitle>
-                <Label>
-                    <P>이름 :</P>
-                    <Input
-                        type="text"
-                        name="nickName"
-                        value={nickName}
-                        onChange={handleNickNameChange}
-                        placeholder="(선택사항)"
-                    />
-                </Label>
-                <Label>
-                    <P>아이디 :</P>
-                    <Input
-                        type="text"
-                        name="empName"
-                        value={empName}
-                        onChange={handleEmpNameChange}
-                        required
-                    />
-                </Label>
-                <ModalButtons>
-                    <SubmitButton type="submit" onClick={submitHandler}>
-                        추가
-                    </SubmitButton>
-                    <CancelButton type="button" onClick={closeModal}>
-                        취소
-                    </CancelButton>
-                </ModalButtons>
-            </ModalContainer>
-        </ModalOverlay>
-    );
+      if (response.status === 201) {
+        dispatch({ type: CLOSE_MODAL });
+        alert("아이디 생성 성공");
+        getUserList();
+        console.log("정상 처리되었습니다.");
+      } else {
+        dispatch({ type: CLOSE_MODAL });
+        alert("아이디 생성 실패");
+        console.log("오류가 발생했습니다.");
+      }
+    } catch (error) {
+      console.log("에러:", error);
+    }
+  };
+
+  return (
+    <ModalOverlay>
+      <ModalContainer>
+        <ModalTitle>관리자 추가</ModalTitle>
+        <Label>
+          <P>이름 :</P>
+          <Input
+            type="text"
+            name="nickname"
+            value={nickname}
+            onChange={handlenicknameChange}
+          />
+        </Label>
+        <Label>
+          <P>아이디 :</P>
+          <Input
+            type="text"
+            name="empName"
+            value={empName}
+            onChange={handleEmpNameChange}
+            required
+            placeholder="영문과 숫자만 입력 가능합니다"
+          />
+        </Label>
+        <ModalButtons>
+          <SubmitButton type="submit" onClick={submitHandler}>
+            추가
+          </SubmitButton>
+          <CancelButton type="button" onClick={closeModal}>
+            취소
+          </CancelButton>
+        </ModalButtons>
+      </ModalContainer>
+    </ModalOverlay>
+  );
 }
 
 export default AdminAddModal;
 
 // 아래 스타일은 그대로 유지됩니다.
 const ModalOverlay = styled.div`
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 `;
 
 const P = styled.p`
-    padding-left: 10px;
-    width: 80px;
+  padding-left: 10px;
+  width: 80px;
 `;
 
 const ModalContainer = styled.div`
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    width: 400px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 `;
 
 const ModalTitle = styled.h2`
-    margin-bottom: 20px;
-    font-size: 24px;
-    text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  text-align: center;
 `;
 
 const Label = styled.label`
-    display: flex;
-    margin-bottom: 10px;
-    font-weight: bold;
+  display: flex;
+  margin-bottom: 10px;
+  font-weight: bold;
 `;
 
 const Input = styled.input`
-    width: 70%;
-    height: 34px;
-    margin-left: 10px;
-    margin-top: 5px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+  width: 70%;
+  height: 34px;
+  margin-left: 10px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 `;
 
 const ModalButtons = styled.div`
-    display: flex;
-    gap: 20px;
-    justify-content: center;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
 `;
 
 const SubmitButton = styled.button`
-    background-color: #4362ff;
-    width: 200px;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  background-color: #4362ff;
+  width: 200px;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 
-    &:hover {
-        background-color: #273fba;
-    }
+  &:hover {
+    background-color: #273fba;
+  }
 `;
 
 const CancelButton = styled.button`
-    background-color: #c5c5c5;
-    color: white;
-    width: 200px;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  background-color: #c5c5c5;
+  color: white;
+  width: 200px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 
-    &:hover {
-        background-color: #929191;
-    }
+  &:hover {
+    background-color: #929191;
+  }
 `;
