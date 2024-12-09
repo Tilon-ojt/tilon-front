@@ -28,40 +28,21 @@ function EditProfile() {
     setNewPasswordError(""); // 초기화
     setConfirmPasswordError(""); // 초기화
 
-    const newPasswordValidationError = validateNewPassword(newPassword);
-    if (newPasswordValidationError) {
-      setNewPasswordError(newPasswordValidationError);
-      return;
-    }
-
-    if (newPassword !== confirmNewPassword) {
-      setConfirmPasswordError("새 비밀번호가 일치하지 않습니다.");
-      return;
-    }
-
     try {
       const verifyResponse = await api.post("/api/verify-password", {
         currentPassword: password,
+        newPassword: newPassword,
       });
 
       if (verifyResponse.status === 200) {
         console.log("현재 비밀번호 인증 성공");
-      } else {
-        setPasswordError("현재 비밀번호가 올바르지 않습니다.");
-        return;
-      }
-
-      const updateResponse = await api.post("/api/change-password", {
-        newPassword: newPassword,
-      });
-
-      if (updateResponse.status === 200) {
         alert("비밀번호가 성공적으로 변경되었습니다.");
         setPassword("");
         setNewPassword("");
         setConfirmNewPassword("");
       } else {
-        alert("비밀번호 변경에 실패했습니다.");
+        setPasswordError("현재 비밀번호가 올바르지 않습니다.");
+        return;
       }
     } catch (error) {
       console.error("비밀번호 변경 오류:", error);
