@@ -1,5 +1,5 @@
 import AdminAddModal from "../../../components/common/AdminAddModal";
-import TheButton from "../../../components/element/TheButton";
+import TheButton2 from "../../../components/element/TheButton2";
 import TheList from "../../../components/element/TheList";
 import { OPEN_MODAL } from "../../../reducer/AdminModal";
 import { useDispatch, useSelector } from "react-redux";
@@ -116,15 +116,15 @@ function UserListPage({ token }) {
     <Container>
       {/* <UserList adminInfo={adminInfo} getUserList={getUserList} /> */}
       <ButtonContainer>
-        <TheButton $primary onClick={openModal}>
+        <TheButton2 $primary onClick={openModal}>
           추가
-        </TheButton>
-        <TheButton $danger onClick={deleteUesr}>
+        </TheButton2>
+        <TheButton2 $danger onClick={deleteUesr}>
           삭제
-        </TheButton>
-        <TheButton $dark onClick={resetPassword}>
+        </TheButton2>
+        <TheButton2 $dark onClick={resetPassword}>
           비밀번호 초기화
-        </TheButton>
+        </TheButton2>
       </ButtonContainer>
       <TheList
         title="유저 관리"

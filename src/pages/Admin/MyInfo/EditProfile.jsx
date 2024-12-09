@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import api from "../../../api/axios";
 import styled from "styled-components";
 import { jwtDecode } from "jwt-decode";
-import TheButton from "../../../components/element/TheButton";
+import TheButton2 from "../../../components/element/TheButton2";
 import { useNavigate } from "react-router-dom";
 
 function EditProfile({ token }) {
@@ -186,13 +186,13 @@ function EditProfile({ token }) {
         >
           수정
         </button>
-        <TheButton
+        <TheButton2
           $dark
           width="100%"
           onClick={() => userWithdrawalHandler(decodedToken.adminId)}
         >
           회원탈퇴
-        </TheButton>
+        </TheButton2>
       </EditProfileCard>
     </Container>
   );
