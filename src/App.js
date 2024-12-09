@@ -63,6 +63,9 @@ import AdminNews from './pages/Admin/NewsPage/AdminNews';
 import CreateNews from './pages/Admin/NewsPage/CreateNews';
 import EditNews from './pages/Admin/NewsPage/EditNews';
 
+import AdminPr from './pages/Admin/Pr/AdminPr';
+import CreatePr from './pages/Admin/Pr/CreatePr';
+
 export const setupAuthManager = () => {
   window.addEventListener('beforeunload', (event) => {
     // 브라우저가 실제로 닫히는 경우에만 토큰 삭제
@@ -94,7 +97,6 @@ function App() {
       <Provider store={store}>
         <Routes>
         <Route path="/edit" element={<PostEditor/>}/>
-        
           {/* 메인 홈 경로 */}
           <Route path="/" element={<TilonHomepage />} />
 
@@ -117,6 +119,8 @@ function App() {
                   <Route path="/news" element={<AdminNews />} />
                   <Route path="news/create" element={<CreateNews />} />
                   <Route path="news/edit/:id" element={<EditNews />} />
+                  <Route path="pr" element={<AdminPr/>}/>
+                  <Route path="pr/create" element={<CreatePr/>}/>
 
                   
                   {/* 추가적인 하위 경로 */}
