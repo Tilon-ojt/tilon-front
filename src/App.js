@@ -114,8 +114,8 @@ function App() {
               <>
                 <Sidebar />
                 <Navbar />
-                <Sidebar />
-                <Navbar />
+                {/* <Sidebar />
+                <Navbar /> */}
                 <Routes>
                   <Route path="/user" element={<UserListPage />} />
                   <Route path="/myInfo" element={<EditProfile />} />
@@ -123,9 +123,9 @@ function App() {
 
                   <Route path="" element={<AdminNews />} />
 
-                  <Route path="/news" element={<NewsDetail />} />
+                  <Route path="/news/:id" element={<NewsDetail />} />
                   <Route path="/news/create" element={<NewsCreate />} />
-                  <Route path="/news/edit" element={<NewsEdit />} />
+                  <Route path="/news/edit/:id" element={<NewsEdit />} />
 
 
                   <Route path="/pr" element={<AdminPr />} />

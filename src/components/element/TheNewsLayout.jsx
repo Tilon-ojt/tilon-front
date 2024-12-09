@@ -48,8 +48,8 @@ const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 50%;
-  margin: 0 10px 30px 0;
-  gap: 20px;
+  margin: 60px;
+  gap: 40px;
 `;
 
 const BtnContainer = styled.div`

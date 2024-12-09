@@ -8,12 +8,15 @@ import TheTable from '../../components/element/TheTable';
 // Test용
 function AdminAdmin() {
 
-  const thead = ["id", "name"];
 
+  const thead = ["id", "name"];
+  const columnWidths =["10px", "300px", "400px"];
+
+  // test Data
   const tbody = [
-    [1,  "/news-1"],
-    [2, "/news-2"],
-    [3, "/news-3"],
+    ["kdhong",  "홍길동"],
+    ["kdhong",  "홍길동"],
+    ["kdhong",  "홍길동"],
   ];
 
   const Td = ({ children }) => <td>{children}</td>;
@@ -47,7 +50,11 @@ function AdminAdmin() {
       }
       
       childrenTable={
-        <TheTable thead={thead} withCheckbox={true} isNavigate={false}>
+        <TheTable 
+          thead={thead} 
+          columnWidths={columnWidths}
+          withCheckbox={true} 
+          isNavigate={false}>
           {tbody.map((row) => (
             row.map((cell, idx) => <Td key={idx}>{cell}</Td>)
           ))}

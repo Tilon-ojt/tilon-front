@@ -2,42 +2,31 @@ import React from "react";
 import TheLayout from "../../../components/element/TheLayout";
 import TheButton from "../../../components/element/TheButton";
 import TheTable from "../../../components/element/TheTable";
+import { useNavigate } from "react-router-dom";
 
 function AdminNews() {
-
-
   const thead = ["no", "Title", "URL"];
-  const columnWidths = ["10px", "10px", "200px", "300px"]; // 각 열의 너비 설정
-  
-  //Test Data
+  const columnWidths = ["10px", "10px", "200px", "300px"];
+
+  // Test Data
   const tbody = [
-    [1, "News 1", "/news-1"],
-    [2, "News 2", "/news-2"],
-    [3, "News 3", "/news-3"],
-    [1, "News 1", "/news-1"],
-    [2, "News 2", "/news-2"],
-    [3, "News 3", "/news-3"],
-    [1, "News 1", "/news-1"],
-    [2, "News 2", "/news-2"],
-    [3, "News 3", "/news-3"],
-    [1, "News 1", "/news-1"],
-    [2, "News 2", "/news-2"],
-    [3, "News 3", "/news-3"],
-    [3, "News 3", "/news-3"],
-    [3, "News 3", "/news-3"],
-    [3, "News 3", "/news-3"],
-    [3, "News 3", "/news-3"],
-    [3, "News 3", "/news-3"],
-    [3, "News 3", "/news-3"],
-    [3, "News 3", "/news-3"],
-    [3, "News 3", "/news-3"],
-    [3, "News 3", "/news-3"],
-    [3, "News 3", "/news-3"],
-  
+    { id: 1, title: "News 1", url: "/news-1", thumbnailSrc:"~~1"},
+    { id: 2, title: "News 2", url: "/news-2",  thumbnailSrc:"~~2"},
+    { id: 3, title: "News 3", url: "/news-3",  thumbnailSrc:"~~3" },
+    { id: 4, title: "News 4", url: "/news-4",  thumbnailSrc:"~~4" },
+    { id: 5, title: "News 5", url: "/news-5", thumbnailSrc:"~~5" },
   ];
 
-  const Td = ({ children }) => <td>{children}</td>;
+  const navigate = useNavigate();
 
+  const clickHandler = (id) => {
+    navigate(`/admin/news/${id}`);
+  };
+
+  // const Td =({children})=><td onClick={clickHandler}>{children}</td>
+  const Td = ({ children, onClick }) => (
+    <td onClick={onClick}>{children}</td>
+  );
   return (
     <TheLayout
       title={"News"}
@@ -53,7 +42,6 @@ function AdminNews() {
             height="40px"
             href="/admin/news/create"
           />
-
           <TheButton
             label="Delete News"
             role="delete"
@@ -66,21 +54,20 @@ function AdminNews() {
       }
       childrenTable={
         <TheTable
-         thead={thead} 
-         columnWidths={columnWidths}
-         withCheckbox={true}
-         isNavigate={true}
-         href={`/admin/news/`}
-        >
+          thead={thead}
+          columnWidths={columnWidths}
+          withCheckbox={true}>
           {tbody.map((row) => (
-            row.map((cell, idx) => <Td key={idx}>{cell}</Td>)
+            <>
+              <Td onClick={() => clickHandler(row.id)}>{row.id}</Td>
+              <Td onClick={() => clickHandler(row.id)}>{row.title}</Td>
+              <Td onClick={() => clickHandler(row.id)}>{row.url}</Td>
+            </>
           ))}
-
         </TheTable>
       }
     />
   );
 }
-
 
 export default AdminNews;

@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const TheTable = ({
@@ -6,22 +5,7 @@ const TheTable = ({
   thead = [],
   withCheckbox = false, // 체크박스 열 추가 여부
   columnWidths = [], // 각 열의 너비 배열
-  isNavigate=false, // 클릭 시 이동 여부
-  href,
 }) => {
-
-
-  const navigate = useNavigate();
- 
-  const clickHandler =()=>{
-    if(isNavigate) {
-    // 해당 idx의 뉴스로 넘어가게 수정하기~~~
-    // alert("navigate!")
-    navigate(href);
-  };
-  }
-
-
   return (
     <TableEl columnWidths={columnWidths}>
       <thead>
@@ -34,8 +18,7 @@ const TheTable = ({
       </thead>
       <tbody>
         {children.map((row, idx) => (
-          <tr key={idx} 
-              onClick={clickHandler}>
+          <tr key={idx}>
             {withCheckbox && (
               <Td>
                 <input type="checkbox" />
@@ -54,7 +37,7 @@ const TableEl = styled.table`
   width: 100%;
   border-collapse: collapse;
   background-color: #f9f9f9;
-  table-layout: fixed; /* 고정된 열 너비를 적용 */
+  table-layout: fixed;
   border: 1px solid #ddd;
 
   & thead {
@@ -63,7 +46,6 @@ const TableEl = styled.table`
     text-align: left;
   }
 
-  
   & tbody tr:hover {
     background-color: #f0f8ff;
     transition: background-color 0.3s;
