@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 function AdminInsight() {
   const thead = ["", "no", "Title", "writer", "date"];
-  const columnWidths = ["2%", "3%" , "75%","10%", "10%"];
+  const columnwidths = ["2%", "3%" , "75%","10%", "10%"];
 
   const initialTbody = [
     { id: 1, title: "INSIGHT 1", writer: "KDHong", date: "2024.12.2"},
@@ -70,7 +70,7 @@ function AdminInsight() {
       childrenTable={
         <TheTable
           thead={thead}
-          columnWidths={columnWidths}
+          columnwidths={columnwidths}
           withCheckbox={true}
           selectedRows={selectedRows}
           setSelectedRows={setSelectedRows}
