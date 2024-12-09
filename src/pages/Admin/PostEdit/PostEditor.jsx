@@ -1,69 +1,64 @@
 import React, { useState, useEffect } from "react";
 import ReactQuill, { Quill } from 'react-quill';
-import Button from 'react-bootstrap/Button';
 import 'react-quill/dist/quill.snow.css';
-
-import ImageResize from 'quill-image-resize';
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { useParams } from 'react-router-dom'; // react-router-dom에서 useParams import
+
+import ImageResize from 'quill-image-resize';
 
 Quill.register('modules/ImageResize', ImageResize);
 
-function Write() {
-    // ------------------------State------------------------
+function PostEditor() {
     let redux = useSelector((state) => { return state });
+    const { categoryParam } = useParams();  // URL에서 category 값을 추출
+    const [title, setTitle] = useState('');  // 제목
+    const [content, setContent] = useState('');  // 내용
+    const [category, setCategory] = useState(categoryParam);  // category 값을 경로에서 추출
+    const [status, setStatus] = useState('PUBLISHED');  // 게시상태 (예: 'active', 'inactive')
+    const [fix, setFix] = useState(false);  // 고정 여부 (예: true, false)
+    const [link, setLink] = useState('');  // URL 링크
+    const [tempPostId, setTempPostId] = useState(null);  // 임시 게시글 ID
+    const [imageUrls, setImageUrls] = useState([]);  // 서버에서 받은 이미지 URL들
 
-    const category = 'notice';
-    let date = '';
-
-    const [subject, setSubject] = useState('');
-    const [content, setContent] = useState('');
-
-    // ------------------------get Content------------------------
-    const onChagecontent = (e) => {
-        console.log(e);
-        setContent(e);
-    };
-
-    // ------------------------정규식으로 src 추출------------------------
-
+    // 이미지 업로드 및 URL로 변환하는 로직
     const srcArray = [];
     const blopArray = [];
     const urlArray = [];
-
     const gainSource = /(<img[^>]*src\s*=\s*[\"']?([^>\"']+)[\"']?[^>]*>)/g;
+
+    useEffect(() => {
+        // 처음에 tempPostId 생성
+        const generateTempPostId = () => {
+            const tempId = Date.now().toString();  // 임시 ID 생성
+            setTempPostId(tempId);
+        };
+        generateTempPostId();
+    }, []);
 
     async function SaveBoard() {
         while (gainSource.test(content)) {
-            console.log('이미지가 있을때만 진행함.');
             let result = RegExp.$2;
             srcArray.push(result);
-            console.log('srcArray 추가: ', srcArray);
-
             const byteString = atob(result.split(",")[1]);
             const ab = new ArrayBuffer(byteString.length);
             const ia = new Uint8Array(ab);
             for (let i = 0; i < byteString.length; i++) {
                 ia[i] = byteString.charCodeAt(i);
             }
-            const blob = new Blob([ia], {
-                type: "image/jpeg"
-            });
+            const blob = new Blob([ia], { type: "image/jpeg" });
             const file = new File([blob], "image.jpg");
 
             const formData = new FormData();
             formData.append("file", file);
+            const config = { header: { 'content-type': 'multipart/form-data' } };
 
-            const config = {
-                header: { 'content-type': 'multipart/form-data' }
-            };
-
-            await axios.post('api/board/uploadImgFolder', formData, config)
+            // 임시 게시글 ID를 사용하여 이미지 업로드
+            await axios.post(`http://localhost:8000/api/board/uploadImgFolder?tempPostId=${tempPostId}`, formData, config)
                 .then(response => {
                     if (response.data.success) {
-                        console.log('이미지 서버에 업로드 성공', response);
-                        urlArray.push(response.data.url);
-                        console.log('urlArray에 추가', urlArray);
+                        urlArray.push(response.data.url);  // 서버에서 받은 URL 추가
+                        setImageUrls(prevUrls => [...prevUrls, response.data.url]); // imageUrls 상태에 추가
                     } else {
                         alert('이미지를 서버에 업로드하는데 실패했습니다.');
                     }
@@ -72,37 +67,43 @@ function Write() {
 
         let endContent = content;
         if (srcArray.length > 0) {
-            console.log('실행은 됐음..');
             for (let i = 0; i < srcArray.length; i++) {
                 let replace = endContent.replace(srcArray[i], urlArray[i]);
                 endContent = replace;
             }
         }
 
-        console.log('endContent:', endContent);
-
+        // 요청할 데이터 객체
         let writeInform = {
-            category: category,
-            subject: subject,
-            content: endContent,
-            writer: redux.setUser.u_id,
-            imgList: urlArray,
-            view: 0,
-            good: 0
+            title: title,  // 제목
+            content: endContent,  // 내용 (변경된 이미지 URL 포함)
+            category: category,  // 카테고리
+            admin_id: redux.setUser.u_id,  // 어드민 번호
+            status: status,  // 게시상태 (예: 'active')
+            fix: fix,  // 고정 여부
+            link: link,  // URL 링크
+            tempPostId: tempPostId,  // 임시 게시글 ID
+            imageUrls: imageUrls,  // 업로드된 이미지 URLs
         };
 
-        axios.post('/api/board/write', writeInform)
-            .then(response => {
-                if (response.data.success) {
-                    console.log('업로드 성공');
-                    console.log('저장한 데이터 : ', response);
-                } else {
-                    alert('업로드에 실패하였습니다.');
-                }
-            });
-
-        console.log('최종 urlArray', urlArray);
-        console.log('최종 srcArray: ', srcArray);
+        // 게시글 작성 API 호출
+        axios.post('http://localhost:8000/api/admin/post', writeInform, {
+            headers: { 
+                'Authorization': `Bearer ${redux.setUser.token}`,
+                'Content-Type': 'application/json' 
+            }
+        })
+        .then(response => {
+            if (response.data.success) {
+                console.log('업로드 성공');
+            } else {
+                alert('업로드에 실패하였습니다.');
+            }
+        })
+        .catch(error => {
+            console.error('게시글 업로드 실패:', error);
+            alert('게시글 업로드 실패');
+        });
     }
 
     const modules = {
@@ -124,49 +125,73 @@ function Write() {
         <div>
             <div style={{ width: '100%', height: '70vh' }}>
                 <div style={{ width: '1000px', margin: 'auto', borderRadius: '19px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '10px' }}>
+                        <select
+                            value={category}
+                            disabled
+                            style={{ width: '150px' }}
+                        >
+                            <option value="pr">PR</option>
+                            <option value="insight">INSIGHT</option>
+                        </select>
 
-                 
+                        <input
+                            type="text"
+                            placeholder="링크를 입력하세요"
+                            value={link}
+                            onChange={(e) => setLink(e.target.value)}
+                            style={{ flex: 1 }} // input 필드가 가능한 공간을 채우도록 설정
+                        />
+
+                        <select
+                            value={status}
+                            onChange={(e) => setStatus(e.target.value)}
+                            style={{ width: '150px' }}
+                        >
+                            <option value="PUBLISHED">PUBLISHED</option>
+                            <option value="DRAFT">DRAFT</option>
+                        </select>
+
+                        <label style={{ marginLeft: '10px' }}>
+                            고정:
+                            <input
+                                type="checkbox"
+                                checked={fix}
+                                onChange={(e) => setFix(e.target.checked)}
+                            />
+                        </label>
+                    </div>
 
                     <input
-                        className="Subject"
+                        className="Title"
                         placeholder="제목을 입력해 주세요"
                         style={{
                             padding: '7px',
                             marginBottom: '10px',
-                            width: '100%',  // 제목 박스 width 100%로 설정
+                            width: '100%',
                             border: '1px solid lightGray',
                             fontSize: '15px',
-                            boxSizing: 'border-box', // box-sizing 설정으로 padding 포함한 width 계산
-							marginTop : '60px',
+                            boxSizing: 'border-box',
+                            marginTop: '30px',
                         }}
-                        onChange={(e) => { setSubject(e.target.value) }}
+                        onChange={(e) => { setTitle(e.target.value) }}
                     />
-
                     <div style={{ height: '400px', width: '100%' }}>
                         <ReactQuill
                             modules={modules}
                             placeholder='내용을 입력해 주세요'
-                            onChange={onChagecontent}
+                            onChange={setContent}
                             style={{
                                 height: "330px",
-                                width: '100%',  // 내용 박스 width 100%로 설정
-                                boxSizing: 'border-box'  // box-sizing 설정으로 padding 포함한 width 계산
+                                width: '100%',
+                                boxSizing: 'border-box'
                             }}
                         />
                     </div>
-
-                    {/* <div style={{ float: 'right' }}>
-                        <Button variant="danger" style={{ marginRight: '10px' }} >취소</Button>
-                        <Button variant="dark"
-                            onClick={() => {
-                                SaveBoard()
-                            }}
-                        >저장하기</Button>
-                    </div> */}
                 </div>
             </div>
         </div>
     );
 }
 
-export default Write;
+export default PostEditor;

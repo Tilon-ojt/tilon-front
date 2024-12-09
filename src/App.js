@@ -66,6 +66,7 @@ import EditNews from './pages/Admin/NewsPage/EditNews';
 import AdminPr from './pages/Admin/Pr/AdminPr';
 import CreatePr from './pages/Admin/Pr/CreatePr';
 
+
 export const setupAuthManager = () => {
   window.addEventListener('beforeunload', (event) => {
     // 브라우저가 실제로 닫히는 경우에만 토큰 삭제
@@ -121,6 +122,7 @@ function App() {
                   <Route path="news/edit/:id" element={<EditNews />} />
                   <Route path="pr" element={<AdminPr/>}/>
                   <Route path="pr/create" element={<CreatePr/>}/>
+                
 
                   
                   {/* 추가적인 하위 경로 */}
