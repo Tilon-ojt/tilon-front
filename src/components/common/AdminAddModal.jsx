@@ -5,16 +5,17 @@ import styled from "styled-components";
 import api from "../../api/axios";
 
 function AdminAddModal({ getUserList }) {
-  const [nickName, setNickName] = useState("");
+  const [nickname, setnickname] = useState("");
   const [empName, setEmpName] = useState("");
 
   const dispatch = useDispatch();
   const token = useSelector((state) => state.auth.token);
 
-  const handleNickNameChange = (e) => {
-    setNickName(e.target.value);
+  const handlenicknameChange = (e) => {
+    setnickname(e.target.value);
   };
 
+  // 아아디 유효성검사
   const handleEmpNameChange = (e) => {
     const value = e.target.value; // 사용자가 입력한 값을 가져옴
     // 입력값이 영문자 및 숫자로만 이루어졌는지 검사
@@ -28,22 +29,22 @@ function AdminAddModal({ getUserList }) {
   };
 
   const submitHandler = () => {
-    if (!nickName.trim() || !empName.trim()) {
+    if (!nickname.trim() || !empName.trim()) {
       alert("이름과 아이디를 모두 입력해주세요.");
       return;
     }
-    console.log({ nickName, empName });
+    console.log({ nickname, empName });
     userInput(); // 유저 저장 함수 호출
   };
 
   // 유저 저장
   const userInput = async () => {
-    console.log(`닉네임: ${nickName}, 아이디: ${empName}`);
+    console.log(`닉네임: ${nickname}, 아이디: ${empName}`);
 
     try {
       const response = await api.post(
         "/admin/accounts",
-        { nickName, empName },
+        { nickname, empName },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -51,8 +52,9 @@ function AdminAddModal({ getUserList }) {
           },
         }
       );
+      console.log(response.data);
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         dispatch({ type: CLOSE_MODAL });
         alert("아이디 생성 성공");
         getUserList();
@@ -75,9 +77,9 @@ function AdminAddModal({ getUserList }) {
           <P>이름 :</P>
           <Input
             type="text"
-            name="nickName"
-            value={nickName}
-            onChange={handleNickNameChange}
+            name="nickname"
+            value={nickname}
+            onChange={handlenicknameChange}
           />
         </Label>
         <Label>

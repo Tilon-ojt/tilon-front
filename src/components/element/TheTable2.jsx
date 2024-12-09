@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-function TheTable({ thead, data }) {
+function TheTable2({ thead, data }) {
   return (
     <CustomTable>
       <TableHeader>
@@ -24,10 +24,12 @@ function TheTable({ thead, data }) {
   );
 }
 
-export default TheTable;
+export default TheTable2;
 
 const CustomTable = styled.table`
-  border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse; /* 구분선 겹침 제거 */
+  border: 1px solid #ddd; /* 테이블 전체 테두리 */
 `;
 
 const TableHeader = styled.thead`
@@ -40,7 +42,7 @@ const Th = styled.th`
   font-size: 16px; /* Adjust font size */
   color: #333; /* Darker text color */
   font-weight: bold; /* Make header text bold */
-  border-bottom: 2px solid #ddd; /* Add bottom border for header cells */
+  border: 1px solid #ddd; /* Header cell border */
 `;
 
 const TableRow = styled.tr`
@@ -54,13 +56,14 @@ const Td = styled.td`
   text-align: left; /* Left-align cell text */
   font-size: 14px; /* Font size adjustment */
   color: #555; /* Slightly lighter color for content */
-  border-bottom: 1px solid #ddd; /* Light border between rows */
+  border: 1px solid #ddd; /* Cell border for all rows */
   &:nth-child(1) {
     width: 20px;
   }
-  &:nth-child(2),
-  &:nth-child(3),
-  &:nth-child(4) {
-    width: 33%;
+  &:nth-child(2) {
+    width: 60px;
+  }
+  &:nth-child(3) {
+    width: 200px;
   }
 `;

@@ -26,6 +26,7 @@ const StyledButton = styled.button`
   border: 1px solid #ced4da; /* 기본 테두리 */
   border-radius: 5px;
   cursor: pointer;
+  width: ${(p) => (p.width ? p.width : "auto")};
 
   &:hover {
     background-color: ${(p) =>

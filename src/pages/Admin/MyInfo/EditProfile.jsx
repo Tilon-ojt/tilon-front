@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import api from "../../../api/axios";
 import styled from "styled-components";
-import useAuth from "../../../hooks/useAuth";
+import { jwtDecode } from "jwt-decode";
+import TheButton from "../../../components/element/TheButton";
+import { useNavigate } from "react-router-dom";
 
-function EditProfile() {
-  const decodedToken = useAuth(); // 디코드된 JWT 데이터를 받음
+function EditProfile({ token }) {
+  const navigate = useNavigate(); // useNavigate Hook
+  const decodedToken = jwtDecode(token); // 디코드된 JWT 데이터를 받음
   console.log(`디코드된 jwt: ${JSON.stringify(decodedToken, null, 2)}`);
 
   const [password, setPassword] = useState("");
@@ -15,6 +18,8 @@ function EditProfile() {
   const [newPasswordError, setNewPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
+  const [isPasswordMatch, setIsPasswordMatch] = useState(false); // 비밀번호 일치 여부 상태 추가
+
   const validateNewPassword = (password) => {
     const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/; // 영문 + 숫자 포함, 최소 6자
     if (!regex.test(password)) {
@@ -23,48 +28,74 @@ function EditProfile() {
     return "";
   };
 
+  useEffect(() => {
+    // 새로운 비밀번호와 비밀번호 확인이 일치하면 버튼 활성화
+    if (
+      newPassword === confirmNewPassword &&
+      newPassword &&
+      confirmNewPassword
+    ) {
+      setIsPasswordMatch(true);
+    } else {
+      setIsPasswordMatch(false);
+    }
+  }, [newPassword, confirmNewPassword]);
+
   const handleSubmit = async () => {
-    setPasswordError(""); // 초기화
-    setNewPasswordError(""); // 초기화
-    setConfirmPasswordError(""); // 초기화
-
-    const newPasswordValidationError = validateNewPassword(newPassword);
-    if (newPasswordValidationError) {
-      setNewPasswordError(newPasswordValidationError);
-      return;
-    }
-
-    if (newPassword !== confirmNewPassword) {
-      setConfirmPasswordError("새 비밀번호가 일치하지 않습니다.");
-      return;
-    }
-
+    console.log(`currentPassword: ${password}, newPassword: ${newPassword}`);
     try {
-      const verifyResponse = await api.post("/api/verify-password", {
-        currentPassword: password,
-      });
+      const verifyResponse = await api.patch(
+        "/admin/update",
+        { currentPassword: password, newPassword: newPassword }, // 데이터 본문
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (verifyResponse.status === 200) {
-        console.log("현재 비밀번호 인증 성공");
+        setPasswordError(""); // 초기화
+        setNewPasswordError(""); // 초기화
+        setConfirmPasswordError(""); // 초기화
+        setPassword("");
+        setNewPassword("");
+        setConfirmNewPassword("");
+        alert("비밀번호가 성공적으로 변경되었습니다.");
+        navigate("/admin/news");
       } else {
         setPasswordError("현재 비밀번호가 올바르지 않습니다.");
         return;
       }
-
-      const updateResponse = await api.post("/api/change-password", {
-        newPassword: newPassword,
-      });
-
-      if (updateResponse.status === 200) {
-        alert("비밀번호가 성공적으로 변경되었습니다.");
-        setPassword("");
-        setNewPassword("");
-        setConfirmNewPassword("");
-      } else {
-        alert("비밀번호 변경에 실패했습니다.");
-      }
     } catch (error) {
-      console.error("비밀번호 변경 오류:", error);
+      alert("비밀번호가 올바르지 않습니다.");
+    }
+  };
+
+  // 회원탈퇴
+  const userWithdrawalHandler = async (adminId) => {
+    const isConfirmed = window.confirm("정말 탈퇴하시겠습니까?");
+    console.log(`탈퇴할 ID: ${adminId}입니다.`, typeof adminId);
+
+    if (isConfirmed) {
+      try {
+        const response = await api.delete("", {
+          data: { adminId },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+        console.log("탈퇴 성공:", response.data);
+        alert(`탈퇴되었습니다.`);
+        navigate("/admin/login");
+      } catch (error) {
+        alert(`탈퇴 실패`);
+        console.error("탈퇴 실패:", error);
+      }
+    } else {
+      console.log("탈퇴가 취소되었습니다.");
     }
   };
 
@@ -77,7 +108,7 @@ function EditProfile() {
             <label>이름</label>
             <span>{`${
               decodedToken
-                ? decodedToken.nickName
+                ? decodedToken.nickname
                 : "이름을 불러 올 수 없습니다."
             }`}</span>
           </div>
@@ -148,9 +179,20 @@ function EditProfile() {
             )}
           </div>
         </div>
-        <button className="submit-btn" onClick={handleSubmit}>
+        <button
+          className="submit-btn"
+          onClick={handleSubmit}
+          disabled={!isPasswordMatch}
+        >
           수정
         </button>
+        <TheButton
+          $dark
+          width="100%"
+          onClick={() => userWithdrawalHandler(decodedToken.adminId)}
+        >
+          회원탈퇴
+        </TheButton>
       </EditProfileCard>
     </Container>
   );
@@ -175,8 +217,10 @@ const EditProfileCard = styled.div`
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   padding: 40px 30px;
   text-align: center;
+  position: relative;
 
   h2 {
+    margin-top: 0px;
     margin-bottom: 30px;
     font-size: 1.8rem;
     color: #333;
@@ -223,6 +267,7 @@ const EditProfileCard = styled.div`
 
   .submit-btn {
     margin-top: 20px;
+    margin-bottom: 5px;
     padding: 12px 20px;
     width: 100%;
     font-size: 1rem;
@@ -235,6 +280,11 @@ const EditProfileCard = styled.div`
 
     &:hover {
       background-color: #478eea;
+    }
+
+    &:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
     }
   }
 `;

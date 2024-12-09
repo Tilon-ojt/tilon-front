@@ -1,59 +1,66 @@
 import React, { useEffect, useState } from "react";
 import { ChevronRight, ChevronLeft } from "lucide-react";
-import TheTable from "./components/element/TheTable";
+import TheTable2 from "./TheTable2";
 import styled from "styled-components";
 
-// 예시
-{
-  /* <UserList
-title="관리자 목록"
-thead={["", "이름", "아이디", "가입날짜"]}
-data={adminInfo}
-itemsPerPage={11}
-columns={["nickName", "empName", "updatedAt"]}
-onSelectionChange={handleSelectionChange} // 부모 컴포넌트로 선택된 아이디 전달
-/> */
-}
-
-function UserList({
+function TheList({
   title,
   thead,
   data,
   itemsPerPage,
   columns,
+  idColumn, // ID 컬럼 이름
   onSelectionChange,
+  selectedUsers, // 부모에서 전달된 selectedUsers 상태
 }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedUsers, setSelectedUsers] = useState({});
+  const [selectedUsersState, setSelectedUsersState] = useState(selectedUsers); // 초기화된 상태 사용
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
 
+  const totalPages = Math.ceil(data.length / itemsPerPage); // 전체 페이지 수 계산
+
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
   const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(data.length / itemsPerPage); i++) {
+  for (let i = 1; i <= totalPages; i++) {
     pageNumbers.push(i);
   }
 
   const handleCheckboxChange = (id) => {
-    setSelectedUsers((prev) => {
-      const newSelectedUsers = {
-        ...prev,
-        [id]: !prev[id], // 기존 값 반전
-      };
-      return newSelectedUsers;
-    });
+    setSelectedUsersState((prev) => ({
+      ...prev,
+      [id]: !prev[id], // 개별 ID의 상태 반전
+    }));
   };
 
   useEffect(() => {
-    // 선택된 사용자만 필터링하여 전달
-    const selectedUserIds = Object.keys(selectedUsers).filter(
-      (id) => selectedUsers[id]
-    );
-    onSelectionChange(selectedUserIds); // 선택된 사용자 id 배열을 부모에게 전달
+    // 부모에서 전달받은 selectedUsers로 상태를 업데이트
+    setSelectedUsersState(selectedUsers);
   }, [selectedUsers]);
+
+  useEffect(() => {
+    // 선택된 사용자만 필터링하여 전달
+    const selectedUserIds = Object.keys(selectedUsersState).filter(
+      (id) => selectedUsersState[id]
+    );
+
+    onSelectionChange?.(selectedUserIds); // 선택된 사용자 id 배열을 부모에게 전달
+  }, [selectedUsersState]);
 
   const getTableData = (item) => {
     const rowData = {};
@@ -62,10 +69,10 @@ function UserList({
     });
     return {
       checkbox: (
-        <Checkbox
+        <input
           type="checkbox"
-          checked={selectedUsers[item.id] || false}
-          onChange={() => handleCheckboxChange(item.id)}
+          checked={selectedUsersState[item[idColumn]] || false}
+          onChange={() => handleCheckboxChange(item[idColumn])}
         />
       ),
       ...rowData,
@@ -75,13 +82,18 @@ function UserList({
   return (
     <Container>
       <Title>{title}</Title>
-      <ButtonContainer />
-      <TheTable
+      <TheTable2
         thead={thead}
         data={currentItems.map((item) => getTableData(item))}
       />
       <Pagination>
-        <ChevronLeft />
+        <ChevronLeft
+          onClick={handlePrevPage}
+          style={{
+            cursor: "pointer",
+            visibility: currentPage > 1 ? "visible" : "hidden", // 'visibility'로 처리
+          }}
+        />
         {pageNumbers.map((number) => (
           <PageButton
             key={number}
@@ -91,13 +103,19 @@ function UserList({
             {number}
           </PageButton>
         ))}
-        <ChevronRight />
+        <ChevronRight
+          onClick={handleNextPage}
+          style={{
+            cursor: "pointer",
+            visibility: currentPage < totalPages ? "visible" : "hidden", // 'visibility'로 처리
+          }}
+        />
       </Pagination>
     </Container>
   );
 }
 
-export default UserList;
+export default TheList;
 
 // 스타일 컴포넌트
 const Container = styled.div`
@@ -115,13 +133,6 @@ const Title = styled.h2`
   font-size: 24px;
   margin-bottom: 20px;
   margin-top: 0;
-`;
-
-const ButtonContainer = styled.div`
-  position: absolute;
-  top: 20px;
-  right: 10px;
-  z-index: 20;
 `;
 
 const Pagination = styled.div`
@@ -145,9 +156,4 @@ const PageButton = styled.button`
   &:hover {
     background-color: #ddd;
   }
-`;
-
-const Checkbox = styled.input`
-  width: 20px;
-  cursor: pointer;
 `;
