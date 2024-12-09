@@ -114,7 +114,7 @@ function Sidebar() {
   const menuItems = [
     {
       label: "News",
-      link: "/admin/",
+      link: "/admin/news",
       roles: ["ROLE_ADMIN", "ROLE_SUPER_ADMIN"],
     },
     {
