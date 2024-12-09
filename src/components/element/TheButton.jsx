@@ -2,11 +2,11 @@ import styled from "styled-components";
 
 const TheButton = ({
   label, // 버튼 이름
-  color, // 버튼 글자 색
-  bgColor, // 버튼 배경 색
+  color="white", // 버튼 글자 색
+  bgColor="#5060fb",// 버튼 배경 색
   width, // 버튼 가로 길이
   height, // 버튼 세로 길이
-  onClick, // 외부에서 전달받은 추가 클릭 핸들러
+  onClick, // 클릭 핸들러
 }) => {
 
   return (

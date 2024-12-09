@@ -36,6 +36,13 @@ function NewsCreate() {
         }
     };
 
+    // 저장 버튼
+    const saveHandler=()=>{
+       alert("저장되었습니다.");
+       console.log(`${thumbnailSrc}-${title} - ${url}`);
+       navigate("/admin/");
+    }
+
     //취소 버튼
     const cancelHandler=()=>{
         alert("작성을 취소하시겠습니까?");
@@ -64,10 +71,9 @@ function NewsCreate() {
                 <>
                     <TheButton
                         label={"저장 완료"}
-                        color={"white"}
-                        bgColor={"#5060fb"}
                         width={"150px"}
                         height={"35px"}
+                        onClick={saveHandler}
                     />
                     <TheButton
                         label={"취소"}

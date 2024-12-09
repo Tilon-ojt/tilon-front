@@ -42,7 +42,14 @@ function NewsEdit() {
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
-  };
+  };    
+  
+  // 수정 완료 버튼
+  const submitHandler=()=>{
+     alert("수정 완료되었습니다.");
+     console.log(`${thumbnailSrc}-${title} - ${url}`);
+     navigate("/admin/");
+  }
 
   //취소 버튼
   const cancelHandler=()=>{
@@ -74,11 +81,9 @@ function NewsEdit() {
           <TheButton
             label={"수정 완료"}
             role={"submit"}
-            color={"white"}
-            bgColor={"#5060fb"}
             width={"150px"}
             height={"35px"}
-            // onClick={handleSubmit}
+            onClick={submitHandler}
           />
           <TheButton
             label={"취소"}

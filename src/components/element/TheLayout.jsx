@@ -1,17 +1,28 @@
 import styled from "styled-components";
-import TheSearch from "../element/TheSearch";
 
 const TheLayout = ({
   title, 
-  hasSearch, 
+  hasSearch, // 검색창 유무
   childrenBtn,
-  childrenTable
+  childrenTable,
+  onClick
 }) => {
   return (
     <Container>
       <Header>
         <Title>{title}</Title>
-        {hasSearch ? (<TheSearch/>):(null)}
+        {hasSearch ? (        
+          <Search>
+            <Input placeholder="제목으로 검색..."/>
+            <Btn>
+                <img
+                    alt="search"
+                    src="https://icons.veryicon.com/png/o/education-technology/education-app/search-137.png"
+                    onClick={onClick}
+                />
+            </Btn>
+          </Search>
+        ):(null)}
         <BtnContainer>{childrenBtn}</BtnContainer>
       </Header>
       <Body>{childrenTable}</Body>
@@ -44,6 +55,45 @@ const Title = styled.h1`
   color: #333;
   font-weight: bold;
 `;
+
+
+const Search = styled.div`
+    width: 350px;
+    border-radius: 4px;
+    border: 1px solid gray;
+    
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    padding: 5px;
+
+`
+
+const Input = styled.input`
+    width: 300px;
+    font-size:16px;
+    padding:0 10px;
+    border: none;
+
+    &:focus{
+        outline: none;
+    }
+`
+
+const Btn = styled.div`
+ img{
+     width: 30px;
+    height: 30px;
+
+    opacity: 0.7;
+    transition: all .3s;
+
+    &:hover{
+        opacity: 1;
+    }
+ }
+`
 
 const BtnContainer = styled.div`
   display: flex;

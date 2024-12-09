@@ -3,14 +3,12 @@ import styled from "styled-components";
 const TheTable = ({
   children,
   thead = [],
-  withCheckbox = false, // 체크박스 열 추가 여부
   columnWidths = [], // 각 열의 너비 배열
 }) => {
   return (
     <TableEl columnWidths={columnWidths}>
       <thead>
         <tr>
-          {withCheckbox && <ThCheckbox />}
           {thead?.map((item, idx) => (
             <Th key={idx}>{item}</Th>
           ))}
@@ -19,11 +17,6 @@ const TheTable = ({
       <tbody>
         {children.map((row, idx) => (
           <tr key={idx}>
-            {withCheckbox && (
-              <Td>
-                <input type="checkbox" />
-              </Td>
-            )}
             {row}
           </tr>
         ))}
@@ -74,12 +67,5 @@ const Th = styled.th`
   font-weight: normal;
 `;
 
-const ThCheckbox = styled.th`
-  width: 40px;
-`;
-
-const Td = styled.td`
-  text-align: center;
-`;
-
 export default TheTable;
+

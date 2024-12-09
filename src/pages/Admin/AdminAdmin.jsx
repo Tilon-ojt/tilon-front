@@ -1,69 +1,95 @@
-import React from 'react';
-// import TheLayout from "../../../components/element/TheLayout";
-// import TheButton from "../../../components/element/TheButton";
-import TheLayout from '../../components/element/TheLayout';
-import TheButton from '../../components/element/TheButton';
-import TheTable from '../../components/element/TheTable';
+import React, { useState } from "react";
+import TheLayout from "../../components/element/TheLayout";
+import TheButton from "../../components/element/TheButton";
+import TheTable from "../../components/element/TheTable";
 
-// Test용
 function AdminAdmin() {
+  const thead = ["", "userid", "name"];
+  const columnWidths = ["2%", "49%", "49%"];
 
-
-  const thead = ["id", "name"];
-  const columnWidths =["10px", "300px", "400px"];
-
-  // test Data
-  const tbody = [
-    ["kdhong",  "홍길동"],
-    ["kdhong",  "홍길동"],
-    ["kdhong",  "홍길동"],
+  const initialTbody = [
+    { id: 1, userid: "KDHong", name: "홍길동" },
+    { id: 2, userid: "KDHong", name: "홍길동" },
+    { id: 3, userid: "KDHong", name: "홍길동3" },
+    { id: 4, userid: "KDHong", name: "홍길동4" },
+    { id: 5, userid: "KDHong", name: "홍길동5" },
   ];
+
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [tbody, setTbody] = useState(initialTbody);
+
+  const searchHandler = () => {
+    alert("Search!");
+  };
+
+  const goToCreateHandler = () => {
+    alert("modal을 띄웁니다");
+  };
+
+  const deleteHandler = () => {
+    setTbody((prevData) =>
+      prevData.filter((userItem) => !selectedRows.includes(userItem.id))
+    );
+    setSelectedRows([]);
+    console.log(`Deleted selected user items: ${selectedRows}`);
+  };
 
   const Td = ({ children }) => <td>{children}</td>;
 
-  return(
-    <TheLayout 
-      title={"User 관리"}
+  return (
+    <TheLayout
+      title="User 관리"
       hasSearch={false}
+      onClick={searchHandler}
       childrenBtn={
         <>
-          <TheButton 
+          <TheButton
             label="Add new User"
-            role="modalopen"
-            color="white"
-            bgColor="#5060fb"
-            width = "150px"
-            height = "40px"
-            href="/admin/"
+            width="150px"
+            height="40px"
+            onClick={goToCreateHandler}
           />
-
-          <TheButton 
+          <TheButton
             label="Delete User"
-            role="delete" 
+            role="delete"
             color="white"
             bgColor="#ff4141"
-            width = "150px"
-            height = "40px"
+            width="150px"
+            height="40px"
+            onClick={deleteHandler}
           />
         </>
-
       }
-      
       childrenTable={
-        <TheTable 
-          thead={thead} 
+        <TheTable
+          thead={thead}
           columnWidths={columnWidths}
-          withCheckbox={true} 
-          isNavigate={false}>
+          withCheckbox={true}
+          selectedRows={selectedRows}
+          setSelectedRows={setSelectedRows}
+        >
           {tbody.map((row) => (
-            row.map((cell, idx) => <Td key={idx}>{cell}</Td>)
+            <React.Fragment key={row.id}>
+              <Td>
+                <input
+                  type="checkbox"
+                  checked={selectedRows.includes(row.id)}
+                  onChange={() => {
+                    setSelectedRows((prevSelected) =>
+                      prevSelected.includes(row.id)
+                        ? prevSelected.filter((selected) => selected !== row.id)
+                        : [...prevSelected, row.id]
+                    );
+                  }}
+                />
+              </Td>
+              <Td>{row.userid}</Td>
+              <Td>{row.name}</Td>
+            </React.Fragment>
           ))}
         </TheTable>
       }
-      >
-
-
-    </TheLayout>
+    />
   );
 }
 
