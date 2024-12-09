@@ -1,63 +1,65 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { jwtDecode } from "jwt-decode";
+import api from "../../api/axios";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function Navbar() {
+  const token = useSelector((state) => state.auth.token);
+  // token이 유효한지 확인하고 jwtDecode 사용
   const [empName, setEmpName] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const logoutHandler = () => {
-    // 로그아웃 처리 예제
-    fetch('/logout', { method: 'POST', credentials: 'include' })
-      .then((response) => {
-        if (response.ok) {
-          console.log('로그아웃되었습니다.');
-          window.location.href = '/login'; // 로그아웃 후 로그인 페이지로 리다이렉트
-        } else {
-          console.error('로그아웃에 실패했습니다.');
-        }
-      })
-      .catch((error) => console.error('로그아웃 요청 오류:', error));
-  };
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUser = async () => {
+    if (token) {
       try {
-        const token = localStorage.getItem('token'); // 토큰 저장 위치 확인
-        if (!token) throw new Error('토큰이 없습니다.');
-
-        const response = await fetch('http://localhost:8000/admin/accounts', {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (!response.ok) throw new Error('사용자 정보를 가져오기 실패');
-
-        const data = await response.json();
-        // 원하는 사용자 정보 추출 (예: 첫 번째 관리자)
-        const currentUser = data[0]; // 또는 특정 조건으로 필터링
-        setEmpName(currentUser.adminName);
+        const decodedToken = jwtDecode(token);
+        setEmpName(decodedToken?.empName || "사용자 정보 없음"); // empName이 없다면 기본 메시지 설정
+        setLoading(false);
       } catch (error) {
-        console.error('API 호출 오류:', error);
-      } finally {
+        console.error("JWT 디코딩 오류:", error);
         setLoading(false);
       }
-    };
+    } else {
+      setLoading(false); // token이 없을 때도 로딩 완료 상태로 설정
+    }
+  }, [token]);
 
-    fetchUser();
-  }, []);
+  const logoutHandler = async () => {
+    const isConfirmed = window.confirm("로그아웃하시겠습니까?");
+    if (isConfirmed) {
+      try {
+        const response = await api.post(`/admin/logout`, null, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+        console.log("로그아웃 성공:", response.data);
+        alert("로그아웃 성공");
+        sessionStorage.removeItem("jwt");
+        navigate("/admin/login");
+      } catch (error) {
+        alert(`로그아웃 실패`);
+        console.error("로그아웃 실패:", error);
+      }
+    } else {
+      console.log("로그아웃 실패");
+    }
+  };
 
   return (
     <Container>
       <IdTxt>
         <span>
           {loading
-            ? '로딩 중...'
+            ? "로딩 중..."
             : empName
             ? `${empName}님 안녕하세요`
-            : '사용자 정보를 불러올 수 없습니다.'}
+            : "사용자 정보를 불러올 수 없습니다."}
         </span>
       </IdTxt>
       <LogoutIcon onClick={logoutHandler}>
@@ -86,6 +88,7 @@ const Container = styled.div`
   gap: 20px;
   padding: 0 20px;
   box-sizing: border-box;
+  z-index: 1000;
 
   span {
     color: black;

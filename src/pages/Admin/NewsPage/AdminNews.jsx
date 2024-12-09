@@ -4,14 +4,30 @@ import TheSearch from "../../../components/element/TheSearch";
 import Btn from "../../../components/element/TheNewsButton";
 
 // AdminNews 컴포넌트
-function AdminNews() {
+function AdminNews({ token }) {
   const navigate = useNavigate(); // useNavigate 훅 사용
+  console.log(`전달받은 토큰: ${JSON.stringify(token, null, 2)}`);
 
   // 예제 데이터 (뉴스 리스트)
   const exampleNewsList = [
-    { id: "1", title: "First News", thumbnail:null, url: "https://example.com/1" },
-    { id: "2", title: "Second News", thumbnail: null, url: "https://example.com/2" },
-    { id: "3", title: "Third News", thumbnail: null, url: "https://example.com/3" },
+    {
+      id: "1",
+      title: "First News",
+      thumbnail: null,
+      url: "https://example.com/1",
+    },
+    {
+      id: "2",
+      title: "Second News",
+      thumbnail: null,
+      url: "https://example.com/2",
+    },
+    {
+      id: "3",
+      title: "Third News",
+      thumbnail: null,
+      url: "https://example.com/3",
+    },
   ];
 
   return (
@@ -26,12 +42,15 @@ function AdminNews() {
       </Header>
 
       <List>
-        <Type> no  Title URL</Type>
-        <hr/> 
+        <Type> no Title URL</Type>
+        <hr />
         {exampleNewsList.map((news) => (
           <ListItem key={news.id}>
-            <input type="checkbox"/>
-            <ItemContent key={news.id} onClick={() => navigate(`/admin/news/edit/${news.id}`)}>
+            <input type="checkbox" />
+            <ItemContent
+              key={news.id}
+              onClick={() => navigate(`/admin/news/edit/${news.id}`)}
+            >
               <span>{news.id}</span>
               <span>{news.title}</span>
               <span>{news.url}</span>
@@ -82,7 +101,6 @@ const Type = styled.span`
   gap: 10px;
 `;
 
-
 const List = styled.div`
   height: 70vh;
   width: 70vw;
@@ -96,7 +114,6 @@ const List = styled.div`
 `;
 
 const ListItem = styled.div`
-
   display: flex;
   flex-direction: row;
   margin-bottom: 10px;
@@ -122,6 +139,6 @@ const ItemContent = styled.div`
   // border: 1px solid lightgray;
   padding: 15px;
   width: 100%;
-`
+`;
 
 export default AdminNews;
