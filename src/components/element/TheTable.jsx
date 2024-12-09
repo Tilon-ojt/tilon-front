@@ -36,7 +36,7 @@ const TableEl = styled.table`
   & thead {
     background-color: #222c44;
     color: white;
-    text-align: left;
+    text-align: center;
   }
 
   & tbody tr:hover {

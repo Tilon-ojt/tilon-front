@@ -8,11 +8,11 @@ function AdminAdmin() {
   const columnWidths = ["2%", "49%", "49%"];
 
   const initialTbody = [
-    { id: 1, userid: "KDHong", name: "홍길동" },
-    { id: 2, userid: "KDHong", name: "홍길동" },
-    { id: 3, userid: "KDHong", name: "홍길동3" },
-    { id: 4, userid: "KDHong", name: "홍길동4" },
-    { id: 5, userid: "KDHong", name: "홍길동5" },
+    { id: 1, userid: "KDHong1", name: "홍길동" },
+    { id: 2, userid: "KDHong2", name: "홍길동" },
+    { id: 3, userid: "KDHong3", name: "홍길동" },
+    { id: 4, userid: "KDHong4", name: "홍길동" },
+    { id: 5, userid: "KDHong5", name: "홍길동" },
   ];
 
   const [selectedRows, setSelectedRows] = useState([]);
