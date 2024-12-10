@@ -67,11 +67,11 @@ import TilonHomepage from "./pages/Home/TilonHomepage";
 import Sidebar from "./components/common/Sidebar";
 import Navbar from "./components/common/Navbar";
 
-import PostEditor from './pages/Admin/PostEdit/PostEditor';
-import Loginpage from './pages/Admin/Login/Loginpage';  // Fix import name to match the component
+import PostEditor from "./pages/Admin/PostEdit/PostEditor";
+import Loginpage from "./pages/Admin/Login/Loginpage"; // Fix import name to match the component
 // import AdminMain from './pages/Admin/AdminMain/AdminMain';
-import UserListPage from './pages/Admin/UserListPage/UserListPage';
-import EditProfile from './pages/Admin/MyInfo/EditProfile';
+import UserListPage from "./pages/Admin/UserListPage/UserListPage";
+import EditProfile from "./pages/Admin/MyInfo/EditProfile";
 
 import AdminNews from './pages/Admin/NewsPage/AdminNews';
 // import NewsDetail from './pages/Admin/NewsPage/NewsDetail';
@@ -106,20 +106,17 @@ function App() {
                   <Route path="/user" element={<UserListPage />} />
                   <Route path="/myInfo" element={<EditProfile />} />
 
-
                   <Route path="/news" element={<AdminNews />} />
 
                   {/* <Route path="/news/:postId" element={<NewsDetail />} /> */}
                   <Route path="/news/create" element={<NewsCreate />} />
                   <Route path="/news/edit/:postId" element={<NewsEdit />} />
 
-
                   <Route path="/pr" element={<AdminPr />} />
                   <Route path="/insight" element={<AdminInsight />} />
                   <Route path="/admin" element={<AdminAdmin />} />
 
-
-                  <Route path="/edit" element={<PostEditor/>}/>
+                  <Route path="/edit" element={<PostEditor />} />
 
                   {/* 추가적인 하위 경로 */}
                 </Routes>
