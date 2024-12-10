@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import React, { useState, useEffect } from "react";
 import api from "../../../api/axios";
 import styled from "styled-components";
-import "./UserListPage.css";
 
 function UserListPage({ token }) {
   const isShow = useSelector((state) => state.adminModal.isShow);

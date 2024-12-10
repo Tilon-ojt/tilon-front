@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import api from "../../api/axios";
-import { OPEN_MODAL } from "../../reducer/AdminModal";
-import TheButton2 from "../element/TheButton2";
-import TheTable2 from "../element/TheTable2";
+import api from "../../../api/axios";
+import { OPEN_MODAL } from "../../../reducer/AdminModal";
+import TheButton2 from "../../../components/element/TheButton2";
+import TheTable2 from "../../../components/element/TheTable2";
 import styled from "styled-components";
 import { ChevronRight, ChevronLeft } from "lucide-react";
-import AdminAddModal from "../../components/common/AdminAddModal";
-import PasswordCheckModal from "../common/PasswordCheckModal";
+import AdminAddModal from "../../../components/common/AdminAddModal";
+import PasswordCheckModal from "../../../components/common/PasswordCheckModal";
 
 function UserListPage2({ token }) {
   console.log(`전달받은 jwt: ${JSON.stringify(token, null, 2)}`);
@@ -26,7 +26,7 @@ function UserListPage2({ token }) {
   const [adminInfo, setAdminInfo] = useState([]);
   const [selectedUserIds, setSelectedUserIds] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
 
   useEffect(() => {
     console.log("선택된 유저 ID:", selectedUserIds);
@@ -110,7 +110,7 @@ function UserListPage2({ token }) {
         console.log("초기화 성공:", response.data);
         alert("비밀번호가 초기화되었습니다.");
         getUserList(); // 유저 목록 갱신
-        setSelectedUserIds({}); // 초기화 상태로 변경
+        setSelectedUserIds([]); // 초기화 상태로 변경
       } catch (error) {
         alert(`초기화 실패`);
         console.error("초기화 실패:", error);
@@ -208,13 +208,15 @@ const Container = styled.div`
   margin-left: 300px;
   margin-top: 62px;
   position: relative;
+  padding: 100px;
+  padding-top: 60px;
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 60px;
+  right: 100px;
   gap: 10px;
   z-index: 10;
 `;
@@ -230,9 +232,9 @@ const Title = styled.h2`
 const Pagination = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
-  position: absolute;
-  bottom: -20px;
+  margin-top: 20px;
 `;
 
 const PageButton = styled.button`
@@ -266,12 +268,14 @@ const Td = styled.td`
     width: 20px;
   }
   &:nth-child(2) {
-    width: 60px;
+    min-width: 50px;
+    width: 50px;
   }
   &:nth-child(3) {
-    width: 200px;
+    min-width: 100px;
+    width: 100px;
   }
-  &:nth-child(4) {
-    width: 300px;
+  &:nth-child(5) {
+    min-width: 200px;
   }
 `;

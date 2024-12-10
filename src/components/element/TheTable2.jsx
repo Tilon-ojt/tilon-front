@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-function TheTable2({ thead, data }) {
+function TheTable2({ thead, children }) {
   return (
     <CustomTable>
       <TableHeader>
@@ -11,15 +11,7 @@ function TheTable2({ thead, data }) {
           ))}
         </tr>
       </TableHeader>
-      <tbody>
-        {data.map((row, index) => (
-          <TableRow key={index}>
-            {Object.keys(row).map((key, index) => (
-              <Td key={index}>{row[key]}</Td>
-            ))}
-          </TableRow>
-        ))}
-      </tbody>
+      <tbody>{children}</tbody>
     </CustomTable>
   );
 }
@@ -45,25 +37,46 @@ const Th = styled.th`
   border: 1px solid #ddd; /* Header cell border */
 `;
 
-const TableRow = styled.tr`
-  &:nth-child(even) {
-    background-color: #f9f9f9; /* Add alternating row colors */
-  }
-`;
+// const TableRow = styled.tr`
+//   &:nth-child(even) {
+//     background-color: #f9f9f9; /* Add alternating row colors */
+//   }
+// `;
 
-const Td = styled.td`
-  padding: 12px 15px; /* Padding for cells */
-  text-align: left; /* Left-align cell text */
-  font-size: 14px; /* Font size adjustment */
-  color: #555; /* Slightly lighter color for content */
-  border: 1px solid #ddd; /* Cell border for all rows */
-  &:nth-child(1) {
-    width: 20px;
-  }
-  &:nth-child(2) {
-    width: 60px;
-  }
-  &:nth-child(3) {
-    width: 200px;
-  }
-`;
+// const Td = styled.td`
+//   padding: 12px 15px; /* Padding for cells */
+//   text-align: left; /* Left-align cell text */
+//   font-size: 14px; /* Font size adjustment */
+//   color: #555; /* Slightly lighter color for content */
+//   border: 1px solid #ddd; /* Cell border for all rows */
+//   &:nth-child(1) {
+//     width: 20px;
+//   }
+//   &:nth-child(2) {
+//     width: 60px;
+//   }
+//   &:nth-child(3) {
+//     width: 200px;
+//   }
+// `;
+
+{
+  /* <CustomTable>
+<TableHeader>
+  <tr>
+    {thead?.map((item, idx) => (
+      <Th key={idx}>{item}</Th>
+    ))}
+  </tr>
+</TableHeader>
+<tbody>
+  {data.map((row, index) => (
+    <TableRow key={index}>
+      {Object.keys(row).map((key, index) => (
+        <Td key={index}>{row[key]}</Td>
+      ))}
+    </TableRow>
+  ))}
+</tbody>
+</CustomTable> */
+}

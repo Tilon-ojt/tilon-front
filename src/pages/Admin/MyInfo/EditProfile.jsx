@@ -18,6 +18,7 @@ function EditProfile({ token }) {
   const [passwordError, setPasswordError] = useState("");
   const [newPasswordError, setNewPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const [myAmdinId] = useState([decodedToken.adminId]); // ID를 서버로 보낼때 배열로 보내야함
 
   const [isPasswordMatch, setIsPasswordMatch] = useState(false); // 비밀번호 일치 여부 상태 추가
 
@@ -73,7 +74,7 @@ function EditProfile({ token }) {
         return;
       }
     } catch (error) {
-      alert("비밀번호가 올바르지 않습니다.");
+      alert("현재 비밀번호가 올바르지 않습니다.");
     }
   };
 
@@ -183,9 +184,9 @@ function EditProfile({ token }) {
       </EditProfileCard>
       {passwordCheckModalIsShow && (
         <PasswordCheckModal
-          selectedUserIds={decodedToken.adminId}
+          selectedUserIds={myAmdinId}
           ClosePasswordCheckModal={ClosePasswordCheckModal} // 확인
-          massage={"정말 탈퇴하시겠습니까?"}
+          massage={"정말 회원탈퇴하시겠습니까?"}
         />
       )}
     </Container>

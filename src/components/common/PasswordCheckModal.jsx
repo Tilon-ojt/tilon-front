@@ -3,6 +3,7 @@ import styled from "styled-components";
 import TheButton2 from "../element/TheButton2";
 import api from "../../api/axios";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const PasswordCheckModal = ({
   selectedUserIds,
@@ -10,18 +11,18 @@ const PasswordCheckModal = ({
   getUserList,
   massage,
 }) => {
+  const navigate = useNavigate();
   const token = useSelector((state) => state.auth.token);
   console.log(`넘겨받은 id: ${selectedUserIds}`);
   const [password, setPassword] = useState("");
 
   const deleteUser = async () => {
-    const isConfirmed = window.confirm("${massage");
+    const isConfirmed = window.confirm(`${massage}`);
     if (isConfirmed) {
-    } else {
       console.log(`삭제 또는 탈퇴할 사용자 ID: ${selectedUserIds}`);
       try {
         const response = await api.delete("/admin/account", {
-          data: { adminId: selectedUserIds, password: password },
+          data: { adminIds: selectedUserIds, password: password },
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -29,13 +30,12 @@ const PasswordCheckModal = ({
         });
         console.log("삭제, 탈퇴 성공:", response.data);
         alert("정상적으로 처리되었습니다.");
-        getUserList();
+        sessionStorage.removeItem("jwt");
+        navigate("/");
       } catch (error) {
         alert(`실패`);
         console.error("실패:", error);
       }
-      alert("처리 완료!");
-      ClosePasswordCheckModal(); // 모달 닫기
     }
   };
 
