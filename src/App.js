@@ -76,7 +76,7 @@ import NewsEdit from "./pages/Admin/NewsPage/NewsEdit";
 
 import AdminPr from "./pages/Admin/Pr/AdminPr";
 import AdminInsight from "./pages/Admin/Insight/AdminInsight";
-import PrivateRoute from "./components/PrivateRoute"; // PrivateRoute 임포트
+import PrivateRoute from "./components/PrivateRoute";
 import UserListPage2 from "./pages/Admin/UserListPage/UserListPage2";
 
 function App() {
