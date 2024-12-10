@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Btn from "../../../components/element/ThePrButton";
+import TheSearch from "../../../components/element/TheSearch";
+import Btn from "../../../components/element/TheNewsButton";
 
 // AdminNews 컴포넌트
-function AdminPr() {
+function AdminNews() {
   const navigate = useNavigate(); // useNavigate 훅 사용
 
   // 예제 데이터 (뉴스 리스트)
@@ -17,6 +18,7 @@ function AdminPr() {
     <Container>
       <Header>
         <Title>Pr</Title>
+        <TheSearch />
         <BtnContainer>
           <Btn type="NavigateN" label="Create new PR" />
           <Btn type="DeleteN" label="Delete PR" />
@@ -26,13 +28,13 @@ function AdminPr() {
       <List>
         <Type> no  Title URL</Type>
         <hr/> 
-        {exampleNewsList.map((pr) => (
-          <ListItem key={pr.id}>
+        {exampleNewsList.map((news) => (
+          <ListItem key={news.id}>
             <input type="checkbox"/>
-            <ItemContent key={pr.id} onClick={() => navigate(`/admin/pr/edit/${pr.id}`)}>
-              <span>{pr.id}</span>
-              <span>{pr.title}</span>
-              <span>{pr.url}</span>
+            <ItemContent key={news.id} onClick={() => navigate(`/admin/news/edit/${news.id}`)}>
+              <span>{news.id}</span>
+              <span>{news.title}</span>
+              <span>{news.url}</span>
             </ItemContent>
           </ListItem>
         ))}
@@ -122,4 +124,4 @@ const ItemContent = styled.div`
   width: 100%;
 `
 
-export default AdminPr;
+export default AdminNews;
