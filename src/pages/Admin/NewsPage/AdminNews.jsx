@@ -9,7 +9,6 @@ import TheButton from "../../../components/element/TheButton";
 import TheTable from "../../../components/element/TheTable";
 import api from "../../../api/axios";
 
-
 function AdminNews() {
   const thead = ["", "no", "Title", "Link", "latest update"];
   const columnwidths = ["2%", "3%", "35%", "40%", "20%"];
@@ -18,7 +17,6 @@ function AdminNews() {
   const dispatch = useDispatch();
   const [tbody, setTbody] = useState([]);
   const token = useSelector((state) => state.auth.token);
-
 
   useEffect(() => {
     if (!token) {
@@ -34,33 +32,31 @@ function AdminNews() {
       // console.log("Redux token:", token);
       const token = sessionStorage.getItem("jwt");
       console.log("jwt: ", token);
-  
+
       if (!token) {
         alert("로그인이 필요합니다.");
         return;
       }
-  
+
       const response = await api.get("/admin/posts", {
-        params: { 
+        params: {
           category: "NEWS",
-          page: "1"
-         },
+          page: "1",
+        },
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
       });
-  
+
       console.log("뉴스 목록 조회:", response.data);
       setTbody(response.data.content);
-  
     } catch (error) {
       console.error("Failed to fetch news:", error.message);
       alert("뉴스 데이터 로딩 실패.");
     }
   };
-  
-  
+
   const searchHandler = () => {
     console.log("Search button clicked");
     alert("Search!");

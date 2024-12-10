@@ -5,8 +5,6 @@ import { CLOSE_MENU, OPEN_MENU } from "../../../reducer/HeaderBar";
 import { useNavigate } from "react-router-dom";
 
 function Header({ headerBackground }) {
-  console.log(headerBackground);
-
   const isShow = useSelector((state) => state.headerbar.isShow);
   const dispatch = useDispatch();
 

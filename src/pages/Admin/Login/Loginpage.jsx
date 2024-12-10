@@ -21,19 +21,20 @@ function Loginpage() {
       console.log("로그인 성공:", response.data);
 
       // JWT 저장 (리프레쉬 토큰 없는 버전)
-      const { token } = response.data;
-      dispatch(setToken(token)); // Redux 상태에 저장
-      console.log("Redux 상태 확인:", store.getState().auth.token); // 상태 확인
-
-      // JWT 저장 (리프레쉬 토큰 있는 버전)
-      // const { accessToken, refreshToken } = response.data;
-
-      // // 세션에 엑세스토큰 저장
-      // dispatch(setToken(accessToken)); // Redux 상태에 저장
+      // const { token } = response.data;
+      // dispatch(setToken(token)); // Redux 상태에 저장
       // console.log("Redux 상태 확인:", store.getState().auth.token); // 상태 확인
 
-      // // 쿠키에 리프레쉬 토큰 저장
-      // document.cookie = `refreshToken=${refreshToken}; path=/admin; HttpOnly`;
+      // JWT 저장 (리프레쉬 토큰 있는 버전)
+      const { accessToken, refreshToken } = response.data;
+
+      // 세션에 엑세스토큰 저장
+      dispatch(setToken(accessToken)); // Redux 상태에 저장
+      console.log("Redux 상태 확인:", store.getState().auth.token); // 상태 확인
+
+      // 쿠키에 리프레쉬 토큰 저장
+      document.cookie = `cookie=${refreshToken}; path=/;`;
+      console.log("저장된 쿠키:", document.cookie);
 
       navigate("/admin/news");
     } catch (error) {

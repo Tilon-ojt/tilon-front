@@ -77,6 +77,7 @@ const TilonHomepage = () => {
 
     const handleScroll = (e) => {
       // 스크롤을 내리면 버튼 보이기, 최상단에서만 숨기기
+      // 스크롤 내려가면 헤더에 희미한 백그라운드 적용
       if (window.scrollY > 50) {
         setShowChevron(true);
         setHeaderBackground(true);
