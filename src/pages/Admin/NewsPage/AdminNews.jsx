@@ -6,6 +6,14 @@ import TheButton from "../../../components/element/TheButton";
 import TheTable from "../../../components/element/TheTable";
 import { useNavigate } from "react-router-dom";
 
+
+import { useDispatch } from "react-redux";
+import { setToken } from "../../../reducer/authSlice";
+import api from "../../../api/axios";
+import store from "../../../store";
+
+
+
 function AdminNews() {
   const thead = ["", "no", "Title", "Link", "latest update"];
   const columnwidths = ["2%", "3%", "35%", "40%", "20%"];
@@ -13,14 +21,18 @@ function AdminNews() {
   const [selectedRows, setSelectedRows] = useState([]);
   const [tbody, setTbody] = useState([]);
   const navigate = useNavigate();
+  const dispatch = useDispatch(); // Redux dispatch
+
 
   // Axios로 데이터 불러오기
   useEffect(() => {
     const fetchNews = async () => {
       try {
         console.log("Fetching news data...");
-        const token = localStorage.getItem("token");
-        console.log("Token:", token);
+
+        const token = localStorage.getItem("token"); // 가져오기
+        dispatch(setToken(token)); // Redux 저장
+        
         const response = await axios.get("/admin/post?category=NEWS", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -47,6 +59,11 @@ function AdminNews() {
     fetchNews();
   }, []);
 
+
+
+
+  // 버튼 핸들러
+
   const searchHandler = (e) => {
     console.log("Search button clicked");
     alert("Search!");
@@ -64,7 +81,6 @@ function AdminNews() {
 
   const Td = ({ children, onClick }) => <td onClick={onClick}>{children}</td>;
 
-  // 뉴스 삭제 버튼 핸들러
   const deleteHandler = async () => {
     console.log("Delete button clicked");
 
