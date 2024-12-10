@@ -153,7 +153,7 @@ function PostEdit() {
             <div
                 style={{
                     width: '1000px', // 고정된 너비
-                    height: '460px', // 고정된 높이
+                    height: '700px', // 고정된 높이
                     margin: 'auto',
                     borderRadius: '19px',
                     boxShadow: '0 4px 10px rgba(0,0,0,0.1)', // 약간의 그림자 추가
@@ -161,6 +161,8 @@ function PostEdit() {
                     backgroundColor: '#fff' // 배경색 설정
                 }}
             >
+
+
                 <div
                     style={{
                         display: 'flex',
@@ -227,7 +229,7 @@ function PostEdit() {
                         value={content}  // 더미 데이터로 초기화된 내용
                         onChange={setContent}
                         style={{
-                            height: "320px",
+                            height: "550px",
                             width: '100%',
                             boxSizing: 'border-box'
                         }}

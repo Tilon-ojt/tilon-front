@@ -4,12 +4,14 @@ import 'react-quill/dist/quill.snow.css';
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { useParams } from 'react-router-dom'; // react-router-dom에서 useParams import
-
+import { useNavigate } from 'react-router-dom';
 import ImageResize from 'quill-image-resize';
 
 Quill.register('modules/ImageResize', ImageResize);
 
 function PostWrite() {
+    const navigate = useNavigate();
+
     let redux = useSelector((state) => { return state });
     const { categoryParam } = useParams();  // URL에서 category 값을 추출
     const [title, setTitle] = useState('');  // 제목
@@ -106,6 +108,16 @@ function PostWrite() {
         });
     }
 
+    // 버튼 클릭 핸들러 추가
+    const CreateBtn = () => {
+        console.log('생성 버튼 클릭.');
+    };
+
+    const CancelBtn = () => {
+        console.log('취소 되었습니다.');
+        navigate('/admin/pr');
+    };
+
     const modules = {
         toolbar: [
             [{ 'font': [] }],
@@ -124,98 +136,133 @@ function PostWrite() {
     return (
         <div
             style={{
-                width: '100%',
-                height: '100vh', // 화면 전체 높이 기준
-                display: 'flex',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-
-            }}
->
-    <div
-        style={{
-            width: '1000px', // 고정된 너비
-            height: '460px', // 고정된 높이
-            margin: 'auto',
-            borderRadius: '19px',
-            boxShadow: '0 4px 10px rgba(0,0,0,0.1)', // 약간의 그림자 추가
-            padding: '20px', // 내부 여백 추가
-            backgroundColor: '#fff' // 배경색 설정
-        }}
-    >
-        <div
-            style={{
+                height: 'calc(100vh - 62px)',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '15px',
-                marginBottom: '10px',
+                paddingLeft: '16vw',
             }}
         >
-            <select
-                value={category}
-                disabled
-                style={{ width: '150px' }}
-            >
-                <option value="pr">PR</option>
-                <option value="insight">INSIGHT</option>
-            </select>
-
-            <input
-                type="text"
-                placeholder="링크를 입력하세요"
-                value={link}
-                onChange={(e) => setLink(e.target.value)}
-                style={{ flex: 1 }} // input 필드가 가능한 공간을 채우도록 설정
-            />
-
-            <select
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-                style={{ width: '150px' }}
-            >
-                <option value="PUBLISHED">PUBLISHED</option>
-                <option value="DRAFT">DRAFT</option>
-            </select>
-
-            <label style={{ marginLeft: '10px' }}>
-                고정:
-                <input
-                    type="checkbox"
-                    checked={fix}
-                    onChange={(e) => setFix(e.target.checked)}
-                />
-            </label>
-        </div>
-
-        <input
-            className="Title"
-            placeholder="제목을 입력해 주세요"
-            style={{
-                padding: '7px',
-                marginBottom: '10px',
-                width: '100%',
-                border: '1px solid lightGray',
-                fontSize: '15px',
-                boxSizing: 'border-box',
-                marginTop: '20px',
-            }}
-            onChange={(e) => { setTitle(e.target.value) }}
-        />
-        <div style={{ height: '380px', width: '100%' }}>
-            <ReactQuill
-                modules={modules}
-                placeholder='내용을 입력해 주세요'
-                onChange={setContent}
+            <div
                 style={{
-                    height: "320px",
-                    width: '100%',
-                    boxSizing: 'border-box'
+                    height: '75%',
+                    width: '68vw',
+                    margin: '0 auto',
+                    borderRadius: '19px',
+                    boxShadow: '0 4px 10px rgba(0,0,0,0.1)', // 약간의 그림자 추가
+                    padding: '20px', // 내부 여백 추가
+                    backgroundColor: '#fff', // 배경색 설정
+                    border: '0.1px solid lightgray',
+                    marginTop: '7vh',
                 }}
-            />
-        </div>
-    </div>
-</div>
+            >
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '15px',
+                        marginBottom: '10px',
+                    }}
+                >
+                    <select
+                        value={category}
+                        disabled
+                        style={{ width: '150px' }}
+                    >
+                        <option value="pr">PR</option>
+                        <option value="insight">INSIGHT</option>
+                    </select>
 
+                    <input
+                        type="text"
+                        placeholder="링크를 입력하세요"
+                        value={link}
+                        onChange={(e) => setLink(e.target.value)}
+                        style={{ flex: 1 }} // input 필드가 가능한 공간을 채우도록 설정
+                    />
+
+                    <select
+                        value={status}
+                        onChange={(e) => setStatus(e.target.value)}
+                        style={{ width: '150px' }}
+                    >
+                        <option value="PUBLISHED">PUBLISHED</option>
+                        <option value="DRAFT">DRAFT</option>
+                    </select>
+
+                    <label style={{ marginLeft: '10px' }}>
+                        고정:
+                        <input
+                            type="checkbox"
+                            checked={fix}
+                            onChange={(e) => setFix(e.target.checked)}
+                        />
+                    </label>
+                </div>
+
+                <input
+                    className="Title"
+                    placeholder="제목을 입력해 주세요"
+                    style={{
+                        padding: '7px',
+                        marginBottom: '10px',
+                        width: '100%',
+                        border: '1px solid lightGray',
+                        fontSize: '15px',
+                        boxSizing: 'border-box',
+                        marginTop: '20px',
+                    }}
+                    value={title}  // 더미 데이터로 초기화된 제목
+                    onChange={(e) => { setTitle(e.target.value) }}
+                />
+                <div style={{ height: '60vh', width: '100%' }}>
+                    <ReactQuill
+                        modules={modules}
+                        placeholder='내용을 입력해 주세요'
+                        value={content}  // 더미 데이터로 초기화된 내용
+                        onChange={setContent}
+                        style={{
+                            height: "55vh",
+                            width: '100%',
+                            boxSizing: 'border-box'
+                        }}
+                    />
+                </div>
+
+                {/* ButtonContainer 추가 */}
+                <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end' }}>
+                    <div style={{ display: 'flex', gap: '30px',  marginTop:'30px'}}>
+                        <button 
+                            onClick={CreateBtn} 
+                            style={{
+                                backgroundColor: '#0d6efd', 
+                                color: 'white', 
+                                border: 'none', 
+                                padding: '10px 30px', 
+                                borderRadius: '5px',
+                                cursor: 'pointer',
+                                fontSize: '16px',
+                            }}
+                        >
+                            생성
+                        </button>
+                        <button 
+                            onClick={CancelBtn} 
+                            style={{
+                                backgroundColor: 'gray', 
+                                color: 'white', 
+                                border: 'none', 
+                                padding: '10px 30px', 
+                                borderRadius: '5px',
+                                cursor: 'pointer',
+                                fontSize: '16px',
+                            }}
+                        >
+                            취소
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     );
 }
 
