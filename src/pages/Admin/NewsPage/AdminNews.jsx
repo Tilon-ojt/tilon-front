@@ -1,24 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { format } from "date-fns";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { setToken } from "../../../reducer/authSlice";
 import TheLayout from "../../../components/element/TheLayout";
 import TheButton from "../../../components/element/TheButton";
 import TheTable from "../../../components/element/TheTable";
 import api from "../../../api/axios";
 
 
-function AdminNews() {
+function AdminNews({token}) {
   const thead = ["", "no", "Title", "Link", "latest update"];
   const columnwidths = ["2%", "3%", "35%", "40%", "20%"];
   const [selectedRows, setSelectedRows] = useState([]);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [tbody, setTbody] = useState([]);
-  const token = useSelector((state) => state.auth.token);
 
+  console.log("jwt: ", token);
+  
 
   useEffect(() => {
     if (!token) {
@@ -31,10 +28,6 @@ function AdminNews() {
 
   const fetchNews = async () => {
     try {
-      // console.log("Redux token:", token);
-      const token = sessionStorage.getItem("jwt");
-      console.log("jwt: ", token);
-  
       if (!token) {
         alert("로그인이 필요합니다.");
         return;
@@ -84,23 +77,17 @@ function AdminNews() {
     );
   };
 
-  const deleteHandler = async () => {
-    if (selectedRows.length === 0) {
-      console.log("No news items selected for deletion");
-      alert("삭제할 항목을 선택하세요.");
+
+  // 삭제 핸들러
+  const deleteHandler = async () => {  
+    if (!token) {
+      alert("로그인이 필요합니다.");
       return;
     }
-
-    if (!window.confirm("선택한 항목을 삭제하시겠습니까?")) {
-      console.log("User cancelled the delete confirmation dialog");
-      return;
-    }
-
+  
     try {
-      const token = localStorage.getItem("token");
-
       for (const postId of selectedRows) {
-        await axios.delete(`/admin/post?category=NEWS&id=${postId}`, {
+        await api.delete(`/admin/posts/${postId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -111,15 +98,16 @@ function AdminNews() {
       setTbody((prevData) =>
         prevData.filter((newsItem) => !selectedRows.includes(newsItem.postId))
       );
+      
       setSelectedRows([]);
-
-      console.log("Selected news items have been deleted.");
       alert("선택한 항목이 삭제되었습니다.");
     } catch (error) {
-      console.error("Failed to delete news:", error);
-      alert("삭제에 실패했습니다. 다시 시도해주세요.");
+      console.error("Failed to delete news:", error.message);
+      alert("삭제에 실패했습니다.");
     }
   };
+  
+  
 
   const renderButtons = () => (
     <>
@@ -153,8 +141,8 @@ function AdminNews() {
         </Td>
         <Td onClick={() => goToEditHandler(row.postId)}>{row.postId}</Td>
         <Td onClick={() => goToEditHandler(row.postId)}>{row.title}</Td>
-        <Td onClick={() => goToEditHandler(row.postId)}>{row.url}</Td>
-        <Td onClick={() => goToEditHandler(row.postId)}>{row.latestDate}</Td>
+        <Td onClick={() => goToEditHandler(row.postId)}>{row.link}</Td>
+        <Td onClick={() => goToEditHandler(row.postId)}>{row.updatedAt}</Td>
       </React.Fragment>
     ));
 
