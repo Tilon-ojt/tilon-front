@@ -1,59 +1,44 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import TheLayout from "../../../components/element/TheLayout";
 import TheButton from "../../../components/element/TheButton";
-import TheTable from "../../../components/element/TheTable";
+import TheTable2 from "../../../components/element/TheTable2";
 import api from "../../../api/axios";
+import styled from "styled-components";
 
 
 function AdminNews({token}) {
-  const thead = ["", "no", "Title", "Link", "latest update"];
-  const columnwidths = ["2%", "3%", "35%", "40%", "20%"];
   const [selectedRows, setSelectedRows] = useState([]);
   const navigate = useNavigate();
   const [tbody, setTbody] = useState([]);
 
-  console.log("jwt: ", token);
-  
-
-  useEffect(() => {
-    if (!token) {
-      alert("로그인이 필요합니다.");
-      navigate("/admin/login");
-    } else {
-      fetchNews();
-    }
-  }, [token]);
-
   const fetchNews = async () => {
     try {
-      if (!token) {
-        alert("로그인이 필요합니다.");
-        return;
-      }
-  
-      const response = await api.get("/admin/posts", {
+      const response = await api.get('/admin/posts', {
         params: { 
           category: "NEWS",
-          page: "1"
-         },
+           page: "1"
+        },
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json"
-        },
+        }
       });
-  
-      console.log("뉴스 목록 조회:", response.data);
+
+      console.log('모든 뉴스 데이터:', response.data.content);
       setTbody(response.data.content);
-  
     } catch (error) {
       console.error("Failed to fetch news:", error.message);
       alert("뉴스 데이터 로딩 실패.");
     }
   };
-  
-  
+
+  useEffect(() => {
+    if(token){
+      fetchNews();
+    }
+  }, []);
+
   const searchHandler = () => {
     console.log("Search button clicked");
     alert("Search!");
@@ -64,8 +49,8 @@ function AdminNews({token}) {
     navigate(`/admin/news/create`);
   };
 
-  const goToEditHandler = (postId) => {
-    console.log(`Navigate to edit page for postId: ${postId}`);
+  const goToDetailHandler = (postId) => {
+    console.log(`Navigate to detail page for postId: ${postId}`);
     navigate(`/admin/news/${postId}`);
   };
 
@@ -77,6 +62,11 @@ function AdminNews({token}) {
     );
   };
 
+  const handleRowClick = (postId, e) => {
+    e.stopPropagation(); // 이벤트 버블링 방지
+    goToDetailHandler(postId);
+  };
+  
 
   // 삭제 핸들러
   const deleteHandler = async () => {  
@@ -121,7 +111,7 @@ function AdminNews({token}) {
         label="Delete News"
         role="delete"
         color="white"
-        bgColor="#ff4141"
+        $bgColor="#ff4141"
         width="150px"
         height="40px"
         onClick={deleteHandler}
@@ -129,22 +119,6 @@ function AdminNews({token}) {
     </>
   );
 
-  const renderTableRows = () =>
-    tbody.map((row) => (
-      <React.Fragment key={row.postId}>
-        <Td>
-          <input
-            type="checkbox"
-            checked={selectedRows.includes(row.postId)}
-            onChange={() => handleCheckboxChange(row.postId)}
-          />
-        </Td>
-        <Td onClick={() => goToEditHandler(row.postId)}>{row.postId}</Td>
-        <Td onClick={() => goToEditHandler(row.postId)}>{row.title}</Td>
-        <Td onClick={() => goToEditHandler(row.postId)}>{row.link}</Td>
-        <Td onClick={() => goToEditHandler(row.postId)}>{row.updatedAt}</Td>
-      </React.Fragment>
-    ));
 
   const Td = ({ children, onClick }) => <td onClick={onClick}>{children}</td>;
 
@@ -155,18 +129,76 @@ function AdminNews({token}) {
       onClick={searchHandler}
       childrenBtn={renderButtons()}
       childrenTable={
-        <TheTable
-          thead={thead}
-          columnwidths={columnwidths}
-          withCheckbox={true}
-          selectedRows={selectedRows}
-          setSelectedRows={setSelectedRows}
-        >
-          {renderTableRows()}
-        </TheTable>
+        <TheTable2 thead={["", "no", "title", "url", "latest update"]}>
+        {/* <tbody> */}
+          {tbody.map((item) => (
+            <TableRow
+              key={item.postId}
+              selected={selectedRows.includes(item.postId)}
+              onClick={(e) => handleRowClick(item.postId, e)} 
+            >
+              <Td>
+                <input
+                  type="checkbox"
+                  checked={selectedRows.includes(item.postId)}
+                  onChange={(e) => handleCheckboxChange(item.postId)}
+                  onClick={(e) => e.stopPropagation()}  // 클릭 시 링크 이동 방지
+                />
+              </Td>
+              <Td>{item.postId}</Td>
+              <Td>{item.title}</Td>
+              <Td>{item.link}</Td>
+              <Td>{item.updatedAt}</Td>
+            </TableRow>
+          ))}
+        {/* </tbody> */}
+
+      </TheTable2>
       }
     />
   );
 }
 
+
 export default AdminNews;
+
+const TableRow = styled.tr`
+  &:nth-child(even) {
+    background-color: #f9f9f9; /* Add alternating row colors */
+  }
+
+  cursor: pointer;
+
+  transition: all .35s;
+  &:hover{
+    background-color: #f0f8ff ;
+  }
+
+  Td{
+  padding: 12px 15px; /* Padding for cells */
+  text-align: left; /* Left-align cell text */
+  font-size: 14px; /* Font size adjustment */
+  color: #555; /* Slightly lighter color for content */
+  border: 1px solid #ddd; /* Cell border for all rows */
+  
+
+  &:nth-child(1) {
+    width: 2%;
+  }
+  &:nth-child(2) {
+    min-width: 50px;
+    width: 3%;
+  }
+  &:nth-child(3) {
+    min-width: 100px;
+    width: 35%;
+  }
+  &:nth-child(4) {
+    min-width: 100px;
+    width: 40%;
+  }
+  &:nth-child(5) {
+    min-width: 20%;
+  }
+}
+`;

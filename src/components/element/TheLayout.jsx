@@ -103,6 +103,7 @@ const BtnContainer = styled.div`
 
 
 const Body = styled.div`
+  /* border: 1px solid red; */
   height: auto;
   width: 70vw;
   margin-top: 20px;

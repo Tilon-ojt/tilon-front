@@ -70,7 +70,7 @@ import Loginpage from "./pages/Admin/Login/Loginpage";
 import EditProfile from "./pages/Admin/MyInfo/EditProfile";
 
 import AdminNews from "./pages/Admin/NewsPage/AdminNews";
-// import NewsDetail from './pages/Admin/NewsPage/NewsDetail';
+import NewsDetail from './pages/Admin/NewsPage/NewsDetail';
 import NewsCreate from "./pages/Admin/NewsPage/NewsCreate";
 import NewsEdit from "./pages/Admin/NewsPage/NewsEdit";
 
@@ -111,13 +111,21 @@ function App() {
                     element={<PrivateRoute element={<AdminNews />} />}
                   />
                   <Route
+                    path="/news/:postId"
+                    element={<PrivateRoute element={<NewsDetail />} />}
+                  />
+
+                  <Route
                     path="news/create"
                     element={<PrivateRoute element={<NewsCreate />} />}
                   />
+
+
                   <Route
                     path="/news/edit/:postId"
                     element={<PrivateRoute element={<NewsEdit />} />}
                   />
+                  
                   <Route
                     path="/pr"
                     element={<PrivateRoute element={<AdminPr />} />}
