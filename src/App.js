@@ -73,18 +73,16 @@ import Loginpage from "./pages/Admin/Login/Loginpage"; // Fix import name to mat
 import UserListPage from "./pages/Admin/UserListPage/UserListPage";
 import EditProfile from "./pages/Admin/MyInfo/EditProfile";
 
-import AdminNews from './pages/Admin/NewsPage/AdminNews';
+import AdminNews from "./pages/Admin/NewsPage/AdminNews";
 // import NewsDetail from './pages/Admin/NewsPage/NewsDetail';
-import NewsCreate from './pages/Admin/NewsPage/NewsCreate';
-import NewsEdit from './pages/Admin/NewsPage/NewsEdit';
+import NewsCreate from "./pages/Admin/NewsPage/NewsCreate";
+import NewsEdit from "./pages/Admin/NewsPage/NewsEdit";
 
-import AdminPr from './pages/Admin/Pr/AdminPr';
-import AdminInsight from './pages/Admin/Insight/AdminInsight';
-import AdminAdmin from './pages/Admin/AdminAdmin';
-
+import AdminPr from "./pages/Admin/Pr/AdminPr";
+import AdminInsight from "./pages/Admin/Insight/AdminInsight";
+import AdminAdmin from "./pages/Admin/AdminAdmin";
 
 function App() {
-
   return (
     <Router>
       <Provider store={store}>
@@ -130,6 +128,3 @@ function App() {
 }
 
 export default App;
-
-
-
