@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { jwtDecode } from "jwt-decode";
 import TheButton2 from "../../../components/element/TheButton2";
 import { useNavigate } from "react-router-dom";
+import PasswordCheckModal from "../../../components/common/PasswordCheckModal";
 
 function EditProfile({ token }) {
   const navigate = useNavigate(); // useNavigate Hook
@@ -17,8 +18,12 @@ function EditProfile({ token }) {
   const [passwordError, setPasswordError] = useState("");
   const [newPasswordError, setNewPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const [myAmdinId] = useState([decodedToken.adminId]); // ID를 서버로 보낼때 배열로 보내야함
 
   const [isPasswordMatch, setIsPasswordMatch] = useState(false); // 비밀번호 일치 여부 상태 추가
+
+  const [passwordCheckModalIsShow, setPasswordCheckModalIsShow] =
+    useState(false); // 비밀번호 확인창
 
   const validateNewPassword = (password) => {
     const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/; // 영문 + 숫자 포함, 최소 6자
@@ -69,34 +74,17 @@ function EditProfile({ token }) {
         return;
       }
     } catch (error) {
-      alert("비밀번호가 올바르지 않습니다.");
+      alert("현재 비밀번호가 올바르지 않습니다.");
     }
   };
 
   // 회원탈퇴
   const userWithdrawalHandler = async (adminId) => {
-    const isConfirmed = window.confirm("정말 탈퇴하시겠습니까?");
-    console.log(`탈퇴할 ID: ${adminId}입니다.`, typeof adminId);
+    setPasswordCheckModalIsShow(true);
+  };
 
-    if (isConfirmed) {
-      try {
-        const response = await api.delete("", {
-          data: { adminId },
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
-        console.log("탈퇴 성공:", response.data);
-        alert(`탈퇴되었습니다.`);
-        navigate("/admin/login");
-      } catch (error) {
-        alert(`탈퇴 실패`);
-        console.error("탈퇴 실패:", error);
-      }
-    } else {
-      console.log("탈퇴가 취소되었습니다.");
-    }
+  const ClosePasswordCheckModal = () => {
+    setPasswordCheckModalIsShow(false); // 모달 닫기
   };
 
   return (
@@ -194,6 +182,13 @@ function EditProfile({ token }) {
           회원탈퇴
         </TheButton2>
       </EditProfileCard>
+      {passwordCheckModalIsShow && (
+        <PasswordCheckModal
+          selectedUserIds={myAmdinId}
+          ClosePasswordCheckModal={ClosePasswordCheckModal} // 확인
+          massage={"정말 회원탈퇴하시겠습니까?"}
+        />
+      )}
     </Container>
   );
 }
