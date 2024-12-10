@@ -5,6 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import TheButton2 from "../../../components/element/TheButton2";
 import { useNavigate } from "react-router-dom";
 import TheModal from "../../../components/element/TheModal";
+import { CircleAlert } from "lucide-react";
 
 function EditProfile({ token }) {
   const navigate = useNavigate(); // useNavigate Hook
@@ -102,27 +103,24 @@ function EditProfile({ token }) {
   };
 
   const deleteUser = async () => {
-    const isConfirmed = window.confirm(`회원탈퇴하시겠습니까?`);
-    if (isConfirmed) {
-      console.log(`삭제 또는 탈퇴할 사용자 ID: ${myAmdinId}`);
-      try {
-        const response = await api.delete("/admin/account", {
-          data: { adminIds: myAmdinId, password: password },
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
-        console.log("삭제, 탈퇴 성공:", response.data);
-        alert("정상적으로 처리되었습니다.");
-        setPassword("");
-        ClosePasswordCheckModal();
-        sessionStorage.removeItem("jwt");
-        navigate("/");
-      } catch (error) {
-        alert(`비밀번호가 일치하지 않습니다.`);
-        console.error("실패:", error);
-      }
+    console.log(`삭제 또는 탈퇴할 사용자 ID: ${myAmdinId}`);
+    try {
+      const response = await api.delete("/admin/account", {
+        data: { adminIds: myAmdinId, password: password },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      console.log("삭제, 탈퇴 성공:", response.data);
+      alert("정상적으로 처리되었습니다.");
+      setPassword("");
+      ClosePasswordCheckModal();
+      sessionStorage.removeItem("jwt");
+      navigate("/");
+    } catch (error) {
+      alert(`비밀번호가 일치하지 않습니다.`);
+      console.error("실패:", error);
     }
   };
 
@@ -222,7 +220,12 @@ function EditProfile({ token }) {
         </TheButton2>
       </EditProfileCard>
       {passwordCheckModalIsShow && (
-        <TheModal title={"비밀번호 확인"}>
+        <TheModal title={"정말 탈퇴하시겠어요?"}>
+          <CircleAlert size={80} style={{ color: "red" }} />
+          <P style={{ color: "red" }}>
+            탈퇴버튼 선택시, 계정은 삭제되며 복구되지 않습니다.
+          </P>
+          <P>탈퇴를 원하면 비밀번호 입력 후 탈퇴버튼을 눌러주세요.</P>
           <Label>
             <P>비밀번호 :</P>
             <Input
@@ -233,14 +236,10 @@ function EditProfile({ token }) {
             />
           </Label>
           <ButtonContainer2>
-            <TheButton2 $primary width="200px" onClick={deleteUser}>
+            <TheButton2 $danger width="200px" onClick={deleteUser}>
               확인
             </TheButton2>
-            <TheButton2
-              $secondary
-              width="200px"
-              onClick={ClosePasswordCheckModal}
-            >
+            <TheButton2 width="200px" onClick={ClosePasswordCheckModal}>
               취소
             </TheButton2>
           </ButtonContainer2>
