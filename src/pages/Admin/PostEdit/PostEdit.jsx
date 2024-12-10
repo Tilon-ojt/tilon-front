@@ -9,7 +9,7 @@ import ImageResize from 'quill-image-resize';
 
 Quill.register('modules/ImageResize', ImageResize);
 
-function PostEditor() {
+function PostEdit() {
     let redux = useSelector((state) => { return state });
     const { categoryParam } = useParams();  // URL에서 category 값을 추출
     const [title, setTitle] = useState('');  // 제목
@@ -20,6 +20,25 @@ function PostEditor() {
     const [link, setLink] = useState('');  // URL 링크
     const [tempPostId, setTempPostId] = useState(null);  // 임시 게시글 ID
     const [imageUrls, setImageUrls] = useState([]);  // 서버에서 받은 이미지 URL들
+
+    // 더미 데이터 설정
+    useEffect(() => {
+        const dummyData = {
+            title: "더미 제목",
+            content: "더미 내용입니다. <img src='data:image/jpeg;base64,...' />",
+            category: categoryParam || "pr",
+            status: "PUBLISHED",
+            fix: true,
+            link: "https://dummy.link",
+        };
+
+        setTitle(dummyData.title);
+        setContent(dummyData.content);
+        setCategory(dummyData.category);
+        setStatus(dummyData.status);
+        setFix(dummyData.fix);
+        setLink(dummyData.link);
+    }, [categoryParam]);
 
     // 이미지 업로드 및 URL로 변환하는 로직
     const srcArray = [];
@@ -122,76 +141,101 @@ function PostEditor() {
     };
 
     return (
-        <div>
-            <div style={{ width: '100%', height: '70vh' }}>
-                <div style={{ width: '1000px', margin: 'auto', borderRadius: '19px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '10px' }}>
-                        <select
-                            value={category}
-                            disabled
-                            style={{ width: '150px' }}
-                        >
-                            <option value="pr">PR</option>
-                            <option value="insight">INSIGHT</option>
-                        </select>
-
-                        <input
-                            type="text"
-                            placeholder="링크를 입력하세요"
-                            value={link}
-                            onChange={(e) => setLink(e.target.value)}
-                            style={{ flex: 1 }} // input 필드가 가능한 공간을 채우도록 설정
-                        />
-
-                        <select
-                            value={status}
-                            onChange={(e) => setStatus(e.target.value)}
-                            style={{ width: '150px' }}
-                        >
-                            <option value="PUBLISHED">PUBLISHED</option>
-                            <option value="DRAFT">DRAFT</option>
-                        </select>
-
-                        <label style={{ marginLeft: '10px' }}>
-                            고정:
-                            <input
-                                type="checkbox"
-                                checked={fix}
-                                onChange={(e) => setFix(e.target.checked)}
-                            />
-                        </label>
-                    </div>
+        <div
+            style={{
+                width: '100%',
+                height: '100vh', // 화면 전체 높이 기준
+                display: 'flex',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+            }}
+        >
+            <div
+                style={{
+                    width: '1000px', // 고정된 너비
+                    height: '460px', // 고정된 높이
+                    margin: 'auto',
+                    borderRadius: '19px',
+                    boxShadow: '0 4px 10px rgba(0,0,0,0.1)', // 약간의 그림자 추가
+                    padding: '20px', // 내부 여백 추가
+                    backgroundColor: '#fff' // 배경색 설정
+                }}
+            >
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '15px',
+                        marginBottom: '10px',
+                    }}
+                >
+                    <select
+                        value={category}
+                        disabled
+                        style={{ width: '150px' }}
+                    >
+                        <option value="pr">PR</option>
+                        <option value="insight">INSIGHT</option>
+                    </select>
 
                     <input
-                        className="Title"
-                        placeholder="제목을 입력해 주세요"
-                        style={{
-                            padding: '7px',
-                            marginBottom: '10px',
-                            width: '100%',
-                            border: '1px solid lightGray',
-                            fontSize: '15px',
-                            boxSizing: 'border-box',
-                            marginTop: '30px',
-                        }}
-                        onChange={(e) => { setTitle(e.target.value) }}
+                        type="text"
+                        placeholder="링크를 입력하세요"
+                        value={link}
+                        onChange={(e) => setLink(e.target.value)}
+                        style={{ flex: 1 }} // input 필드가 가능한 공간을 채우도록 설정
                     />
-                    <div style={{ height: '400px', width: '100%' }}>
-                        <ReactQuill
-                            modules={modules}
-                            placeholder='내용을 입력해 주세요'
-                            onChange={setContent}
-                            style={{
-                                height: "330px",
-                                width: '100%',
-                                boxSizing: 'border-box'
-                            }}
+
+                    <select
+                        value={status}
+                        onChange={(e) => setStatus(e.target.value)}
+                        style={{ width: '150px' }}
+                    >
+                        <option value="PUBLISHED">PUBLISHED</option>
+                        <option value="DRAFT">DRAFT</option>
+                    </select>
+
+                    <label style={{ marginLeft: '10px' }}>
+                        고정:
+                        <input
+                            type="checkbox"
+                            checked={fix}
+                            onChange={(e) => setFix(e.target.checked)}
                         />
-                    </div>
+                    </label>
+                </div>
+
+                <input
+                    className="Title"
+                    placeholder="제목을 입력해 주세요"
+                    style={{
+                        padding: '7px',
+                        marginBottom: '10px',
+                        width: '100%',
+                        border: '1px solid lightGray',
+                        fontSize: '15px',
+                        boxSizing: 'border-box',
+                        marginTop: '20px',
+                    }}
+                    value={title}  // 더미 데이터로 초기화된 제목
+                    onChange={(e) => { setTitle(e.target.value) }}
+                />
+                <div style={{ height: '380px', width: '100%' }}>
+                    <ReactQuill
+                        modules={modules}
+                        placeholder='내용을 입력해 주세요'
+                        value={content}  // 더미 데이터로 초기화된 내용
+                        onChange={setContent}
+                        style={{
+                            height: "320px",
+                            width: '100%',
+                            boxSizing: 'border-box'
+                        }}
+                    />
                 </div>
             </div>
         </div>
     );
 }
 
-export default PostEditor;
+export default PostEdit;

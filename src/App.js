@@ -53,7 +53,6 @@ import TilonHomepage from './pages/Home/TilonHomepage';
 import Sidebar from './components/common/Sidebar';
 import Navbar from './components/common/Navbar';
 
-import PostEditor from './pages/Admin/PostEdit/PostEditor';
 import Loginpage from './pages/Admin/Login/Loginpage';  // Fix import name to match the component
 import AdminMain from './pages/Admin/AdminMain/AdminMain';
 import UserListPage from './pages/Admin/UserListPage/UserListPage';
@@ -65,7 +64,9 @@ import EditNews from './pages/Admin/NewsPage/EditNews';
 
 import AdminPr from './pages/Admin/Pr/AdminPr';
 import CreatePr from './pages/Admin/Pr/CreatePr';
-
+import EditPr from './pages/Admin/Pr/EditPr';
+import PostWrite from './pages/Admin/PostEdit/PostWrite';
+import PostEdit from './pages/Admin/PostEdit/PostEdit';
 
 export const setupAuthManager = () => {
   window.addEventListener('beforeunload', (event) => {
@@ -97,7 +98,7 @@ function App() {
     <Router>
       <Provider store={store}>
         <Routes>
-        <Route path="/edit" element={<PostEditor/>}/>
+        <Route path="/edit" element={<PostWrite/>}/>
           {/* 메인 홈 경로 */}
           <Route path="/" element={<TilonHomepage />} />
 
@@ -122,7 +123,7 @@ function App() {
                   <Route path="news/edit/:id" element={<EditNews />} />
                   <Route path="pr" element={<AdminPr/>}/>
                   <Route path="pr/create" element={<CreatePr/>}/>
-                
+                  <Route path ="pr/edit/:id" element={<PostEdit/>}/>
 
                   
                   {/* 추가적인 하위 경로 */}

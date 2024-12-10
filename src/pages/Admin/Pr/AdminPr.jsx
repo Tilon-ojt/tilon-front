@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import TheSearch from "../../../components/element/TheSearch";
-import Btn from "../../../components/element/TheNewsButton";
+import Btn from "../../../components/element/ThePrButton";
 
 // AdminNews 컴포넌트
 function AdminPr() {
@@ -28,13 +28,13 @@ function AdminPr() {
       <List>
         <Type> no  Title URL</Type>
         <hr/> 
-        {exampleNewsList.map((news) => (
-          <ListItem key={news.id}>
+        {exampleNewsList.map((pr) => (
+          <ListItem key={pr.id}>
             <input type="checkbox"/>
-            <ItemContent key={news.id} onClick={() => navigate(`/admin/news/edit/${news.id}`)}>
-              <span>{news.id}</span>
-              <span>{news.title}</span>
-              <span>{news.url}</span>
+            <ItemContent key={pr.id} onClick={() => navigate(`/admin/pr/edit/${pr.id}`)}>
+              <span>{pr.id}</span>
+              <span>{pr.title}</span>
+              <span>{pr.url}</span>
             </ItemContent>
           </ListItem>
         ))}

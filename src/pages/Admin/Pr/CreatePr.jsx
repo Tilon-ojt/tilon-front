@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import PostEditor from "../PostEdit/PostEditor"; 
 import styled from "styled-components";
 import TheNewsButton from "../../../components/element/TheNewsButton";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import PostWrite from "../PostEdit/PostWrite.jsx";
 
 function CreatePr() {
     const [title, setTitle] = useState(""); // 제목 상태
@@ -43,9 +43,9 @@ function CreatePr() {
             <Header>
                 <PageLabel>Create new Pr</PageLabel>
             </Header>
-            <Body>
-                <PostEditor onSave={handleSave} /> {/* PostEditor에서 onSave로 전달된 데이터 처리 */}
-            </Body>
+            
+                <PostWrite /> 
+            
             <Btn>
                 <TheNewsButton
                     type="SubmitN"
