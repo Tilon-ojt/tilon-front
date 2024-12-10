@@ -70,8 +70,12 @@ import Loginpage from "./pages/Admin/Login/Loginpage";
 import EditProfile from "./pages/Admin/MyInfo/EditProfile";
 
 import AdminNews from "./pages/Admin/NewsPage/AdminNews";
-import CreateNews from "./pages/Admin/NewsPage/CreateNews";
-import EditNews from "./pages/Admin/NewsPage/EditNews";
+// import NewsDetail from './pages/Admin/NewsPage/NewsDetail';
+import NewsCreate from "./pages/Admin/NewsPage/NewsCreate";
+import NewsEdit from "./pages/Admin/NewsPage/NewsEdit";
+
+import AdminPr from "./pages/Admin/Pr/AdminPr";
+import AdminInsight from "./pages/Admin/Insight/AdminInsight";
 import PrivateRoute from "./components/PrivateRoute"; // PrivateRoute 임포트
 import UserListPage2 from "./pages/Admin/UserListPage/UserListPage2";
 
@@ -108,11 +112,23 @@ function App() {
                   />
                   <Route
                     path="news/create"
-                    element={<PrivateRoute element={<CreateNews />} />}
+                    element={<PrivateRoute element={<NewsCreate />} />}
                   />
                   <Route
-                    path="news/edit/:id"
-                    element={<PrivateRoute element={<EditNews />} />}
+                    path="/news/edit/:postId"
+                    element={<PrivateRoute element={<NewsEdit />} />}
+                  />
+                  <Route
+                    path="/edit"
+                    element={<PrivateRoute element={<PostEditor />} />}
+                  />
+                  <Route
+                    path="/pr"
+                    element={<PrivateRoute element={<AdminPr />} />}
+                  />
+                  <Route
+                    path="/insight"
+                    element={<PrivateRoute element={<AdminInsight />} />}
                   />
                   <Route
                     path="/edit"
