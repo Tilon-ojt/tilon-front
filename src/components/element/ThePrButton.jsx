@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 // 액션 import
-import { submitAction, deleteAction,  } from "../../reducer/NewsBtn.js";
+// import { submitAction, deleteAction,  } from "../../reducer/NewsBtn.js";
 
 function ThePrButton({ label, type, payload }) {
   const dispatch = useDispatch();
@@ -27,13 +27,13 @@ function ThePrButton({ label, type, payload }) {
 
       case "SubmitN":
         // 작성 완료 or 수정 완료 버튼
-        dispatch(submitAction(payload));
+        // dispatch(submitAction(payload));
         console.log("click submit btn");
         break;
 
       case "DeleteN":
         // 삭제 버튼
-        dispatch(deleteAction(payload));
+        // dispatch(deleteAction(payload));
         console.log("click delete btn");
 
         break;

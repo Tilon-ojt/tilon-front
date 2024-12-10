@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import TheSearch from "../../../components/element/TheSearch";
 import Btn from "../../../components/element/ThePrButton";
 
 // AdminNews 컴포넌트
@@ -18,7 +17,6 @@ function AdminPr() {
     <Container>
       <Header>
         <Title>Pr</Title>
-        <TheSearch />
         <BtnContainer>
           <Btn type="NavigateN" label="Create new PR" />
           <Btn type="DeleteN" label="Delete PR" />
