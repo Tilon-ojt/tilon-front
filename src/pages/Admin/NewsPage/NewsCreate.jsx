@@ -12,51 +12,37 @@ function NewsCreate({ token }) {
   const [thumbnailSrc, setThumbnailSrc] = useState(placeholdImg);
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
+  const [tempPostId, setTempPostId] = useState("");
   const fileInputRef = useRef(null);
 
 
-  const thumbnailHandler = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => setThumbnailSrc(e.target.result);
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const clearThumbnailHandler = () => {
-    setThumbnailSrc(placeholdImg);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-  };
-
-  // const submitHandler = async () => {
-  //   try {
-  //     const updatedData = {
-  //       title: title.trim(),
-  //       link: url.trim(),
-  //       imageUrl: thumbnailSrc,
-  //     };
-
-  //     const response = await api.post(`/admin/posts`, updatedData, {
-  //       params:{
-  //           tempPostId : "1"
-  //       },
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //         "Content-Type": "application/json",
-  //       },
-  //     });
-
-  //     alert("저장이 완료되었습니다.");
-  //     console.log("저장된 데이터:", response.data);
-  //     navigate("/admin/news");
-  //   } catch (error) {
-  //     console.error("저장 요청 실패:", error.message);
-  //     alert("저장에 실패했습니다. 다시 시도해주세요.");
-  //   }
-  // };
+  useEffect(() => {
+    const createPost = async () => {
+      try {
+        const response = await api.post("/admin/posts/start", {}, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+  
+        // 서버 응답에서 생성된 데이터 확인
+        console.log("서버 응답 전체 데이터:", response.data);
+  
+        if (response.data) {
+          setTempPostId(response.data);
+          console.log("생성된 tempPostId:", response.data);
+        } else {
+          console.error("서버 응답에 tempPostId가 없습니다.");
+        }
+      } catch (error) {
+        console.error("POST /admin/posts/start 요청 실패:", error.message);
+      }
+    };
+  
+    createPost();
+  }, [token]);
 
   const submitHandler = async () => {
     const updatedData = {
@@ -72,9 +58,28 @@ function NewsCreate({ token }) {
   };
   
 
+
+  const thumbnailHandler = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => setThumbnailSrc(e.target.result);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  
+  const clearThumbnailHandler = () => {
+    setThumbnailSrc(placeholdImg);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+
   // 취소 버튼
   const cancelHandler = () => {
-    alert("수정을 취소하시겠습니까?");
+    alert("작성을 취소하시겠습니까?");
     navigate("/admin/news");
   };
 
@@ -88,7 +93,7 @@ function NewsCreate({ token }) {
             setTitle={setTitle}
             url={url}
             setUrl={setUrl}
-            thumbnailSrc={thumbnailSrc}
+            imageUrl={thumbnailSrc}
             setThumbnailSrc={setThumbnailSrc}
             onChange={thumbnailHandler}
             onClick={clearThumbnailHandler}

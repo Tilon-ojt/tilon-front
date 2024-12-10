@@ -107,7 +107,7 @@ function NewsEdit({ token }) {
             setTitle={setTitle}
             url={url}
             setUrl={setUrl}
-            thumbnailSrc={thumbnailSrc}
+            imageUrl={thumbnailSrc}
             setThumbnailSrc={setThumbnailSrc}
             onChange={thumbnailHandler}
             onClick={clearThumbnailHandler}

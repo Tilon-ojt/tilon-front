@@ -5,8 +5,8 @@ const TheNewsCELayout = ({
     setTitle, 
     url, 
     setUrl, 
-    thumbnailSrc, 
-    setThumbnailSrc,
+    imageUrl, 
+    // setImageUrl,
     onClick,
     onChange,
     ref,
@@ -16,7 +16,7 @@ const TheNewsCELayout = ({
     <>
       <ThumbnailImg>
         <img alt="썸네일 이미지" 
-        src={thumbnailSrc} 
+        src={imageUrl} 
         />
       </ThumbnailImg>
 
