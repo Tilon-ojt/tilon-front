@@ -74,7 +74,7 @@ import UserListPage from './pages/Admin/UserListPage/UserListPage';
 import EditProfile from './pages/Admin/MyInfo/EditProfile';
 
 import AdminNews from './pages/Admin/NewsPage/AdminNews';
-import NewsDetail from './pages/Admin/NewsPage/NewsDetail';
+// import NewsDetail from './pages/Admin/NewsPage/NewsDetail';
 import NewsCreate from './pages/Admin/NewsPage/NewsCreate';
 import NewsEdit from './pages/Admin/NewsPage/NewsEdit';
 
@@ -135,7 +135,7 @@ function App() {
 
                   <Route path="/news" element={<AdminNews />} />
 
-                  <Route path="/news/:postId" element={<NewsDetail />} />
+                  {/* <Route path="/news/:postId" element={<NewsDetail />} /> */}
                   <Route path="/news/create" element={<NewsCreate />} />
                   <Route path="/news/edit/:postId" element={<NewsEdit />} />
 
@@ -159,4 +159,6 @@ function App() {
 }
 
 export default App;
+
+
 

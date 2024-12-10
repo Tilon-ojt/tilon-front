@@ -24,8 +24,8 @@ function Loginpage() {
       const { token } = response.data;
       dispatch(setToken(token)); // Redux 상태에 저장
       console.log("Redux 상태 확인:", store.getState().auth.token); // 상태 확인
-
       navigate("/admin/news");
+      
     } catch (error) {
       alert("아이디 또는 비밀번호가 올바르지않습니다.");
     }
