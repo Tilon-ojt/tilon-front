@@ -13,7 +13,7 @@ function NewsEdit({ token }) {
   const [newsItem, setNewsItem] = useState({});
   const [thumbnailSrc, setThumbnailSrc] = useState(placeholdImg);
   const [title, setTitle] = useState("");
-  const [url, setUrl] = useState("");
+  const [link, setLink] = useState("");
   const fileInputRef = useRef(null);
 
   // 데이터 가져오기
@@ -34,7 +34,6 @@ function NewsEdit({ token }) {
     }
   };
 
-  // 뉴스 데이터 가져오기
   useEffect(() => {
     if (postId && token) {
       fetchNewsItem();
@@ -46,7 +45,7 @@ function NewsEdit({ token }) {
     if (newsItem) {
       setThumbnailSrc(newsItem.imageUrl || placeholdImg);
       setTitle(newsItem.title || "");
-      setUrl(newsItem.link || "");
+      setLink(newsItem.link || "");
     }
   }, [newsItem]);
 
@@ -71,7 +70,7 @@ function NewsEdit({ token }) {
     try {
       const updatedData = {
         title: title.trim(),
-        link: url.trim(),
+        link: link.trim(),
         imageUrl: thumbnailSrc,
       };
 
@@ -94,7 +93,7 @@ function NewsEdit({ token }) {
   // 취소 버튼
   const cancelHandler = () => {
     alert("수정을 취소하시겠습니까?");
-    navigate("/admin/news");
+    navigate(`/admin/news/${postId}`);
   };
 
   return (
@@ -105,8 +104,8 @@ function NewsEdit({ token }) {
           <TheNewsCELayout
             title={title}
             setTitle={setTitle}
-            url={url}
-            setUrl={setUrl}
+            link={link}
+            setLink={setLink}
             imageUrl={thumbnailSrc}
             setThumbnailSrc={setThumbnailSrc}
             onChange={thumbnailHandler}

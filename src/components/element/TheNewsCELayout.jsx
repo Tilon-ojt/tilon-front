@@ -1,23 +1,22 @@
 import styled from "styled-components";
 
-const TheNewsCELayout = ({ 
-    title, 
-    setTitle, 
-    url, 
-    setUrl, 
-    imageUrl, 
-    // setImageUrl,
-    onClick,
-    onChange,
-    ref,
+const TheNewsCELayout = ({
+  title,
+  setTitle,
+  link,
+  setLink,
+  imageUrl,
+  onClick,
+  onChange,
+  ref,
 }) => {
-
   return (
     <>
       <ThumbnailImg>
-        <img alt="썸네일 이미지" 
-        src={imageUrl} 
-        />
+        {imageUrl 
+          && <img alt="썸네일 이미지" 
+                  src={imageUrl} />
+        }
       </ThumbnailImg>
 
       <Input>
@@ -46,8 +45,8 @@ const TheNewsCELayout = ({
         <input
           type="url"
           placeholder="URL 입력..."
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
+          value={link}
+          onChange={(e) => setLink(e.target.value)}
         />
       </Input>
     </>
@@ -55,7 +54,7 @@ const TheNewsCELayout = ({
 };
 
 const ThumbnailImg = styled.div`
-  height: auto ;
+  height: auto;
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -81,30 +80,23 @@ const Input = styled.div`
   }
 
   input[type="file"] {
+    /* width: 130px; */
     width: 65%;
   }
 
   input[type="text"],
   input[type="url"] {
     border: 1.5px solid lightgray;
-
     width: 70%;
     height: 25px;
     padding: 2px 10px;
-    border: 1px solid lightgray;
     border-radius: 5px;
-
-    &:focus {
-      outline: none;
-      border: 1.5px solid lightgray;
-    }
   }
 
   button {
     background: transparent;
     border: none;
     cursor: pointer;
-    font-weight: bold;
 
     &:hover {
       background: #f5f5f5;

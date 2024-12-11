@@ -160,27 +160,73 @@ function AdminNews({token}) {
 }
 
 
-export default AdminNews;
 
+
+// const TableRow = styled.tr`
+//   &:nth-child(even) {
+//     background-color: #f9f9f9; /* Add alternating row colors */
+//   }
+
+//   cursor: pointer;
+
+//   transition: all .35s;
+//   &:hover{
+//     background-color: #f0f8ff ;
+//   }
+
+//   Td{
+//   padding: 12px 15px; /* Padding for cells */
+//   text-align: left; /* Left-align cell text */
+//   font-size: 14px; /* Font size adjustment */
+//   color: #555; /* Slightly lighter color for content */
+//   border: 1px solid #ddd; /* Cell border for all rows */
+  
+
+//   &:nth-child(1) {
+//     width: 2%;
+//   }
+//   &:nth-child(2) {
+//     min-width: 50px;
+//     width: 3%;
+//   }
+//   &:nth-child(3) {
+//     min-width: 100px;
+//     width: 35%;
+//   }
+//   &:nth-child(4) {
+//     min-width: 100px;
+//     width: 40%;
+//   }
+//   &:nth-child(5) {
+//     min-width: 20%;
+//   }
+// }
+// `;
 const TableRow = styled.tr`
   &:nth-child(even) {
-    background-color: #f9f9f9; /* Add alternating row colors */
+    background-color: #f9f9f9;
   }
 
   cursor: pointer;
+  transition: all 0.35s;
 
-  transition: all .35s;
-  &:hover{
-    background-color: #f0f8ff ;
+  &:hover {
+    background-color: #f0f8ff;
   }
 
-  Td{
-  padding: 12px 15px; /* Padding for cells */
-  text-align: left; /* Left-align cell text */
-  font-size: 14px; /* Font size adjustment */
-  color: #555; /* Slightly lighter color for content */
-  border: 1px solid #ddd; /* Cell border for all rows */
-  
+  td {
+    padding: 12px 15px;
+    text-align: left;
+    font-size: 14px;
+    color: #555;
+    border: 1px solid #ddd;
+    height: 20px; /* 셀 높이를 고정 */
+    max-width: 150px; /* 셀 너비 최대 값 */
+    overflow: hidden;
+    text-overflow: ellipsis; /* 넘칠 경우 말줄임 처리 */
+    white-space: nowrap; /* 내용이 한 줄로 유지됨 */
+    word-break: break-all; /* 긴 단어도 깨서 출력 */
+  }
 
   &:nth-child(1) {
     width: 2%;
@@ -200,5 +246,6 @@ const TableRow = styled.tr`
   &:nth-child(5) {
     min-width: 20%;
   }
-}
+
 `;
+export default AdminNews;
