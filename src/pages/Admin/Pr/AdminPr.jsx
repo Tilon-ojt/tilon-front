@@ -75,7 +75,6 @@ function AdminPr({ token }) {
       console.log("게시글 목록:", response.data);
       setPostInfo(response.data.content);
 
-    
     } catch (error) {
       console.error("Post 목록 가져오기 실패:", error.message);
       alert("Post 데이터를 불러오는 데 실패했습니다.");
@@ -96,6 +95,24 @@ function AdminPr({ token }) {
     const images = div.querySelectorAll("img");
     images.forEach((img) => img.remove()); // 이미지 제거
     return div.innerHTML; // 이미지가 제거된 HTML 반환
+  };
+
+  // HTML 내용을 파싱하고 글자 제한 후 반환하는 함수
+  const truncateHTMLContent = (html, maxLength) => {
+    const div = document.createElement("div");
+    div.innerHTML = html;
+
+    // HTML에서 텍스트만 추출
+    const textContent = div.textContent || div.innerText || "";
+
+    // 글자 수 제한
+    const truncatedText =
+      textContent.length > maxLength
+        ? textContent.slice(0, maxLength) + "..."
+        : textContent;
+
+    // 제한된 텍스트를 반환
+    return truncatedText;
   };
 
   return (
@@ -123,11 +140,12 @@ function AdminPr({ token }) {
             <Td onClick={() => goToEditHandler(item.postId)} style={{ cursor: "pointer" }}>
               {item.title}
             </Td>
-            
             <ContentTd
               onClick={() => goToEditHandler(item.postId)}
               style={{ cursor: "pointer" }}
-              dangerouslySetInnerHTML={{ __html: removeImagesFromHTML(item.content) }} // 이미지 제거 후 HTML 출력
+              dangerouslySetInnerHTML={{
+                __html: truncateHTMLContent(removeImagesFromHTML(item.content), 50),
+              }}
             />
             <Td>{item.updatedAt}</Td>
           </TableRow>
@@ -227,6 +245,7 @@ const Td = styled.td`
   font-size: 14px;
   border-bottom: 1px solid #e9e9e9;
 `;
+
 
 const TitleTd = styled.td`
   padding: 12px 15px;

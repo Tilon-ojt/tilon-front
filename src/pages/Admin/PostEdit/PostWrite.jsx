@@ -1,117 +1,157 @@
 import React, { useState, useEffect } from "react";
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { useSelector } from "react-redux";
 import axios from "axios";
-import { useParams } from 'react-router-dom'; // react-router-dom에서 useParams import
+import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import ImageResize from 'quill-image-resize';
+import api from "../../../api/axios";
 
 Quill.register('modules/ImageResize', ImageResize);
 
 function PostWrite() {
     const navigate = useNavigate();
+    const { categoryParam } = useParams();
 
-    let redux = useSelector((state) => { return state });
-    const { categoryParam } = useParams();  // URL에서 category 값을 추출
-    const [title, setTitle] = useState('');  // 제목
-    const [content, setContent] = useState('');  // 내용
-    const [category, setCategory] = useState(categoryParam);  // category 값을 경로에서 추출
-    const [status, setStatus] = useState('PUBLISHED');  // 게시상태 (예: 'active', 'inactive')
-    const [fix, setFix] = useState(false);  // 고정 여부 (예: true, false)
-    const [link, setLink] = useState('');  // URL 링크
-    const [tempPostId, setTempPostId] = useState(null);  // 임시 게시글 ID
-    const [imageUrls, setImageUrls] = useState([]);  // 서버에서 받은 이미지 URL들
-
-    // 이미지 업로드 및 URL로 변환하는 로직
-    const srcArray = [];
-    const blopArray = [];
-    const urlArray = [];
-    const gainSource = /(<img[^>]*src\s*=\s*[\"']?([^>\"']+)[\"']?[^>]*>)/g;
+    // 상태 관리
+    const [title, setTitle] = useState('');
+    const [content, setContent] = useState('');
+    const [category, setCategory] = useState(categoryParam || 'PR');
+    const [status, setStatus] = useState('PUBLISHED');
+    const [fix, setFix] = useState(false);
+    const [link, setLink] = useState('');
+    const [tempPostId, setTempPostId] = useState(null);
 
     useEffect(() => {
-        // 처음에 tempPostId 생성
-        const generateTempPostId = () => {
-            const tempId = Date.now().toString();  // 임시 ID 생성
-            setTempPostId(tempId);
-        };
-        generateTempPostId();
-    }, []);
+        const cookie = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('cookie='));
+        
+        if (!cookie) {
+            alert("로그인이 필요합니다.");
+            navigate('/login');
+            return;
+        }
+
+        const token = cookie.split('=')[1];
+        // tempPostId 생성
+        setTempPostId(Date.now().toString());
+    }, [navigate]);
+
+    const CreateBtn = async () => {
+        if (!title.trim()) {
+            alert('제목을 입력해주세요.');
+            return;
+        }
+        if (!content.trim()) {
+            alert('내용을 입력해주세요.');
+            return;
+        }
+        
+        try {
+            await SaveBoard();
+            alert('게시글이 성공적으로 작성되었습니다.');
+            navigate('/admin/pr');
+        } catch (error) {
+            console.error('게시글 작성 실패:', error);
+            alert('게시글 작성에 실패했습니다.');
+        }
+    };
 
     async function SaveBoard() {
-        while (gainSource.test(content)) {
-            let result = RegExp.$2;
-            srcArray.push(result);
-            const byteString = atob(result.split(",")[1]);
-            const ab = new ArrayBuffer(byteString.length);
-            const ia = new Uint8Array(ab);
-            for (let i = 0; i < byteString.length; i++) {
-                ia[i] = byteString.charCodeAt(i);
+        try {
+            const cookie = document.cookie
+                .split('; ')
+                .find(row => row.startsWith('cookie='));
+            
+            if (!cookie) {
+                throw new Error('인증 토큰이 없습니다.');
             }
-            const blob = new Blob([ia], { type: "image/jpeg" });
-            const file = new File([blob], "image.jpg");
 
-            const formData = new FormData();
-            formData.append("file", file);
-            const config = { header: { 'content-type': 'multipart/form-data' } };
+            const token = cookie.split('=')[1];
 
-            // 임시 게시글 ID를 사용하여 이미지 업로드
-            await axios.post(`/api/board/uploadImgFolder?tempPostId=${tempPostId}`, formData, config)
-                .then(response => {
-                    if (response.data.success) {
-                        urlArray.push(response.data.url);  // 서버에서 받은 URL 추가
-                        setImageUrls(prevUrls => [...prevUrls, response.data.url]); // imageUrls 상태에 추가
-                    } else {
-                        alert('이미지를 서버에 업로드하는데 실패했습니다.');
+            // 이미지 처리 로직
+            const gainSource = /(<img[^>]*src\s*=\s*[\"']?([^>\"']+)[\"']?[^>]*>)/g;
+            const srcArray = [];
+            const urlArray = [];
+            let contentCopy = content;
+            let match;
+
+            while ((match = gainSource.exec(content)) !== null) {
+                const imgSrc = match[2];
+                if (imgSrc.startsWith('data:image')) {
+                    srcArray.push(imgSrc);
+                    
+                    const byteString = atob(imgSrc.split(",")[1]);
+                    const ab = new ArrayBuffer(byteString.length);
+                    const ia = new Uint8Array(ab);
+                    for (let i = 0; i < byteString.length; i++) {
+                        ia[i] = byteString.charCodeAt(i);
                     }
-                });
-        }
+                    const blob = new Blob([ia], { type: "image/jpeg" });
+                    const file = new File([blob], "image.jpg");
 
-        let endContent = content;
-        if (srcArray.length > 0) {
+                    const formData = new FormData();
+                    formData.append("file", file);
+
+                    const response = await api.post(
+                        `/admin/posts/image/upload?tempPostId=${tempPostId}`,
+                        formData,
+                        {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                                "Content-Type": "multipart/form-data",
+                                "Accept": "application/json",
+                                "Cache-Control": "no-cache"
+                            }
+                        }
+                    );
+
+                    if (response.data.success) {
+                        urlArray.push(response.data.url);
+                    } else {
+                        throw new Error('이미지 업로드 실패');
+                    }
+                }
+            }
+
+            // 이미지 URL 교체
             for (let i = 0; i < srcArray.length; i++) {
-                let replace = endContent.replace(srcArray[i], urlArray[i]);
-                endContent = replace;
+                contentCopy = contentCopy.replace(srcArray[i], urlArray[i]);
             }
+
+            // 최종 게시글 작성 요청
+            const writeInform = {
+                title,
+                content: contentCopy,
+                category,
+                link,
+                status,
+                fix
+            };
+
+            const response = await api.post(
+                `/admin/post?tempPostId=${tempPostId}`,
+                writeInform,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                        "Accept": "application/json",
+                        "Cache-Control": "no-cache"
+                    }
+                }
+            );
+
+            if (!response.data.success) {
+                throw new Error('게시글 작성 실패');
+            }
+
+        } catch (error) {
+            console.error('SaveBoard 에러:', error);
+            throw error;
         }
-
-        // 요청할 데이터 객체
-        let writeInform = {
-            title: title,  // 제목
-            content: endContent,  // 내용 (변경된 이미지 URL 포함)
-            category: category,  // 카테고리
-            admin_id: redux.setUser.u_id,  // 어드민 번호
-            status: status,  // 게시상태 (예: 'active')
-            fix: fix,  // 고정 여부
-            link: link,  // URL 링크
-            tempPostId: tempPostId,  // 임시 게시글 ID
-            imageUrls: imageUrls,  // 업로드된 이미지 URLs
-        };
-
-        // 게시글 작성 API 호출
-        axios.post('/admin/post', writeInform, {
-            headers: { 
-                'Authorization': `Bearer ${redux.setUser.token}`,
-                'Content-Type': 'application/json' 
-            }
-        })
-        .then(response => {
-            if (response.data.success) {
-                console.log('업로드 성공');
-            } else {
-                alert('업로드에 실패하였습니다.');
-            }
-        })
-        .catch(error => {
-            console.error('게시글 업로드 실패:', error);
-            alert('게시글 업로드 실패');
-        });
     }
-
-    // 버튼 클릭 핸들러 추가
-    const CreateBtn = () => {
-        console.log('생성 버튼 클릭.');
-    };
 
     const CancelBtn = () => {
         console.log('취소 되었습니다.');
@@ -148,9 +188,9 @@ function PostWrite() {
                     width: '68vw',
                     margin: '0 auto',
                     borderRadius: '19px',
-                    boxShadow: '0 4px 10px rgba(0,0,0,0.1)', // 약간의 그림자 추가
-                    padding: '20px', // 내부 여백 추가
-                    backgroundColor: '#fff', // 배경색 설정
+                    boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
+                    padding: '20px',
+                    backgroundColor: '#fff',
                     border: '0.1px solid lightgray',
                     marginTop: '7vh',
                 }}
@@ -177,7 +217,7 @@ function PostWrite() {
                         placeholder="링크를 입력하세요"
                         value={link}
                         onChange={(e) => setLink(e.target.value)}
-                        style={{ flex: 1 }} // input 필드가 가능한 공간을 채우도록 설정
+                        style={{ flex: 1 }}
                     />
 
                     <select
@@ -211,14 +251,14 @@ function PostWrite() {
                         boxSizing: 'border-box',
                         marginTop: '20px',
                     }}
-                    value={title}  // 더미 데이터로 초기화된 제목
+                    value={title}
                     onChange={(e) => { setTitle(e.target.value) }}
                 />
                 <div style={{ height: '60vh', width: '100%' }}>
                     <ReactQuill
                         modules={modules}
                         placeholder='내용을 입력해 주세요'
-                        value={content}  // 더미 데이터로 초기화된 내용
+                        value={content}
                         onChange={setContent}
                         style={{
                             height: "55vh",
@@ -228,9 +268,8 @@ function PostWrite() {
                     />
                 </div>
 
-                {/* ButtonContainer 추가 */}
                 <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end' }}>
-                    <div style={{ display: 'flex', gap: '30px',  marginTop:'30px'}}>
+                    <div style={{ display: 'flex', gap: '30px', marginTop:'30px'}}>
                         <button 
                             onClick={CreateBtn} 
                             style={{

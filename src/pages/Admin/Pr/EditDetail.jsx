@@ -30,7 +30,7 @@ function EditDetail({ token }) {
           수정
         </TheButton2>
         <TheButton2 $secondary onClick={cancelAction}>
-          취소
+          돌아가기
         </TheButton2>
       </ButtonContainer>
     </Container>

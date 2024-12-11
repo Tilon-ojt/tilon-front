@@ -77,8 +77,7 @@ import AdminPr from "./pages/Admin/Pr/AdminPr";
 import AdminInsight from "./pages/Admin/Insight/AdminInsight";
 import PrivateRoute from "./components/PrivateRoute";
 import UserListPage2 from "./pages/Admin/UserListPage/UserListPage2";
-import PostEdit from "./pages/Admin/Pr/EditPr";
-import EditPr from "./pages/Admin/Pr/EditPr";
+import PostEdit from "./pages/Admin/PostEdit/PostEdit";
 import EditDetail from './pages/Admin/Pr/EditDetail';
 import PostWrite from "./pages/Admin/PostEdit/PostWrite";
 
@@ -129,7 +128,7 @@ function App() {
                   
                   <Route
                     path="/pr/:postId"
-                    element={<PrivateRoute element={<EditDetail />} />}
+                    element={<PrivateRoute element={<PostEdit />} />}
                   />
 
                   <Route
