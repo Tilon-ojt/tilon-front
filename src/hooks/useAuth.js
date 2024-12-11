@@ -73,55 +73,48 @@ const useAuth = () => {
         return;
       }
 
-      try {
-        // JWT 디코딩
-        const decoded = jwtDecode(token);
-        const now = Date.now() / 1000;
+      // JWT 디코딩
+      const decoded = jwtDecode(token);
+      const now = Date.now() / 1000;
 
-        if (decoded.exp < now) {
-          console.log("기간 만료됨. 리프레쉬 토큰 요청");
-          const refreshtoken = getRefreshToken();
-          console.log(`가지고있는 쿠키: ${refreshtoken}`);
-
-          if (!refreshtoken) {
-            throw new Error("리프레시 토큰이 없습니다.");
-          }
-
-          try {
-            // 서버에 리프레쉬 토큰 요청
-            const response = await api.post("/auth/refresh-token", null, {
-              headers: {
-                "Refresh-Token": refreshtoken, // 파싱된 리프레시 토큰 값 사용
-              },
-            });
-
-            // if (response.status === 200) {
-            const { accessToken, refreshToken } = response.data;
-
-            // 새로운 액세스 토큰 Redux에 저장
-            dispatch(setToken(accessToken));
-            console.log(`토큰이 생성되려고하는지 확인해봐야함!!`);
-
-            // 쿠키에 리프레쉬 토큰 저장
-            document.cookie = `cookie=${refreshToken}; path=/admin`;
-            navigate("/admin/news"); // 새로운 토큰 발급 후 관리자 홈으로 이동
-            // }
-          } catch (refreshError) {
-            console.error("리프레쉬 토큰 요청 실패:", refreshError);
-            alert("세션이 만료되었습니다. 다시 로그인 해주세요.");
-            sessionStorage.removeItem("jwt");
-            navigate("/admin/login");
-          }
-        }
-      } catch (error) {
-        console.error("JWT 디코딩 실패:", error);
-        alert("유효하지 않은 토큰입니다. 다시 로그인 해주세요.");
-        navigate("/admin/login");
+      if (decoded.exp < now) {
+        console.log("기간 만료됨. 리프레쉬 토큰 요청");
+        refreshTokenCall();
       }
     };
 
     checkToken();
   }, [token, dispatch, navigate]);
+
+  const refreshTokenCall = async () => {
+    const refreshtoken = getRefreshToken();
+    console.log(`가지고있는 쿠키: ${refreshtoken}`);
+    try {
+      // 서버에 리프레쉬 토큰 요청
+      const response = await api.post("/auth/refresh-token", null, {
+        headers: {
+          "Refresh-Token": refreshtoken, // 파싱된 리프레시 토큰 값 사용
+        },
+      });
+
+      if (response.status === 200) {
+        const { accessToken } = response.data;
+
+        // 새로운 액세스 토큰 Redux에 저장
+        dispatch(setToken(accessToken));
+        // console.log(`토큰이 생성되려고하는지 확인해봐야함!!`);
+
+        navigate("/admin/news"); // 새로운 토큰 발급 후 관리자 홈으로 이동
+      }
+    } catch (refreshError) {
+      console.error("리프레쉬 토큰 요청 실패:", refreshError);
+      alert("세션이 만료되었습니다. 다시 로그인 해주세요.");
+      sessionStorage.removeItem("jwt");
+      document.cookie =
+        "cookie=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+      navigate("/admin/login");
+    }
+  };
 
   return token; // 토큰 반환
 };

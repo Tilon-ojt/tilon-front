@@ -81,6 +81,7 @@ function UserListPage2({ token }) {
       console.log("유저목록:", response.data);
       setAdminInfo(response.data);
     } catch (error) {
+      alert(`유저목록 가져오기 실패`);
       console.error("실패:", error);
     }
   };
