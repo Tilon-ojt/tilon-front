@@ -24,7 +24,6 @@ function PostEdit() {
         updated_at: 'updatedAt',
         status: 'status',
         fix: 'fix',
-        link: 'link'
     });
 
     const [editedData, setEditedData] = useState({
@@ -33,7 +32,6 @@ function PostEdit() {
         category: category || '',
         postStatus: '',  // Renamed to avoid conflict with global 'status'
         fix: false,
-        link: ''
     });
 
     useEffect(() => {
@@ -57,7 +55,7 @@ function PostEdit() {
                 }
             });
 
-            console.log('API 응답:', response);
+            console.log('PR 상세 조회 API 응답:', response.data);
             console.log('응답 상태 코드:', response.status); 
 
             if (response.status === 200 ) {
@@ -71,7 +69,6 @@ function PostEdit() {
                     updated_at: response.data.updatedAt,
                     status: response.data.status,
                     fix: response.data.fix,
-                    link: response.data.link
                 });
 
                 setEditedData({
@@ -80,7 +77,6 @@ function PostEdit() {
                     category: response.data.category,
                     postStatus: response.data.status,
                     fix: response.data.fix,
-                    link: response.data.link
                 });
             } else {
                 alert('게시글을 불러오는데 실패했습니다.');
@@ -105,7 +101,6 @@ function PostEdit() {
                 category: editedData.category,
                 status: editedData.postStatus,  // postStatus를 status로 변환
                 fix: editedData.fix,
-                link: editedData.link
             };
 
             console.log('전송할 데이터:', requestData); // 디버깅용
@@ -143,110 +138,81 @@ function PostEdit() {
 
     return (
         <div style={{
-            width: '100%',
-            minHeight: '100vh',
+            height: 'calc(100vh - 62px)',
             display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'flex-start',
-            marginLeft: '8vw',
+            alignItems: 'center',
+            paddingLeft: '16vw',
         }}>
             <div style={{
-                width: '100%',
-                maxWidth: '1200px',
-                margin: 'auto',
+                height: '75%',
+                width: '68vw',
+                margin: '0 auto',
                 borderRadius: '19px',
                 boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
-                padding: '2rem',
+                padding: '20px',
                 backgroundColor: '#fff',
-                display: 'flex',
-                flexDirection: 'column',
+                border: '0.1px solid lightgray',
+                marginTop: '7vh',
             }}>
                 <div style={{
                     display: 'flex',
                     alignItems: 'center',
                     gap: '15px',
-                    marginBottom: '1rem',
-                    flexWrap: 'wrap',
+                    marginBottom: '10px',
                 }}>
-                    <div style={{ width: '150px', minWidth: '120px' }}>
-                        <select 
-                            value={editedData.category}
-                            onChange={(e) => setEditedData({...editedData, category: e.target.value})}
-                            style={{ width: '100%', padding: '0.5rem' }}
-                        >
-                            <option value="Pr">Pr</option>
-                            <option value="Insight">Insight</option>
-                        </select>
-                    </div>
+                    <select
+                        value={postData.category}
+                        onChange={(e) => setPostData({...postData, category: e.target.value})}
+                        style={{ width: '150px' }}
+                    >
+                        <option value="PR">PR</option>
+                        <option value="INSIGHT">INSIGHT</option>
+                    </select>
 
-                    <div style={{ flex: 1, minWidth: '200px' }}>
-                        <input
-                            type="text"
-                            value={editedData.link}
-                            onChange={(e) => setEditedData({...editedData, link: e.target.value})}
-                            placeholder="링크"
-                            style={{ width: '100%', padding: '0.5rem' }}
-                        />
-                    </div>
 
-                    <div style={{ width: '150px', minWidth: '120px' }}>
-                        <select 
-                            value={editedData.postStatus}  // Renamed to 'postStatus'
-                            onChange={(e) => setEditedData({...editedData, postStatus: e.target.value})}
-                            style={{ width: '100%', padding: '0.5rem' }}
-                        >
-                            <option value="활성">활성</option>
-                            <option value="비활성">비활성</option>
-                        </select>
-                    </div>
+                    <select
+                        value={postData.status}
+                        onChange={(e) => setPostData({...postData, status: e.target.value})}
+                        style={{ width: '150px' }}
+                    >
+                        <option value="PUBLISHED">PUBLISHED</option>
+                        <option value="DRAFT">DRAFT</option>
+                    </select>
 
-                    <div style={{ minWidth: '80px' }}>
+                    <label style={{ marginLeft: '10px' }}>
+                        고정:
                         <input
                             type="checkbox"
-                            checked={editedData.fix}
-                            onChange={(e) => setEditedData({...editedData, fix: e.target.checked})}
-                        /> 고정
-                    </div>
+                            checked={postData.fix}
+                            onChange={(e) => setPostData({...postData, fix: e.target.checked})}
+                        />
+                    </label>
                 </div>
 
-                <div style={{
-                    marginTop: '1.5rem',
-                    marginBottom: '1rem',
-                    display: 'flex',
-                    gap: '2rem',
-                    flexWrap: 'wrap',
-                }}>
-                    <div>작성자: {postData.admin_id}</div>
-                    <div>작성일: {new Date(postData.created_at).toLocaleDateString()}</div>
-                    <div>수정일: {new Date(postData.updated_at).toLocaleDateString()}</div>
-                </div>
+                <input
+                    className="Title"
+                    placeholder="제목을 입력해 주세요"
+                    value={postData.title}
+                    onChange={(e) => setPostData({...postData, title: e.target.value})}
+                    style={{
+                        padding: '7px',
+                        marginBottom: '10px',
+                        width: '100%',
+                        border: '1px solid lightGray',
+                        fontSize: '15px',
+                        boxSizing: 'border-box',
+                        marginTop: '20px',
+                    }}
+                />
 
-                <div style={{ width: '100%', margin: '1rem 0' }}>
-                    <input
-                        type="text"
-                        value={editedData.title}
-                        onChange={(e) => setEditedData({...editedData, title: e.target.value})}
-                        style={{
-                            width: '100%',
-                            padding: '0.7rem',
-                            fontSize: '1.25rem',
-                            fontWeight: 'bold',
-                            boxSizing: 'border-box'
-                        }}
-                    />
-                </div>
-
-                <div style={{ 
-                    width: '100%',
-                    height: '380px',
-                    marginBottom: '1rem'
-                }}>
+                <div style={{ height: '60vh', width: '100%' }}>
                     <ReactQuill
-                        value={editedData.content}
-                        onChange={(content) => setEditedData({...editedData, content})}
+                        value={postData.content}
+                        onChange={(content) => setPostData({...postData, content})}
                         modules={modules}
+                        placeholder='내용을 입력해 주세요'
                         style={{
-                            height: '100%',
+                            height: "55vh",
                             width: '100%',
                             boxSizing: 'border-box'
                         }}
@@ -254,39 +220,40 @@ function PostEdit() {
                 </div>
 
                 <div style={{ 
-                    display: 'flex',
-                    gap: '1rem',
-                    justifyContent: 'flex-start',
-                    marginTop: '1rem',
-                    marginLeft: '50vw',
-                    marginTop: '6vh',
+                    marginTop: '20px', 
+                    display: 'flex', 
+                    justifyContent: 'flex-end' 
                 }}>
-                    <button 
-                        onClick={handleUpdate}
-                        style={{
-                            padding: '0.75rem 1.5rem',
-                            backgroundColor: 'orange',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '5px',
-                            cursor: 'pointer'
-                        }}
-                    >
-                        수정
-                    </button>
-                    <button 
-                        onClick={() => navigate('/admin/posts')}
-                        style={{
-                            padding: '0.75rem 1.5rem',
-                            backgroundColor: '#6c757d',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '5px',
-                            cursor: 'pointer'
-                        }}
-                    >
-                        취소
-                    </button>
+                    <div style={{ display: 'flex', gap: '30px', marginTop:'30px'}}>
+                        <button 
+                            onClick={handleUpdate}
+                            style={{
+                                backgroundColor: 'orange',
+                                color: 'white',
+                                border: 'none',
+                                padding: '10px 30px',
+                                borderRadius: '5px',
+                                cursor: 'pointer',
+                                fontSize: '16px',
+                            }}
+                        >
+                            생성
+                        </button>
+                        <button 
+                            onClick={() => navigate('/admin/pr')}
+                            style={{
+                                backgroundColor: 'gray',
+                                color: 'white',
+                                border: 'none',
+                                padding: '10px 30px',
+                                borderRadius: '5px',
+                                cursor: 'pointer',
+                                fontSize: '16px',
+                            }}
+                        >
+                            취소
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

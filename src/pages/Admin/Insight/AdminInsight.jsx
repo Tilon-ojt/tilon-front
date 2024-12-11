@@ -8,7 +8,7 @@ import TheTable2 from "../../../components/element/TheTable2";
 import styled from "styled-components";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 
-function AdminPr({ token }) {
+function AdminInsight({ token }) {
   const navigate = useNavigate();
   console.log(`전달받은 jwt: ${JSON.stringify(token, null, 2)}`);
 
@@ -48,7 +48,7 @@ function AdminPr({ token }) {
 
   const goToEditHandler = (postId) => {
     console.log(`선택한 게시물 ID: ${postId}`);
-    navigate(`/admin/pr/${postId}`);
+    navigate(`/admin/insight/${postId}`);
   };
 
   const getUserList = async () => {
@@ -76,8 +76,8 @@ function AdminPr({ token }) {
       setPostInfo(response.data.content);
 
     } catch (error) {
-      console.error("유저 목록 가져오기 실패:", error.message);
-      alert("유저 데이터를 불러오는 데 실패했습니다.");
+      console.error("Post 목록 가져오기 실패:", error.message);
+      alert("Post 데이터를 불러오는 데 실패했습니다.");
     }
   };
 
@@ -97,6 +97,24 @@ function AdminPr({ token }) {
     return div.innerHTML; // 이미지가 제거된 HTML 반환
   };
 
+  // HTML 내용을 파싱하고 글자 제한 후 반환하는 함수
+  const truncateHTMLContent = (html, maxLength) => {
+    const div = document.createElement("div");
+    div.innerHTML = html;
+
+    // HTML에서 텍스트만 추출
+    const textContent = div.textContent || div.innerText || "";
+
+    // 글자 수 제한
+    const truncatedText =
+      textContent.length > maxLength
+        ? textContent.slice(0, maxLength) + "..."
+        : textContent;
+
+    // 제한된 텍스트를 반환
+    return truncatedText;
+  };
+
   return (
     <Container>
       <ButtonContainer>
@@ -107,7 +125,7 @@ function AdminPr({ token }) {
           삭제
         </TheButton2>
       </ButtonContainer>
-      <Title>PR</Title>
+      <Title>Insight</Title>
       <TheTable2 thead={["", "번호", "제목", "내용", "작성날짜"]}>
         {currentItems.map((item) => (
           <TableRow key={item.postId}>
@@ -122,12 +140,13 @@ function AdminPr({ token }) {
             <Td onClick={() => goToEditHandler(item.postId)} style={{ cursor: "pointer" }}>
               {item.title}
             </Td>
-
             <ContentTd
               onClick={() => goToEditHandler(item.postId)}
-              dangerouslySetInnerHTML={{ __html: removeImagesFromHTML(item.content) }} // 이미지 제거 후 HTML 출력
+              style={{ cursor: "pointer" }}
+              dangerouslySetInnerHTML={{
+                __html: truncateHTMLContent(removeImagesFromHTML(item.content), 50),
+              }}
             />
-
             <Td>{item.updatedAt}</Td>
           </TableRow>
         ))}
@@ -161,7 +180,7 @@ function AdminPr({ token }) {
   );
 }
 
-export default AdminPr;
+export default AdminInsight;
 
 const Container = styled.div`
   display: flex;
@@ -227,6 +246,7 @@ const Td = styled.td`
   border-bottom: 1px solid #e9e9e9;
 `;
 
+
 const TitleTd = styled.td`
   padding: 12px 15px;
   text-align: left;
@@ -234,7 +254,6 @@ const TitleTd = styled.td`
   border-bottom: 1px solid #e9e9e9;
   cursor: pointer;
 `;
-
 
 const ContentTd = styled.td`
   padding: 8px 10px; /* 기존의 높이를 줄이기 위해 padding을 축소 */
@@ -252,7 +271,6 @@ const ContentTd = styled.td`
   div {
     margin: 0; /* 불필요한 margin 제거 */
     padding: 0; /* 불필요한 padding 제거 */
-    line-height: 1.5; /* 줄 간격 축소 */
+    line-height: 1.2; /* 줄 간격 축소 */
   }
 `;
-

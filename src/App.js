@@ -141,6 +141,16 @@ function App() {
                     element={<PrivateRoute element={<AdminInsight />} />}
                   />
 
+                  <Route
+                    path="/insight/:postId"
+                    element={<PrivateRoute element={<PostEdit />} />}
+                  />
+
+                  <Route
+                    path="/insight/write"
+                    element={<PrivateRoute element={<PostWrite />} />}
+                  />
+
                   {/* 추가적인 하위 경로 */}
                 </Routes>
               </>

@@ -1,161 +1,172 @@
 import React, { useState, useEffect } from "react";
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import axios from "axios";
-import { useParams } from 'react-router-dom';
+import { useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 import ImageResize from 'quill-image-resize';
 import api from "../../../api/axios";
+import { jwtDecode } from "jwt-decode";
 
 Quill.register('modules/ImageResize', ImageResize);
 
-function PostWrite() {
+function PostWrite({ isEdit, editPostId }) {
     const navigate = useNavigate();
-    const { categoryParam } = useParams();
-
-    // 상태 관리
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
-    const [category, setCategory] = useState(categoryParam || 'PR');
-    const [status, setStatus] = useState('PUBLISHED');
-    const [fix, setFix] = useState(false);
-    const [link, setLink] = useState('');
+    const userState = useSelector((state) => state.auth.token);
+    const decodedToken = jwtDecode(userState);
     const [tempPostId, setTempPostId] = useState(null);
 
+    const [postData, setPostData] = useState({
+        title: '',
+        content: '',
+        category: 'PR',
+        status: 'PUBLISHED',
+        fix: false,
+    });
+
     useEffect(() => {
-        const cookie = document.cookie
-            .split('; ')
-            .find(row => row.startsWith('cookie='));
-        
-        if (!cookie) {
+        if (!userState) {
             alert("로그인이 필요합니다.");
             navigate('/login');
             return;
         }
-
-        const token = cookie.split('=')[1];
-        // tempPostId 생성
         setTempPostId(Date.now().toString());
-    }, [navigate]);
+    }, [navigate, userState]);
 
-    const CreateBtn = async () => {
-        if (!title.trim()) {
+    const handleCreate = async () => {
+        console.log(`문제0`);
+        if (!postData.title.trim()) {
             alert('제목을 입력해주세요.');
             return;
         }
-        if (!content.trim()) {
+        if (!postData.content.trim()) {
             alert('내용을 입력해주세요.');
             return;
         }
-        
+        console.log(`문제0.5`);
         try {
-            await SaveBoard();
-            alert('게시글이 성공적으로 작성되었습니다.');
-            navigate('/admin/pr');
-        } catch (error) {
-            console.error('게시글 작성 실패:', error);
-            alert('게시글 작성에 실패했습니다.');
-        }
-    };
-
-    async function SaveBoard() {
-        try {
-            const cookie = document.cookie
-                .split('; ')
-                .find(row => row.startsWith('cookie='));
-            
-            if (!cookie) {
-                throw new Error('인증 토큰이 없습니다.');
-            }
-
-            const token = cookie.split('=')[1];
-
-            // 이미지 처리 로직
-            const gainSource = /(<img[^>]*src\s*=\s*[\"']?([^>\"']+)[\"']?[^>]*>)/g;
-            const srcArray = [];
-            const urlArray = [];
-            let contentCopy = content;
+            // Quill 인스턴스의 내용을 파싱
+            const quillContent = document.querySelector('.ql-editor');
+            const images = quillContent.getElementsByTagName('img');
+            let contentCopy = postData.content;
             let match;
+            console.log(`문제1`);
 
-            while ((match = gainSource.exec(content)) !== null) {
-                const imgSrc = match[2];
-                if (imgSrc.startsWith('data:image')) {
-                    srcArray.push(imgSrc);
-                    
-                    const byteString = atob(imgSrc.split(",")[1]);
-                    const ab = new ArrayBuffer(byteString.length);
-                    const ia = new Uint8Array(ab);
-                    for (let i = 0; i < byteString.length; i++) {
-                        ia[i] = byteString.charCodeAt(i);
-                    }
-                    const blob = new Blob([ia], { type: "image/jpeg" });
-                    const file = new File([blob], "image.jpg");
+            // HTML Collection을 배열로 변환하여 처리
+            for (let i = 0; i < images.length; i++) {
+                const img = images[i];
+                const base64Image = img.src;
 
-                    const formData = new FormData();
-                    formData.append("file", file);
-
-                    const response = await api.post(
-                        `/admin/posts/image/upload?tempPostId=${tempPostId}`,
-                        formData,
-                        {
-                            headers: {
-                                Authorization: `Bearer ${token}`,
-                                "Content-Type": "multipart/form-data",
-                                "Accept": "application/json",
-                                "Cache-Control": "no-cache"
-                            }
+                if (base64Image.startsWith('data:image')) {
+                    console.log(`문제2`);
+                    try {
+                        const formData = new FormData();
+                        
+                        // base64 데이터에서 실제 바이너리 데이터 추출
+                        const base64Data = base64Image.split(',')[1];
+                        const byteCharacters = atob(base64Data);
+                        const byteArrays = [];
+                        
+                        for (let i = 0; i < byteCharacters.length; i++) {
+                            byteArrays.push(byteCharacters.charCodeAt(i));
                         }
-                    );
+                        
+                        // 바이너리 데이터로 Blob 생성
+                        const blob = new Blob([new Uint8Array(byteArrays)], {
+                            type: 'image/jpeg'
+                        });
+                        
+                        // sessionStorage에서 토큰 가져오기
+                        const token = sessionStorage.getItem("jwt");
+                        console.log("전송할 토큰:", token);
 
-                    if (response.data.success) {
-                        urlArray.push(response.data.url);
-                    } else {
-                        throw new Error('이미지 업로드 실패');
+                        if (!token) {
+                            throw new Error("인증 토큰이 없습니다.");
+                        }
+                        
+                        // FormData에 추가
+                        formData.append('ImgFile', blob, `image_${Date.now()}.jpg`);
+
+                        try {
+                            // 임시 게시글 ID 생성
+                            const tempPostId = Date.now().toString();
+                            const params = isEdit ? { postId: editPostId } : { tempPostId };
+                            
+                            const imageResponse = await api.post(
+                                `/admin/posts/image/upload`, 
+                                formData,
+                                {
+                                    params: params,
+                                    headers: {
+                                        'Authorization': `Bearer ${token}`
+                                    }
+                                }
+                            );
+
+                            console.log('이미지 업로드 응답:', imageResponse.data.imageUrl);
+                            console.log('이미지 업로드 응답:', imageResponse.data);
+
+                            if (!imageResponse.data || !imageResponse.data.imageUrl) {
+                                throw new Error('이미지 URL을 받지 못했습니다.');
+                            }
+
+                            // 이미지 URL 추출
+                            const imageUrl = imageResponse.data.imageUrl;
+
+                            // 이미지 URL로 content 업데이트
+                            const updatedContent = contentCopy.replace(base64Image, imageUrl);
+
+                            // link 필드에 이미지 URL 설정
+                            const requestData = {
+                                title: postData.title,
+                                adminId: decodedToken.adminId,
+                                content: updatedContent,
+                                category: 'PR',
+                                status: 'PUBLISHED',
+                                // fix: false,
+                                // tempPostId: tempPostId
+                            };
+
+                            console.log('서버로 전송되는 데이터:', requestData);
+
+                            const response = await api.post(`/admin/posts`, requestData ,{
+                                params: {tempPostId},
+                                
+                                    headers: {
+                                        Authorization: `Bearer ${token}`,
+                                        'Content-Type': 'application/json'
+                                    }
+                                
+                        });
+
+                            if (response.status === 201 || response.status === 200) {
+                                console.log('게시글 생성 성공:', response.data);
+                                alert('게시글이 성공적으로 생성되었습니다.');
+                                navigate('/admin/pr');
+                            }
+                        } catch (error) {
+                            console.error('이미지 업로드 실패:', error);
+                            throw error;
+                        }
+                    } catch (error) {
+                        console.error('이미지 업로드 중 에러 발생:', error);
+                        if (error.response) {
+                            console.error('에러 응답:', error.response.data);
+                            console.error('에러 상태:', error.response.status);
+                            console.error('에러 헤더:', error.response.headers);
+                        }
+                        throw error;
                     }
                 }
             }
-
-            // 이미지 URL 교체
-            for (let i = 0; i < srcArray.length; i++) {
-                contentCopy = contentCopy.replace(srcArray[i], urlArray[i]);
-            }
-
-            // 최종 게시글 작성 요청
-            const writeInform = {
-                title,
-                content: contentCopy,
-                category,
-                link,
-                status,
-                fix
-            };
-
-            const response = await api.post(
-                `/admin/post?tempPostId=${tempPostId}`,
-                writeInform,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                        "Accept": "application/json",
-                        "Cache-Control": "no-cache"
-                    }
-                }
-            );
-
-            if (!response.data.success) {
-                throw new Error('게시글 작성 실패');
-            }
-
         } catch (error) {
-            console.error('SaveBoard 에러:', error);
-            throw error;
+            console.error('게시글 생성 실패:', error);
+            // 에러 응답 데이터 출력
+            if (error.response) {
+                console.error('에러 응답 데이터:', error.response.data);
+                console.error('에러 상태:', error.response.status);
+            }
+            alert(`게시글 생성 실패: ${error.response?.data?.message || error.message}`);
         }
-    }
-
-    const CancelBtn = () => {
-        console.log('취소 되었습니다.');
-        navigate('/admin/pr');
     };
 
     const modules = {
@@ -174,55 +185,42 @@ function PostWrite() {
     };
 
     return (
-        <div
-            style={{
-                height: 'calc(100vh - 62px)',
-                display: 'flex',
-                alignItems: 'center',
-                paddingLeft: '16vw',
-            }}
-        >
-            <div
-                style={{
-                    height: '75%',
-                    width: '68vw',
-                    margin: '0 auto',
-                    borderRadius: '19px',
-                    boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
-                    padding: '20px',
-                    backgroundColor: '#fff',
-                    border: '0.1px solid lightgray',
-                    marginTop: '7vh',
-                }}
-            >
-                <div
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '15px',
-                        marginBottom: '10px',
-                    }}
-                >
+        <div style={{
+            height: 'calc(100vh - 62px)',
+            display: 'flex',
+            alignItems: 'center',
+            paddingLeft: '16vw',
+        }}>
+            <div style={{
+                height: '75%',
+                width: '68vw',
+                margin: '0 auto',
+                borderRadius: '19px',
+                boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
+                padding: '20px',
+                backgroundColor: '#fff',
+                border: '0.1px solid lightgray',
+                marginTop: '7vh',
+            }}>
+                <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '15px',
+                    marginBottom: '10px',
+                }}>
                     <select
-                        value={category}
-                        disabled
+                        value={postData.category}
+                        onChange={(e) => setPostData({...postData, category: e.target.value})}
                         style={{ width: '150px' }}
                     >
-                        <option value="pr">PR</option>
-                        <option value="insight">INSIGHT</option>
+                        <option value="PR">PR</option>
+                        <option value="INSIGHT">INSIGHT</option>
                     </select>
 
-                    <input
-                        type="text"
-                        placeholder="링크를 입력하세요"
-                        value={link}
-                        onChange={(e) => setLink(e.target.value)}
-                        style={{ flex: 1 }}
-                    />
 
                     <select
-                        value={status}
-                        onChange={(e) => setStatus(e.target.value)}
+                        value={postData.status}
+                        onChange={(e) => setPostData({...postData, status: e.target.value})}
                         style={{ width: '150px' }}
                     >
                         <option value="PUBLISHED">PUBLISHED</option>
@@ -233,8 +231,8 @@ function PostWrite() {
                         고정:
                         <input
                             type="checkbox"
-                            checked={fix}
-                            onChange={(e) => setFix(e.target.checked)}
+                            checked={postData.fix}
+                            onChange={(e) => setPostData({...postData, fix: e.target.checked})}
                         />
                     </label>
                 </div>
@@ -242,6 +240,8 @@ function PostWrite() {
                 <input
                     className="Title"
                     placeholder="제목을 입력해 주세요"
+                    value={postData.title}
+                    onChange={(e) => setPostData({...postData, title: e.target.value})}
                     style={{
                         padding: '7px',
                         marginBottom: '10px',
@@ -251,15 +251,14 @@ function PostWrite() {
                         boxSizing: 'border-box',
                         marginTop: '20px',
                     }}
-                    value={title}
-                    onChange={(e) => { setTitle(e.target.value) }}
                 />
+
                 <div style={{ height: '60vh', width: '100%' }}>
                     <ReactQuill
+                        value={postData.content}
+                        onChange={(content) => setPostData({...postData, content})}
                         modules={modules}
                         placeholder='내용을 입력해 주세요'
-                        value={content}
-                        onChange={setContent}
                         style={{
                             height: "55vh",
                             width: '100%',
@@ -268,15 +267,19 @@ function PostWrite() {
                     />
                 </div>
 
-                <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end' }}>
+                <div style={{ 
+                    marginTop: '20px', 
+                    display: 'flex', 
+                    justifyContent: 'flex-end' 
+                }}>
                     <div style={{ display: 'flex', gap: '30px', marginTop:'30px'}}>
                         <button 
-                            onClick={CreateBtn} 
+                            onClick={handleCreate}
                             style={{
-                                backgroundColor: '#0d6efd', 
-                                color: 'white', 
-                                border: 'none', 
-                                padding: '10px 30px', 
+                                backgroundColor: '#0d6efd',
+                                color: 'white',
+                                border: 'none',
+                                padding: '10px 30px',
                                 borderRadius: '5px',
                                 cursor: 'pointer',
                                 fontSize: '16px',
@@ -285,12 +288,12 @@ function PostWrite() {
                             생성
                         </button>
                         <button 
-                            onClick={CancelBtn} 
+                            onClick={() => navigate('/admin/pr')}
                             style={{
-                                backgroundColor: 'gray', 
-                                color: 'white', 
-                                border: 'none', 
-                                padding: '10px 30px', 
+                                backgroundColor: 'gray',
+                                color: 'white',
+                                border: 'none',
+                                padding: '10px 30px',
                                 borderRadius: '5px',
                                 cursor: 'pointer',
                                 fontSize: '16px',
