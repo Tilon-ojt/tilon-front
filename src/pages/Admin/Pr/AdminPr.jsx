@@ -75,9 +75,10 @@ function AdminPr({ token }) {
       console.log("게시글 목록:", response.data);
       setPostInfo(response.data.content);
 
+    
     } catch (error) {
-      console.error("유저 목록 가져오기 실패:", error.message);
-      alert("유저 데이터를 불러오는 데 실패했습니다.");
+      console.error("Post 목록 가져오기 실패:", error.message);
+      alert("Post 데이터를 불러오는 데 실패했습니다.");
     }
   };
 
@@ -122,12 +123,12 @@ function AdminPr({ token }) {
             <Td onClick={() => goToEditHandler(item.postId)} style={{ cursor: "pointer" }}>
               {item.title}
             </Td>
-
+            
             <ContentTd
               onClick={() => goToEditHandler(item.postId)}
+              style={{ cursor: "pointer" }}
               dangerouslySetInnerHTML={{ __html: removeImagesFromHTML(item.content) }} // 이미지 제거 후 HTML 출력
             />
-
             <Td>{item.updatedAt}</Td>
           </TableRow>
         ))}
@@ -235,7 +236,6 @@ const TitleTd = styled.td`
   cursor: pointer;
 `;
 
-
 const ContentTd = styled.td`
   padding: 8px 10px; /* 기존의 높이를 줄이기 위해 padding을 축소 */
   text-align: left;
@@ -252,7 +252,6 @@ const ContentTd = styled.td`
   div {
     margin: 0; /* 불필요한 margin 제거 */
     padding: 0; /* 불필요한 padding 제거 */
-    line-height: 1.5; /* 줄 간격 축소 */
+    line-height: 1.2; /* 줄 간격 축소 */
   }
 `;
-

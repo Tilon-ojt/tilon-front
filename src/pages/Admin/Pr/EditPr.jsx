@@ -73,7 +73,7 @@ function EditPr() {
             const config = { header: { 'content-type': 'multipart/form-data' } };
 
             // 임시 게시글 ID를 사용하여 이미지 업로드
-            await axios.post(`http://localhost:8000/api/board/uploadImgFolder?tempPostId=${tempPostId}`, formData, config)
+            await axios.post(`/api/board/uploadImgFolder?tempPostId=${tempPostId}`, formData, config)
                 .then(response => {
                     if (response.data.success) {
                         urlArray.push(response.data.url);  // 서버에서 받은 URL 추가
@@ -106,7 +106,7 @@ function EditPr() {
         };
 
         // 게시글 작성 API 호출
-        axios.post('http://localhost:8000/api/admin/post', writeInform, {
+        axios.post('/api/admin/post', writeInform, {
             headers: { 
                 'Authorization': `Bearer ${redux.setUser.token}`,
                 'Content-Type': 'application/json' 
