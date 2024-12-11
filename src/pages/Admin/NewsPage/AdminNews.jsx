@@ -174,54 +174,42 @@ function AdminNews({token}) {
         {/* </tbody> */}
 
       </TheTable2>
+
+      // <div className="pagination">
+      // <button
+      //   onClick={prevPage}
+      //   disabled={currentPage === 1}
+      //   className="page-btn"
+      // >
+      //   <ChevronLeft />
+      // </button>
+
+      // {/* 페이지 번호 표시 */}
+      // {pageNumbers.map((number) => (
+      //   <button
+      //     key={number}
+      //     onClick={() => goToPage(number)}
+      //     className={`page-number-btn ${
+      //       currentPage === number ? "active" : ""
+      //     }`}
+      //   >
+      //     {number}
+      //   </button>
+      // ))}
+
+      // <button
+      //   onClick={nextPage}
+      //   disabled={currentPage === totalPages}
+      //   className="page-btn"
+      // >
+      //   <ChevronRight />
+      // </button>
+      // </div>
       }
     />
   );
 }
 
-
-
-
-// const TableRow = styled.tr`
-//   &:nth-child(even) {
-//     background-color: #f9f9f9; /* Add alternating row colors */
-//   }
-
-//   cursor: pointer;
-
-//   transition: all .35s;
-//   &:hover{
-//     background-color: #f0f8ff ;
-//   }
-
-//   Td{
-//   padding: 12px 15px; /* Padding for cells */
-//   text-align: left; /* Left-align cell text */
-//   font-size: 14px; /* Font size adjustment */
-//   color: #555; /* Slightly lighter color for content */
-//   border: 1px solid #ddd; /* Cell border for all rows */
-  
-
-//   &:nth-child(1) {
-//     width: 2%;
-//   }
-//   &:nth-child(2) {
-//     min-width: 50px;
-//     width: 3%;
-//   }
-//   &:nth-child(3) {
-//     min-width: 100px;
-//     width: 35%;
-//   }
-//   &:nth-child(4) {
-//     min-width: 100px;
-//     width: 40%;
-//   }
-//   &:nth-child(5) {
-//     min-width: 20%;
-//   }
-// }
-// `;
 const TableRow = styled.tr`
   &:nth-child(even) {
     background-color: #f9f9f9;

@@ -63,9 +63,12 @@ const imguploadHandler = async (file) => {
   try {
     const formData = new FormData();
     formData.append("ImgFile", file);
-    formData.append("tempPostId", tempPostId);
+    // formData.append("tempPostId", tempPostId);
 
     const response = await api.post("/admin/posts/image/upload", formData, {
+      params:{
+        tempPostId,
+      },
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "multipart/form-data",
@@ -74,12 +77,9 @@ const imguploadHandler = async (file) => {
 
     console.log("서버 응답 데이터:", response.data);
 
+    // 서버 응답에서 전달된 이미지 URL을 수정 없이 반환
     if (response.data && response.data.imageUrl) {
-      const serverDomain = "http://172.16.5.51:8080";
-      const uploadedUrl = `${serverDomain}${response.data.imageUrl}`;
-      
-      console.log("변경된 이미지 URL:", uploadedUrl);
-      return uploadedUrl;
+      return response.data.imageUrl;  // 수정 없이 그대로 반환
     } else {
       throw new Error("서버 응답 데이터에 imageUrl이 없습니다.");
     }
@@ -90,61 +90,61 @@ const imguploadHandler = async (file) => {
 };
 
 
+// 뉴스 저장 제출 핸들러
+const submitHandler = async () => {
+  if (!tempPostId) {
+    alert("tempPostId가 설정되지 않았습니다.");
+    return;
+  }
 
-  // 뉴스 저장 제출 핸들러
-  const submitHandler = async () => {
-    if (!tempPostId) {
-      alert("tempPostId가 설정되지 않았습니다.");
+  if (!title.trim() || !url.trim()) {
+    alert("제목과 링크가 비어있습니다.");
+    return;
+  }
+
+  if (!selectedFile) {
+    alert("이미지가 선택되지 않았습니다.");
+    return;
+  }
+
+  try {
+    // 서버에 이미지 업로드 요청
+    const uploadedUrl = await imguploadHandler(selectedFile);
+
+    if (!uploadedUrl) {
+      alert("이미지 업로드 실패");
       return;
     }
 
-    if (!title.trim() || !url.trim()) {
-      alert("제목과 링크가 비어있습니다.");
-      return;
-    }
+    const updatedData = {
+      title: title.trim(),
+      category: "NEWS",
+      adminId: "5",
+      status: "PUBLISHED",
+      link: url.trim(),
+      tempPostId: tempPostId,
+      imageUrl: uploadedUrl,  // 수정된 URL 저장
+    };
 
-    if (!selectedFile) {
-      alert("이미지가 선택되지 않았습니다.");
-      return;
-    }
+    console.log("뉴스 저장 데이터:", updatedData);
 
-    try {
-      // 서버에 이미지 업로드 요청
-      const uploadedUrl = await imguploadHandler(selectedFile);
+    const response = await api.post(`/admin/posts`, updatedData, {
+      params: { tempPostId },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
 
-      if (!uploadedUrl) {
-        alert("이미지 업로드 실패");
-        return;
-      }
+    console.log("서버 저장 응답:", response.data);
+    alert("뉴스 저장 완료!");
+    navigate("/admin/news");
+  } catch (error) {
+    console.error("서버 요청 실패:", error.message);
+    alert("뉴스 저장 중 문제가 발생했습니다.");
+  }
+};
 
-      const updatedData = {
-        title: title.trim(),
-        category: "NEWS",
-        adminId: "5",
-        status: "PUBLISHED",
-        link: url.trim(),
-        tempPostId: tempPostId,
-        imageUrl: uploadedUrl,  // 수정된 URL 저장
-      };
-
-      console.log("뉴스 저장 데이터:", updatedData);
-
-      const response = await api.post(`/admin/posts`, updatedData, {
-        params: { tempPostId },
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      console.log("서버 저장 응답:", response.data);
-      alert("뉴스 저장 완료!");
-      navigate("/admin/news");
-    } catch (error) {
-      console.error("서버 요청 실패:", error.message);
-      alert("뉴스 저장 중 문제가 발생했습니다.");
-    }
-  };
 
   // 취소 버튼 핸들러
   const cancelHandler = () => {

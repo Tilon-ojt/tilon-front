@@ -32,7 +32,7 @@ function NewsDetail({ token }) {
   
         // 백슬래시 -> 슬래시 변환 + 서버 도메인 합치기
         const formattedImageUrl = imageUrl
-          ? `${serverDomain}/image/${imageUrl.split('\\').pop()}`
+          ? `${serverDomain}/static/image/${imageUrl.split('\\').pop()}`
           : defaultThumbnail;
   
         console.log("변환된 이미지 URL:", formattedImageUrl);
