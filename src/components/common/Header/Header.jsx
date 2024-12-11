@@ -1,12 +1,10 @@
 import { Menu, X } from "lucide-react";
-import "./Header.css";
 import { useDispatch, useSelector } from "react-redux";
 import { CLOSE_MENU, OPEN_MENU } from "../../../reducer/HeaderBar";
 import { useNavigate } from "react-router-dom";
+import "./Header.css";
 
 function Header({ headerBackground }) {
-  console.log(headerBackground);
-
   const isShow = useSelector((state) => state.headerbar.isShow);
   const dispatch = useDispatch();
 
@@ -19,10 +17,6 @@ function Header({ headerBackground }) {
   };
 
   const navigate = useNavigate();
-
-  const clicktest = () => {
-    navigate("/admin/news");
-  };
 
   return (
     <div>
@@ -52,7 +46,7 @@ function Header({ headerBackground }) {
             <ul>
               <li>
                 <a href="">
-                  <p onClick={clicktest}>회사소개</p>
+                  <p onClick={() => navigate("/admin/news")}>회사소개</p>
                 </a>
               </li>
               <li>

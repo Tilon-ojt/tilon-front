@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 
 function Navbar() {
   const token = useSelector((state) => state.auth.token);
+  // const token = useSelector((state) => state.auth.AccessToken);
   // token이 유효한지 확인하고 jwtDecode 사용
   const [empName, setEmpName] = useState(null);
   const [loading, setLoading] = useState(true);
