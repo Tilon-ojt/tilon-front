@@ -5,13 +5,15 @@ import TheNewsLayout from "../../../components/element/TheNewsLayout";
 import TheButton from "../../../components/element/TheButton";
 import api from "../../../api/axios";
 
-const defaultThumbnail = "https://community.softr.io/uploads/db9110/original/2X/7/74e6e7e382d0ff5d7773ca9a87e6f6f8817a68a6.jpeg";
+const defaultThumbnail =
+  "https://community.softr.io/uploads/db9110/original/2X/7/74e6e7e382d0ff5d7773ca9a87e6f6f8817a68a6.jpeg";
 
 function NewsDetail({ token }) {
   const navigate = useNavigate();
   const { postId } = useParams(); // URL params에서 postId 가져오기
   const [newsItem, setNewsItem] = useState({});
 
+  // 뉴스 상세 데이터 가져오기
   const fetchDetail = async () => {
     try {
       const response = await api.get(`/admin/posts/${postId}`, {
@@ -21,41 +23,52 @@ function NewsDetail({ token }) {
         },
       });
   
-      console.log("모든 상세 데이터:", response.data);
-      setNewsItem(response.data); // newsItem 상태 업데이트
+      console.log("서버 응답 데이터:", response.data);
+  
+      if (response.data) {
+        const { title, link, imageUrl } = response.data;
+  
+        const serverDomain = "http://172.16.5.51:8080";
+  
+        // 백슬래시 -> 슬래시 변환 + 서버 도메인 합치기
+        const formattedImageUrl = imageUrl
+          ? `${serverDomain}/image/${imageUrl.split('\\').pop()}`
+          : defaultThumbnail;
+  
+        console.log("변환된 이미지 URL:", formattedImageUrl);
+  
+        setNewsItem({
+          title,
+          link,
+          imageUrl: formattedImageUrl,
+        });
+      }
     } catch (error) {
       console.error("Failed to fetch news:", error.message);
       alert("상세 데이터 로딩 실패.");
     }
   };
   
+
+
   useEffect(() => {
-    console.log('postId:', postId);  // postId 값 확인
-    console.log('token:', token);
     if (postId && token) {
       fetchDetail();
     }
   }, [postId, token]);
-  
 
-  // 수정 버튼
   const goToEditHandler = () => {
     navigate(`/admin/news/edit/${postId}`);
   };
 
-  // 삭제 버튼
   const deleteHandler = async () => {
     if (!token) {
       alert("로그인이 필요합니다.");
       return;
     }
 
-    // 사용자 확인 팝업창 띄우기
     const isConfirmed = window.confirm("뉴스 항목을 삭제하시겠습니까?");
-
-    if (!isConfirmed) {
-      return;  // "아니오" 선택 시 삭제 취소
-    }
+    if (!isConfirmed) return;
 
     try {
       await api.delete(`/admin/posts/${postId}`, {
@@ -66,7 +79,7 @@ function NewsDetail({ token }) {
       });
 
       alert("뉴스 항목이 삭제되었습니다.");
-      navigate("/admin/news");  // 삭제 완료 후 뉴스 목록 페이지로 이동
+      navigate("/admin/news");
     } catch (error) {
       console.error("Failed to delete news:", error.message);
       alert("삭제에 실패했습니다.");
@@ -78,18 +91,19 @@ function NewsDetail({ token }) {
       title={`no.${postId}`}
       children={
         <>
-          {/* <p>{newsItem.updatedAt}</p> */}
           <ThumnailImg>
-            <img
-              alt="썸네일 이미지"
-              src={newsItem.imageUrl || defaultThumbnail}
-            />
+          <img
+            src={newsItem.imageUrl || defaultThumbnail}
+            alt={newsItem.imageUrl ? "썸네일 이미지" : "기본 이미지"}
+          />
+
           </ThumnailImg>
+
           <Input>
             <Span>뉴스 제목</Span>
             <TitleSpan>{newsItem.title}</TitleSpan>
           </Input>
-  
+
           <Input>
             <Span>연결 링크</Span>
             <a href={newsItem.link} target="_blank" rel="noreferrer">
@@ -115,11 +129,9 @@ function NewsDetail({ token }) {
             onClick={deleteHandler}
           />
         </>
-
       }
     />
   );
-  
 }
 
 const ThumnailImg = styled.div`
@@ -130,38 +142,35 @@ const ThumnailImg = styled.div`
   img {
     border: 2px solid lightgray;
     width: 400px;
+    height: auto;
     border-radius: 10px;
     margin-bottom: 10px;
+    object-fit: cover;
   }
 `;
 
 const Input = styled.div`
-
-  /* border: 2px solid lightgray; */
-
   height: auto;
   display: flex;
   align-items: flex-start;
-  /* justify-content: center; */
   flex-direction: row;
   gap: 20px;
-
 `;
 
 const Span = styled.span`
   border-right: 2px solid lightgray;
-  /* width: 30%; */
   width: 130px;
 `;
 
 const TitleSpan = styled.span`
   display: block;
-  max-width: 400px; /* 최대 너비 */
-  height: 40px; /* 고정 높이 */
-  line-height: 1.5; /* 텍스트 줄 간격 */
-  overflow: hidden; /* 넘치는 텍스트 숨기기 */
-  text-overflow: ellipsis; /* 넘칠 경우 말줄임 표시 */
-  white-space: nowrap; /* 텍스트가 한 줄로 유지됨 */
-  word-break: break-all; /* 긴 단어도 깨서 출력 */
-`
+  max-width: 400px;
+  height: 40px;
+  line-height: 1.5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: break-all;
+`;
+
 export default NewsDetail;

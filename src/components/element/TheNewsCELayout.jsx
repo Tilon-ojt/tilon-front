@@ -1,5 +1,7 @@
 import styled from "styled-components";
 
+const placeholdImg = "https://community.softr.io/uploads/db9110/original/2X/7/74e6e7e382d0ff5d7773ca9a87e6f6f8817a68a6.jpeg";
+
 const TheNewsCELayout = ({
   title,
   setTitle,
@@ -13,10 +15,9 @@ const TheNewsCELayout = ({
   return (
     <>
       <ThumbnailImg>
-        {imageUrl 
-          && <img alt="썸네일 이미지" 
-                  src={imageUrl} />
-        }
+        < img alt="썸네일 이미지" 
+              src={imageUrl || placeholdImg} />
+
       </ThumbnailImg>
 
       <Input>

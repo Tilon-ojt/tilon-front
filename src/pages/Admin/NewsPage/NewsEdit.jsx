@@ -11,10 +11,15 @@ function NewsEdit({ token }) {
   const navigate = useNavigate();
   const { postId } = useParams(); // URL params에서 postId 가져오기
   const [newsItem, setNewsItem] = useState({});
-  const [thumbnailSrc, setThumbnailSrc] = useState(placeholdImg);
+  const [thumbnailSrc, setThumbnailSrc] = useState("");
   const [title, setTitle] = useState("");
   const [link, setLink] = useState("");
   const fileInputRef = useRef(null);
+
+
+  const [PostId, setPostId] = useState("");
+
+  const [selectedFile, setSelectedFile] = useState(null);
 
   // 데이터 가져오기
   const fetchNewsItem = async () => {
@@ -43,20 +48,20 @@ function NewsEdit({ token }) {
   // newsItem 업데이트 후 상태 반영
   useEffect(() => {
     if (newsItem) {
-      setThumbnailSrc(newsItem.imageUrl || placeholdImg);
-      setTitle(newsItem.title || "");
-      setLink(newsItem.link || "");
+      setThumbnailSrc(newsItem.imageUrl);
+      setTitle(newsItem.title);
+      setLink(newsItem.link);
     }
   }, [newsItem]);
 
-  const thumbnailHandler = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => setThumbnailSrc(e.target.result);
-      reader.readAsDataURL(file);
-    }
-  };
+  // const thumbnailHandler = (e) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onload = (e) => setThumbnailSrc(e.target.result);
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
 
   const clearThumbnailHandler = () => {
     setThumbnailSrc(placeholdImg);
@@ -65,7 +70,58 @@ function NewsEdit({ token }) {
     }
   };
 
-  // 수정 완료 버튼 - 아직 이미지 미완
+
+  // 파일 선택
+const thumbnailHandler = async (e) => {
+  const file = e.target.files[0];
+
+  if (file) {
+    console.log("선택한 파일:", file);
+    setSelectedFile(file);
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const selectedImageUrl = e.target.result;
+      setThumbnailSrc(selectedImageUrl);
+      console.log("로컬 미리보기 URL:", selectedImageUrl);
+    };
+    reader.readAsDataURL(file);
+  }
+};
+
+const imguploadHandler = async (file) => {
+  try {
+    console.log("서버 업로드 시작...");
+
+    const formData = new FormData();
+    formData.append("ImgFile", file);
+    formData.append("PostId", PostId);
+
+    const response = await api.post(
+      "/admin/posts/image/upload",
+      formData,
+      {
+        params: { PostId },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    console.log("------image url:", response.data);
+    const imageUrl = response.data;
+    setThumbnailSrc(imageUrl);  // 이미지 URL 상태 업데이트
+
+    return imageUrl;
+
+  } catch (error) {
+    console.error("이미지 업로드 실패:", error.message);
+    return null;
+  }
+};
+
+  // 수정 완료 버튼
   const submitHandler = async () => {
     try {
       const updatedData = {
@@ -107,7 +163,7 @@ function NewsEdit({ token }) {
             link={link}
             setLink={setLink}
             imageUrl={thumbnailSrc}
-            setThumbnailSrc={setThumbnailSrc}
+            setThumbnailSrc={imguploadHandler}
             onChange={thumbnailHandler}
             onClick={clearThumbnailHandler}
             ref={fileInputRef}
