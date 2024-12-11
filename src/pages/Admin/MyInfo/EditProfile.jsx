@@ -63,6 +63,12 @@ function EditProfile({ token }) {
 
   const handleSubmit = async () => {
     console.log(`currentPassword: ${password}, newPassword: ${newPassword}`);
+    if (password === newPassword) {
+      alert("변경할 비밀번호와 새 비밀번호가 같습니다.");
+      setNewPassword("");
+      setConfirmNewPassword("");
+      return;
+    }
     try {
       const verifyResponse = await api.patch(
         "/admin/update",
@@ -221,11 +227,13 @@ function EditProfile({ token }) {
       </EditProfileCard>
       {passwordCheckModalIsShow && (
         <TheModal title={"정말 탈퇴하시겠어요?"}>
-          <CircleAlert size={80} style={{ color: "red" }} />
-          <P style={{ color: "red" }}>
+          <CircleAlert size={80} style={{ color: "red", width: "100%" }} />
+          <P style={{ color: "red", width: "100%", marginBottom: "0" }}>
             탈퇴버튼 선택시, 계정은 삭제되며 복구되지 않습니다.
           </P>
-          <P>탈퇴를 원하면 비밀번호 입력 후 탈퇴버튼을 눌러주세요.</P>
+          <P style={{ width: "100%", marginTop: "0" }}>
+            탈퇴를 원하면 비밀번호 입력 후 탈퇴버튼을 눌러주세요.
+          </P>
           <Label>
             <P>비밀번호 :</P>
             <Input

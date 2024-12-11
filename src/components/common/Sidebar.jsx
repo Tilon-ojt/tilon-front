@@ -6,7 +6,6 @@ import styled from "styled-components";
 
 function Sidebar() {
   const token = useSelector((state) => state.auth.token);
-  // const token = useSelector((state) => state.auth.AccessToken);
   // token이 유효한지 확인하고 jwtDecode 사용
   let decodedToken = null;
   if (token) {

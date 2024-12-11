@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { CLOSE_MODAL } from "../../reducer/AdminModal";
+import React, { useState } from "react";
+import { CLOSE_MODAL } from "../../../reducer/AdminModal";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import api from "../../api/axios";
+import api from "../../../api/axios";
 
 function AdminAddModal({ getUserList }) {
   const [nickname, setnickname] = useState("");
@@ -62,10 +62,15 @@ function AdminAddModal({ getUserList }) {
       } else {
         dispatch({ type: CLOSE_MODAL });
         alert("아이디 생성 실패");
-        console.log("오류가 발생했습니다.");
       }
     } catch (error) {
       console.log("에러:", error);
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      submitHandler();
     }
   };
 
@@ -76,6 +81,8 @@ function AdminAddModal({ getUserList }) {
         <Label>
           <P>이름 :</P>
           <Input
+            autocomplete="off" // 이전에 입력한 데이터 보이지않도록 설정
+            autoFocus // 자동으로 눌러저있도록 설정
             type="text"
             name="nickname"
             value={nickname}
@@ -85,12 +92,14 @@ function AdminAddModal({ getUserList }) {
         <Label>
           <P>아이디 :</P>
           <Input
+            autocomplete="off"
             type="text"
             name="empName"
             value={empName}
             onChange={handleEmpNameChange}
             required
             placeholder="영문과 숫자만 입력 가능합니다"
+            onKeyDown={handleKeyPress} // 엔터 키 입력 감지
           />
         </Label>
         <ModalButtons>
