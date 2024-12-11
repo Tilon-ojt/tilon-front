@@ -32,14 +32,9 @@ function Loginpage() {
       dispatch(setToken(accessToken)); // Redux 상태에 저장
       console.log("Redux 상태 확인:", store.getState().auth.token); // 상태 확인
 
-<<<<<<< HEAD
-      // // 쿠키에 리프레쉬 토큰 저장
-      document.cookie = `refreshToken=${refreshToken}; path=/admin`;
-=======
       // 쿠키에 리프레쉬 토큰 저장
       document.cookie = `cookie=${refreshToken}; path=/;`;
       console.log("저장된 쿠키:", document.cookie);
->>>>>>> d6e6e01d65da16553678bfab8c08e308c2fb245b
 
       navigate("/admin/news");
     } catch (error) {
