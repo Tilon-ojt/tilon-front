@@ -342,7 +342,7 @@ const EditProfileCard = styled.div`
     }
 
     &:disabled {
-      background-color: #ccc;
+      background-color: #8bbdff;
       cursor: not-allowed;
     }
   }

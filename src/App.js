@@ -67,7 +67,7 @@ import Navbar from "./components/common/Navbar";
 
 import PostEdit from "./pages/Admin/PostEdit/PostEdit";
 import Loginpage from "./pages/Admin/Login/Loginpage";
-import EditProfile from "./pages/Admin/MyInfo/EditProfile";
+import EditProfile from "./pages/Admin/EditProfile/EditProfile";
 
 import AdminNews from "./pages/Admin/NewsPage/AdminNews";
 // import NewsDetail from './pages/Admin/NewsPage/NewsDetail';
