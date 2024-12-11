@@ -11,7 +11,7 @@ function AdminNews({token}) {
   const [selectedRows, setSelectedRows] = useState([]);
   const navigate = useNavigate();
   const [tbody, setTbody] = useState([]);
-  const token = useSelector((state) => state.auth.token);
+  // const token = useSelector((state) => state.auth.token);
 
   useEffect(() => {
     if (!token) {
@@ -33,8 +33,6 @@ function AdminNews({token}) {
         return;
       }
 
-      const response = await api.get("/admin/posts", {
-        params: {
       const response = await api.get('/admin/posts', {
         params: { 
           category: "NEWS",
