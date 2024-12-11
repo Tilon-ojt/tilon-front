@@ -65,7 +65,7 @@ import TilonHomepage from "./pages/Home/TilonHomepage";
 import Sidebar from "./components/common/Sidebar";
 import Navbar from "./components/common/Navbar";
 
-import PostEditor from "./pages/Admin/PostEdit/PostEditor";
+import PostEdit from "./pages/Admin/PostEdit/PostEdit";
 import Loginpage from "./pages/Admin/Login/Loginpage";
 import EditProfile from "./pages/Admin/MyInfo/EditProfile";
 
@@ -76,7 +76,7 @@ import NewsEdit from "./pages/Admin/NewsPage/NewsEdit";
 
 import AdminPr from "./pages/Admin/Pr/AdminPr";
 import AdminInsight from "./pages/Admin/Insight/AdminInsight";
-import PrivateRoute from "./components/PrivateRoute"; // PrivateRoute 임포트
+import PrivateRoute from "./components/PrivateRoute";
 import UserListPage2 from "./pages/Admin/UserListPage/UserListPage2";
 
 function App() {
@@ -119,10 +119,6 @@ function App() {
                     element={<PrivateRoute element={<NewsEdit />} />}
                   />
                   <Route
-                    path="/edit"
-                    element={<PrivateRoute element={<PostEditor />} />}
-                  />
-                  <Route
                     path="/pr"
                     element={<PrivateRoute element={<AdminPr />} />}
                   />
@@ -132,7 +128,7 @@ function App() {
                   />
                   <Route
                     path="/edit"
-                    element={<PrivateRoute element={<PostEditor />} />}
+                    element={<PrivateRoute element={<PostEdit />} />}
                   />
                   {/* 추가적인 하위 경로 */}
                 </Routes>
