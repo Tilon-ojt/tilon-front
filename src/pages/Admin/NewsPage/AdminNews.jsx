@@ -13,16 +13,20 @@ function AdminNews({token}) {
   const [tbody, setTbody] = useState([]);
   // const token = useSelector((state) => state.auth.token);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState("");
+
+
   useEffect(() => {
     if (!token) {
       alert("로그인이 필요합니다.");
       navigate("/admin/login");
     } else {
-      fetchNews();
+      fetchNews(currentPage);
     }
-  }, [token]);
+  }, [currentPage, token]);
 
-  const fetchNews = async () => {
+  const fetchNews = async (page) => {
     try {
       // console.log("Redux token:", token);
       const token = sessionStorage.getItem("jwt");
@@ -36,7 +40,7 @@ function AdminNews({token}) {
       const response = await api.get('/admin/posts', {
         params: { 
           category: "NEWS",
-          page: "1",
+          page: page,
         },
         headers: {
           Authorization: `Bearer ${token}`,
@@ -46,6 +50,8 @@ function AdminNews({token}) {
 
       console.log("뉴스 목록 조회:", response.data);
       setTbody(response.data.content);
+      setTotalPages(response.data.totalPages);
+
     } catch (error) {
       console.error("Failed to fetch news:", error.message);
       alert("뉴스 데이터 로딩 실패.");
@@ -58,6 +64,12 @@ function AdminNews({token}) {
     }
   }, []);
 
+
+  const pageHandler =(page)=>{
+    if(page>=1 && page < totalPages){
+      setCurrentPage(page);
+    }
+  }
 
   const searchHandler = () => {
     console.log("Search button clicked");
@@ -149,62 +161,50 @@ function AdminNews({token}) {
       onClick={searchHandler}
       childrenBtn={renderButtons()}
       childrenTable={
-        <TheTable2 thead={["", "no", "title", "url", "latest update"]}>
-        {/* <tbody> */}
-          {tbody.map((item) => (
-            <TableRow
-              key={item.postId}
-              selected={selectedRows.includes(item.postId)}
-              onClick={(e) => handleRowClick(item.postId, e)} 
-            >
+        <>
+          <TheTable2 thead={["", "no", "title", "url", "latest update"]}>
+            {tbody.map((item) => (
+              <TableRow
+                key={item.postId}
+                selected={selectedRows.includes(item.postId)}
+                onClick={(e) => handleRowClick(item.postId, e)} 
+              >
               <Td>
                 <input
                   type="checkbox"
                   checked={selectedRows.includes(item.postId)}
                   onChange={(e) => handleCheckboxChange(item.postId)}
                   onClick={(e) => e.stopPropagation()}  // 클릭 시 링크 이동 방지
-                />
+                 />
               </Td>
-              <Td>{item.postId}</Td>
-              <Td>{item.title}</Td>
-              <Td>{item.link}</Td>
-              <Td>{item.updatedAt}</Td>
-            </TableRow>
-          ))}
-        {/* </tbody> */}
+                 <Td>{item.postId}</Td>
+                 <Td>{item.title}</Td>
+                 <Td>{item.link}</Td>
+                 <Td>{item.updatedAt}</Td>
+               </TableRow>
+              ))}
+          </TheTable2>
 
-      </TheTable2>
+          <Pagination>
+            <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+              Prev
+            </button>
 
-      // <div className="pagination">
-      // <button
-      //   onClick={prevPage}
-      //   disabled={currentPage === 1}
-      //   className="page-btn"
-      // >
-      //   <ChevronLeft />
-      // </button>
+            {Array.from({ length: totalPages }).map((_, idx) => (
+              <button
+                key={idx + 1}
+                onClick={() => handlePageChange(idx + 1)}
+                disabled={currentPage === idx + 1}
+              >
+                {idx + 1}
+              </button>
+            ))}
 
-      // {/* 페이지 번호 표시 */}
-      // {pageNumbers.map((number) => (
-      //   <button
-      //     key={number}
-      //     onClick={() => goToPage(number)}
-      //     className={`page-number-btn ${
-      //       currentPage === number ? "active" : ""
-      //     }`}
-      //   >
-      //     {number}
-      //   </button>
-      // ))}
-
-      // <button
-      //   onClick={nextPage}
-      //   disabled={currentPage === totalPages}
-      //   className="page-btn"
-      // >
-      //   <ChevronRight />
-      // </button>
-      // </div>
+            <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+              Next
+            </button>
+          </Pagination>
+        </>
       }
     />
   );
@@ -256,4 +256,28 @@ const TableRow = styled.tr`
   }
 
 `;
+
+const Pagination = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: 15px;
+
+  button {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #f0f4f8;
+    margin: 0 5px;
+    border: none;
+    font-weight: bold;
+
+    &:hover {
+      background-color: #e1f1ff;
+    }
+    &:disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  }
+`;
+
 export default AdminNews;
