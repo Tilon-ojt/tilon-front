@@ -148,6 +148,7 @@ function PostEdit() {
                 display: 'flex',
                 justifyContent: 'flex-start',
                 alignItems: 'center',
+                marginTop: '5vh',
             }}
         >
             <div
@@ -159,6 +160,7 @@ function PostEdit() {
                     boxShadow: '0 4px 10px rgba(0,0,0,0.1)', // 약간의 그림자 추가
                     padding: '20px', // 내부 여백 추가
                     backgroundColor: '#fff' // 배경색 설정
+                    
                 }}
             >
 

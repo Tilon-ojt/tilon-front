@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom"; // useNavigate 추가
+import { useNavigate } from "react-router-dom";
 import api from "../../../api/axios";
 import { OPEN_MODAL } from "../../../reducer/AdminModal";
 import TheButton2 from "../../../components/element/TheButton2";
@@ -9,7 +9,7 @@ import styled from "styled-components";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 
 function AdminPr({ token }) {
-  const navigate = useNavigate(); // useNavigate 훅 추가
+  const navigate = useNavigate();
   console.log(`전달받은 jwt: ${JSON.stringify(token, null, 2)}`);
 
   useEffect(() => {
@@ -31,34 +31,29 @@ function AdminPr({ token }) {
     console.log("선택된 Post ID:", selectedPostIds);
   }, [selectedPostIds]);
 
-  // 체크박스 상태 변경
   const handleCheckboxChange = (id) => {
     setSelectedPostIds((prev) =>
       prev.includes(id) ? prev.filter((userId) => userId !== id) : [...prev, id]
     );
   };
 
-  // 페이지네이션 계산
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = postInfo.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(postInfo.length / itemsPerPage);
 
-  // 페이지 이동 함수
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const handlePrevPage = () => currentPage > 1 && setCurrentPage(currentPage - 1);
   const handleNextPage = () => currentPage < totalPages && setCurrentPage(currentPage + 1);
 
-  // 게시물 수정 페이지로 이동하는 함수
   const goToEditHandler = (postId) => {
     console.log(`선택한 게시물 ID: ${postId}`);
-    navigate(`/admin/pr/${postId}`); // 해당 게시물의 수정 페이지로 이동
+    navigate(`/admin/pr/${postId}`);
   };
 
-  // admin 목록 받아오기
   const getUserList = async () => {
     try {
-      const token = sessionStorage.getItem("jwt"); // 세션 저장소에서 토큰 가져오기
+      const token = sessionStorage.getItem("jwt");
       console.log("JWT:", token);
 
       if (!token) {
@@ -78,7 +73,7 @@ function AdminPr({ token }) {
       });
 
       console.log("게시글 목록:", response.data);
-      setPostInfo(response.data.content); // 응답 데이터 설정
+      setPostInfo(response.data.content);
 
     } catch (error) {
       console.error("유저 목록 가져오기 실패:", error.message);
@@ -86,14 +81,21 @@ function AdminPr({ token }) {
     }
   };
 
-  // admin 삭제
   const deletePost = async () => {
     if (selectedPostIds.length === 0) {
       alert("삭제할 사용자가 선택되지 않았습니다.");
       return;
-    } 
+    }
   };
 
+  // 이미지를 제외한 HTML을 반환하는 함수
+  const removeImagesFromHTML = (html) => {
+    const div = document.createElement("div");
+    div.innerHTML = html;
+    const images = div.querySelectorAll("img");
+    images.forEach((img) => img.remove()); // 이미지 제거
+    return div.innerHTML; // 이미지가 제거된 HTML 반환
+  };
 
   return (
     <Container>
@@ -120,10 +122,12 @@ function AdminPr({ token }) {
             <Td onClick={() => goToEditHandler(item.postId)} style={{ cursor: "pointer" }}>
               {item.title}
             </Td>
-            
-            <Td onClick={() => goToEditHandler(item.postId)} style={{ cursor: "pointer" }}>
-              {item.content}
-            </Td>
+
+            <ContentTd
+              onClick={() => goToEditHandler(item.postId)}
+              dangerouslySetInnerHTML={{ __html: removeImagesFromHTML(item.content) }} // 이미지 제거 후 HTML 출력
+            />
+
             <Td>{item.updatedAt}</Td>
           </TableRow>
         ))}
@@ -159,7 +163,6 @@ function AdminPr({ token }) {
 
 export default AdminPr;
 
-// 스타일 컴포넌트
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -213,15 +216,15 @@ const PageButton = styled.button`
 
 const TableRow = styled.tr`
   &:nth-child(even) {
-    background-color: #f9f9f9; /* Add alternating row colors */
+    background-color: #f9f9f9;
   }
 `;
 
 const Td = styled.td`
-  padding: 12px 15px; /* Padding for cells */
-  text-align: left; /* Left-align cell text */
-  font-size: 14px; /* Font size for cells */
-  border-bottom: 1px solid #e9e9e9; /* Add borders between rows */
+  padding: 12px 15px;
+  text-align: left;
+  font-size: 14px;
+  border-bottom: 1px solid #e9e9e9;
 `;
 
 const TitleTd = styled.td`
@@ -229,13 +232,27 @@ const TitleTd = styled.td`
   text-align: left;
   font-size: 14px;
   border-bottom: 1px solid #e9e9e9;
-  cursor: pointer; /* 제목 셀에만 포인터 커서 */
+  cursor: pointer;
 `;
 
+
 const ContentTd = styled.td`
-  padding: 12px 15px;
+  padding: 8px 10px; /* 기존의 높이를 줄이기 위해 padding을 축소 */
   text-align: left;
   font-size: 14px;
   border-bottom: 1px solid #e9e9e9;
-  cursor: pointer; /* 내용 셀에만 포인터 커서 */
+  max-height: 40px; /* 최대 높이 설정 */
+  overflow: hidden; /* 내용이 넘치면 숨김 처리 */
+  text-overflow: ellipsis; /* 넘치는 내용을 말줄임표로 표시 */
+  white-space: nowrap; /* 줄바꿈 방지 */
+  cursor: pointer;
+
+  /* td 내부에 렌더링된 HTML 태그 스타일 */
+  p,
+  div {
+    margin: 0; /* 불필요한 margin 제거 */
+    padding: 0; /* 불필요한 padding 제거 */
+    line-height: 1.5; /* 줄 간격 축소 */
+  }
 `;
+

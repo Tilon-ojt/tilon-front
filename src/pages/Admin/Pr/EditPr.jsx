@@ -146,7 +146,7 @@ function EditPr() {
                 width: '100%',
                 height: '100vh', // 화면 전체 높이 기준
                 display: 'flex',
-        
+                marginTop: '10vh',
                 
             }}
         >
