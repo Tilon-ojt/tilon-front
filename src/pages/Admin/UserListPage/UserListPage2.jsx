@@ -7,13 +7,24 @@ import TheTable2 from "../../../components/element/TheTable2";
 import styled from "styled-components";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import AdminAddModal from "../../../components/common/AdminAddModal";
-import PasswordCheckModal from "../../../components/common/PasswordCheckModal";
+import TheModal from "../../../components/element/TheModal";
 
 function UserListPage2({ token }) {
   console.log(`전달받은 jwt: ${JSON.stringify(token, null, 2)}`);
   useEffect(() => {
     getUserList();
   }, []);
+
+  // 리프레시 토큰을 쿠키에서 가져오는 함수
+  const getRefreshToken = () => {
+    return document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("refreshToken="))
+      ?.split("=")[1];
+  };
+
+  const refreshtoken = getRefreshToken();
+  console.log(`가지고있는 쿠키: ${refreshtoken}`);
 
   const isShow = useSelector((state) => state.adminModal.isShow);
   const [passwordCheckModalIsShow, setPasswordCheckModalIsShow] =
@@ -22,7 +33,7 @@ function UserListPage2({ token }) {
   const openModal = () => {
     dispatch({ type: OPEN_MODAL });
   };
-
+  const [password, setPassword] = useState("");
   const [adminInfo, setAdminInfo] = useState([]);
   const [selectedUserIds, setSelectedUserIds] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -70,6 +81,7 @@ function UserListPage2({ token }) {
       console.log("유저목록:", response.data);
       setAdminInfo(response.data);
     } catch (error) {
+      alert(`유저목록 가져오기 실패`);
       console.error("실패:", error);
     }
   };
@@ -123,6 +135,30 @@ function UserListPage2({ token }) {
   const ClosePasswordCheckModal = () => {
     console.log(`취소 누름`); // 로그 추가
     setPasswordCheckModalIsShow(false); // 모달 닫기
+  };
+
+  const deleteUser = async () => {
+    const isConfirmed = window.confirm(`선택한 사용자를 삭제하시겠습니까?`);
+    if (isConfirmed) {
+      console.log(`삭제 또는 탈퇴할 사용자 ID: ${selectedUserIds}`);
+      try {
+        const response = await api.delete("/admin/account", {
+          data: { adminIds: selectedUserIds, password: password },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+        console.log("삭제, 탈퇴 성공:", response.data);
+        alert("정상적으로 처리되었습니다.");
+        setPassword("");
+        getUserList(); // 유저목록 갱신
+        ClosePasswordCheckModal();
+      } catch (error) {
+        alert(`실패`);
+        console.error("실패:", error);
+      }
+    }
   };
 
   return (
@@ -187,12 +223,29 @@ function UserListPage2({ token }) {
       </Pagination>
       {isShow && <AdminAddModal getUserList={getUserList} />}
       {passwordCheckModalIsShow && (
-        <PasswordCheckModal
-          selectedUserIds={selectedUserIds}
-          ClosePasswordCheckModal={ClosePasswordCheckModal} // 확인
-          getUserList={getUserList}
-          massage={"선택한 사용자를 삭제하시겠습니까?"}
-        />
+        <TheModal title={"비밀번호 확인"}>
+          <Label>
+            <P>비밀번호 :</P>
+            <Input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="현재 비밀번호를 입력하세요"
+            />
+          </Label>
+          <ButtonContainer2>
+            <TheButton2 $primary width="200px" onClick={deleteUser}>
+              확인
+            </TheButton2>
+            <TheButton2
+              $secondary
+              width="200px"
+              onClick={ClosePasswordCheckModal}
+            >
+              취소
+            </TheButton2>
+          </ButtonContainer2>
+        </TheModal>
       )}
     </Container>
   );
@@ -210,6 +263,11 @@ const Container = styled.div`
   position: relative;
   padding: 100px;
   padding-top: 60px;
+
+  @media (max-width: 1090px) {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 `;
 
 const ButtonContainer = styled.div`
@@ -219,6 +277,10 @@ const ButtonContainer = styled.div`
   right: 100px;
   gap: 10px;
   z-index: 10;
+
+  @media (max-width: 1090px) {
+    right: 20px;
+  }
 `;
 
 const Title = styled.h2`
@@ -276,6 +338,32 @@ const Td = styled.td`
     width: 100px;
   }
   &:nth-child(5) {
-    min-width: 200px;
+    min-width: 130px;
   }
+`;
+
+const Label = styled.label`
+  display: flex;
+  margin-bottom: 10px;
+  font-weight: bold;
+`;
+
+const Input = styled.input`
+  width: 70%;
+  height: 34px;
+  margin-left: 10px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+`;
+
+const P = styled.p`
+  padding-left: 10px;
+  width: 80px;
+`;
+
+const ButtonContainer2 = styled.div`
+  display: flex;
+  gap: 5px;
 `;

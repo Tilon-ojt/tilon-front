@@ -15,7 +15,7 @@ function CreatePr() {
     // 게시글 저장 함수 (PostEditor에서 받은 title와 content 사용)
     const handleSave = async ({ title, content }) => {
         try {
-            const response = await axios.post("http://localhost:8000/api/save", {
+            const response = await axios.post("/api/save", {
                 title,
                 content,
             });

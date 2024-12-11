@@ -11,21 +11,42 @@ function AdminNews({token}) {
   const [selectedRows, setSelectedRows] = useState([]);
   const navigate = useNavigate();
   const [tbody, setTbody] = useState([]);
+  const token = useSelector((state) => state.auth.token);
+
+  useEffect(() => {
+    if (!token) {
+      alert("로그인이 필요합니다.");
+      navigate("/admin/login");
+    } else {
+      fetchNews();
+    }
+  }, [token]);
 
   const fetchNews = async () => {
     try {
+      // console.log("Redux token:", token);
+      const token = sessionStorage.getItem("jwt");
+      console.log("jwt: ", token);
+
+      if (!token) {
+        alert("로그인이 필요합니다.");
+        return;
+      }
+
+      const response = await api.get("/admin/posts", {
+        params: {
       const response = await api.get('/admin/posts', {
         params: { 
           category: "NEWS",
-           page: "1"
+          page: "1",
         },
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       });
 
-      console.log('모든 뉴스 데이터:', response.data.content);
+      console.log("뉴스 목록 조회:", response.data);
       setTbody(response.data.content);
     } catch (error) {
       console.error("Failed to fetch news:", error.message);
@@ -38,6 +59,7 @@ function AdminNews({token}) {
       fetchNews();
     }
   }, []);
+
 
   const searchHandler = () => {
     console.log("Search button clicked");

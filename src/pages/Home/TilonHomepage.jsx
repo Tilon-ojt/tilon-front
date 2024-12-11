@@ -9,10 +9,10 @@ import PrInsight from "./PrInsight/PrInsight";
 
 const TilonHomepage = () => {
   const isScrolling = useRef(false);
-  const [showChevron, setShowChevron] = useState(false); // 버튼 보이기 상태
-  const [isWideScreen, setIsWideScreen] = useState(window.innerWidth > 770);
-  const [isScrollingFromButton, setIsScrollingFromButton] = useState(false); // 버튼 클릭 상태 추적
-  const [headerBackground, setHeaderBackground] = useState(false);
+  const [showChevron, setShowChevron] = useState(false); // top버튼 보이기 상태
+  const [isWideScreen, setIsWideScreen] = useState(window.innerWidth > 770); // 화면이 770일때는 스크롤이벤트없애고 사진으로 변경되게함
+  const [isScrollingFromButton, setIsScrollingFromButton] = useState(false); // top버튼 클릭 상태 추적
+  const [headerBackground, setHeaderBackground] = useState(false); // 헤더의 백그라운드 상태
 
   // 각 섹션의 ref 생성 (Banner 포함)
   const sectionRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
@@ -32,13 +32,13 @@ const TilonHomepage = () => {
     const handleWheel = (e) => {
       if (!isWideScreen || isScrollingFromButton) return; // 버튼 클릭 중이면 스크롤 처리하지 않음
 
-      e.preventDefault();
-      if (isScrolling.current) return;
+      e.preventDefault(); // 기본스크롤을 막아줌.
+      if (isScrolling.current) return; // 스크롤하며 이벤트 처리중일때는 이중 스크롤이벤트 방지
 
       const scrollDirection = e.deltaY > 0 ? 1 : -1;
 
       const footerRef = sectionRefs[sectionRefs.length - 1];
-      const footerRect = footerRef.current.getBoundingClientRect();
+      const footerRect = footerRef.current.getBoundingClientRect(); // footer DOM요소의 위치(top) 정보를 가져온다.
 
       if (footerRect.top < window.innerHeight && scrollDirection === -1) {
         isScrolling.current = true;
@@ -77,6 +77,7 @@ const TilonHomepage = () => {
 
     const handleScroll = (e) => {
       // 스크롤을 내리면 버튼 보이기, 최상단에서만 숨기기
+      // 스크롤 내려가면 헤더에 희미한 백그라운드 적용
       if (window.scrollY > 50) {
         setShowChevron(true);
         setHeaderBackground(true);
