@@ -75,8 +75,7 @@ import NewsCreate from "./pages/Admin/NewsPage/NewsCreate";
 import NewsEdit from "./pages/Admin/NewsPage/NewsEdit";
 
 import AdminPr from "./pages/Admin/Pr/AdminPr";
-import AdminInsight from "./pages/Admin/Insight/AdminInsight";
-import PrivateRoute from "./components/PrivateRoute";
+import PrivateRoute from "./routes/PrivateRoute";
 import UserListPage2 from "./pages/Admin/UserListPage/UserListPage2";
 
 function App() {
@@ -121,10 +120,6 @@ function App() {
                   <Route
                     path="/pr"
                     element={<PrivateRoute element={<AdminPr />} />}
-                  />
-                  <Route
-                    path="/insight"
-                    element={<PrivateRoute element={<AdminInsight />} />}
                   />
                   <Route
                     path="/edit"

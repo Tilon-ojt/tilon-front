@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
-import Header from "../../components/common/Header/Header.jsx";
-import Banner from "./Banner/Banner";
-import "./TilonHomepage.css";
-
 import Footer from "../../components/common/Footer/Footer.jsx";
-import News from "./News/News";
+import Header from "../../components/common/Header/Header.jsx";
+import React, { useEffect, useRef, useState } from "react";
 import PrInsight from "./PrInsight/PrInsight";
+import Banner from "./Banner/Banner";
+import News from "./News/News";
+import "./TilonHomepage.css";
 
 const TilonHomepage = () => {
   const isScrolling = useRef(false);

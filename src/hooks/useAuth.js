@@ -1,59 +1,22 @@
-// import { useEffect, useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import { useSelector } from "react-redux";
-// import { jwtDecode } from "jwt-decode"; // 올바른 import 확인
-
-// 리프레쉬토큰 없는 버전
-// const useAuth = () => {
-//   const navigate = useNavigate();
-//   const token = useSelector((state) => state.auth.token);
-
-//   console.log(`useAuth 실행: ${token}`);
-
-//   useEffect(() => {
-//     if (!token) {
-//       console.log(`토큰이 null일떄`);
-
-//       navigate("/admin/login");
-//       alert("로그인이 필요합니다.");
-//       return;
-//     }
-
-//     try {
-//       // JWT 디코딩
-//       const decoded = jwtDecode(token);
-//       const now = Date.now() / 1000;
-
-//       if (decoded.exp < now) {
-//         alert("세션이 만료되었습니다. 다시 로그인 해주세요.");
-//         // 서버에 리프레쉬토큰을 쿠키로 저장
-//         navigate("/admin/login");
-//       }
-//     } catch (error) {
-//       console.error("JWT 디코딩 실패:", error);
-//       alert("유효하지 않은 토큰입니다. 다시 로그인 해주세요.");
-//       navigate("/admin/login");
-//     }
-//   }, []);
-
-//   return token; // 토큰 반환
-// };
-
-// export default useAuth;
-
 // 리프레쉬 토큰 있는 버전 (쿠키 사용)
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import getRefreshToken from "../utils/getRefreshToken";
 import { useDispatch, useSelector } from "react-redux";
-import { jwtDecode } from "jwt-decode";
-import api from "../api/axios";
 import { setToken } from "../reducer/authSlice";
-import getRefreshToken from "./getRefreshToken";
+import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import { useEffect } from "react";
+import api from "../api/axios";
 
+/**
+ *
+ * @returns 로그인된 상태인지 체크, 엑세스토큰 만료시간 확인, 리프레시 요청
+ */
 const useAuth = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const token = useSelector((state) => state.auth.token);
+  const location = useLocation(); // 현재 경로 정보 가져오기
 
   // console.log(`useAuth 실행: ${token}`);
 
@@ -98,7 +61,8 @@ const useAuth = () => {
         dispatch(setToken(accessToken));
         // console.log(`토큰이 생성되려고하는지 확인해봐야함!!`);
 
-        navigate("/admin/news"); // 새로운 토큰 발급 후 관리자 홈으로 이동
+        // 현재 페이지로 리다이렉트
+        navigate(location.pathname); // 현재 페이지로 리다이렉트
       }
     } catch (refreshError) {
       console.error("리프레쉬 토큰 요청 실패:", refreshError);

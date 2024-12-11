@@ -20,17 +20,6 @@ function Loginpage() {
       });
       console.log("로그인 성공:", response.data);
 
-      // JWT 저장 (body로 토큰둘다 넘어옴)
-      // const { accessToken, refreshToken } = response.data;
-
-      // 세션에 엑세스토큰 저장
-      // dispatch(setToken(accessToken)); // Redux 상태에 저장
-      // console.log("Redux 상태 확인:", store.getState().auth.token); // 상태 확인
-
-      // 쿠키에 리프레쉬 토큰 저장
-      // document.cookie = `refreshToken=${refreshToken}; path=/admin;`;
-      // console.log("저장된 쿠키:", document.cookie);
-
       // JWT 저장 (엑세스토큰: body, 리프레시토큰: headers)
       const accessToken = response.data.accessToken;
       dispatch(setToken(accessToken)); // Redux 상태에 저장

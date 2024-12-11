@@ -4,7 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import api from "../../api/axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import getRefreshToken from "../../hooks/getRefreshToken";
+import getRefreshToken from "../../utils/getRefreshToken";
 import TheButton2 from "../element/TheButton2";
 import TheModal from "../element/TheModal";
 

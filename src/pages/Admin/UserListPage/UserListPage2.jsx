@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import api from "../../../api/axios";
-import { OPEN_MODAL } from "../../../reducer/AdminModal";
-import TheButton2 from "../../../components/element/TheButton2";
-import TheTable2 from "../../../components/element/TheTable2";
-import styled from "styled-components";
 import { ChevronRight, ChevronLeft, CircleAlert } from "lucide-react";
-import AdminAddModal from "./AdminAddModal";
+import TheButton2 from "../../../components/element/TheButton2";
 import TheModal from "../../../components/element/TheModal";
+import TheTable2 from "../../../components/element/TheTable2";
+import { OPEN_MODAL } from "../../../reducer/AdminModal";
+import { useDispatch, useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import AdminAddModal from "./AdminAddModal";
+import styled from "styled-components";
+import api from "../../../api/axios";
 
 function UserListPage2({ token }) {
   // console.log(`전달받은 jwt: ${JSON.stringify(token, null, 2)}`);
@@ -38,9 +38,9 @@ function UserListPage2({ token }) {
   };
 
   // 페이지네이션 계산
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = adminInfo.slice(indexOfFirstItem, indexOfLastItem);
+  const indexOfLastItem = currentPage * itemsPerPage; // 1 * 10 = 10
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage; // 10 - 10 = 0
+  const currentItems = adminInfo.slice(indexOfFirstItem, indexOfLastItem); // 0, 10 -> [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
   const totalPages = Math.ceil(adminInfo.length / itemsPerPage);
 
   // 페이지 이동 함수
@@ -213,7 +213,11 @@ function UserListPage2({ token }) {
           }}
         />
       </Pagination>
+
+      {/* 계정 추기 모달 */}
       {isShow && <AdminAddModal getUserList={getUserList} />}
+
+      {/* 계정 삭제 모달 */}
       {passwordCheckModalIsShow && (
         <TheModal title={"계정삭제"}>
           <CircleAlert size={80} style={{ color: "red", width: "100%" }} />
@@ -254,6 +258,7 @@ function UserListPage2({ token }) {
           </ButtonContainer2>
         </TheModal>
       )}
+      {/* 비밀번호 초기화 모달 */}
       {UserResetModal && (
         <TheModal title={"비밀번호 초기화"}>
           <CircleAlert size={80} style={{ color: "red", width: "100%" }} />

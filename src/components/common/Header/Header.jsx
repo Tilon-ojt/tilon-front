@@ -1,7 +1,7 @@
-import { Menu, X } from "lucide-react";
-import { useDispatch, useSelector } from "react-redux";
 import { CLOSE_MENU, OPEN_MENU } from "../../../reducer/HeaderBar";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { Menu, X } from "lucide-react";
 import "./Header.css";
 
 function Header({ headerBackground }) {
@@ -46,16 +46,16 @@ function Header({ headerBackground }) {
             <ul>
               <li>
                 <a href="">
-                  <p onClick={() => navigate("/admin/news")}>회사소개</p>
+                  <p onClick={() => navigate("/admin")}>회사소개</p>
                 </a>
               </li>
               <li>
-                <a href="">
+                <a href="https://www.tilon.com/ethic/ecode">
                   <p>윤리경영</p>
                 </a>
               </li>
               <li>
-                <a href="">
+                <a href="https://www.tilon.com/contact">
                   <p>오시는길</p>
                 </a>
               </li>
@@ -66,27 +66,27 @@ function Header({ headerBackground }) {
             <p className="nav-title">Solution & Service</p>
             <ul>
               <li>
-                <a href="">
+                <a href="https://www.tilon.com/virtual/ds">
                   <p style={{ width: "54px" }}>가상화</p>
                 </a>
               </li>
               <li>
-                <a href="">
+                <a href="https://www.tilon.com/metaverse/cv">
                   <p>메타버스</p>
                 </a>
               </li>
               <li>
-                <a href="">
+                <a href="https://www.tilon.com/cloud/dc">
                   <p>클라우드</p>
                 </a>
               </li>
               <li>
-                <a href="">
+                <a href="https://www.tilon.com/bchain/ms">
                   <p>블록체인</p>
                 </a>
               </li>
               <li>
-                <a href="">
+                <a href="https://www.tilon.com/zero/obb">
                   <p>제로디바이스</p>
                 </a>
               </li>
@@ -97,12 +97,12 @@ function Header({ headerBackground }) {
             <p className="nav-title">Business</p>
             <ul>
               <li>
-                <a href="">
+                <a href="https://www.tilon.com/exp/public">
                   <p>구축사례</p>
                 </a>
               </li>
               <li>
-                <a href="">
+                <a href="https://www.tilon.com/tba/program">
                   <p>파트너사</p>
                 </a>
               </li>
@@ -113,22 +113,22 @@ function Header({ headerBackground }) {
             <p className="nav-title">News</p>
             <ul>
               <li>
-                <a href="">
+                <a href="https://www.tilon.com/inside/notice">
                   <p>공지사항</p>
                 </a>
               </li>
               <li>
-                <a href="">
+                <a href="https://www.tilon.com/inside/article">
                   <p>보도자료</p>
                 </a>
               </li>
               <li>
-                <a href="">
+                <a href="https://www.tilon.com/inside/news">
                   <p>관련뉴스</p>
                 </a>
               </li>
               <li>
-                <a href="">
+                <a href="https://www.tilon.com/inside/insight">
                   <p>인사이트</p>
                 </a>
               </li>
@@ -138,22 +138,22 @@ function Header({ headerBackground }) {
             <p className="nav-title">IR</p>
             <ul>
               <li>
-                <a href="">
+                <a href="https://www.tilon.com/finance/report">
                   <p>재무정보</p>
                 </a>
               </li>
               <li>
-                <a href="">
+                <a href="https://www.tilon.com/investments/info">
                   <p>공시정보</p>
                 </a>
               </li>
               <li>
-                <a href="">
+                <a href="https://www.tilon.com/irboard/results">
                   <p>IR 게시판</p>
                 </a>
               </li>
               <li>
-                <a href="">
+                <a href="https://www.tilon.com/investments/ircontact">
                   <p>IR contact</p>
                 </a>
               </li>
