@@ -75,6 +75,13 @@ const Container = styled.div`
   height: 100vh;
   background: #1d253a;
   padding-top: 20px;
+
+  @media (max-width: 850px) {
+    width: 150px;
+  }
+  @media (max-width: 700px) {
+    display: none;
+  }
 `;
 
 const Logo = styled.div`

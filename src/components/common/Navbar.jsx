@@ -99,8 +99,7 @@ const Container = styled.div`
   border-bottom: 2px solid #f5f5f5;
   position: fixed;
   top: 0;
-  left: 300px;
-  width: calc(100% - 300px);
+  right: 0;
   height: 62px;
   background: white;
   display: flex;
@@ -113,6 +112,14 @@ const Container = styled.div`
 
   span {
     color: black;
+  }
+
+  @media (max-width: 1090px) {
+    padding-right: 20px;
+  }
+
+  @media (max-width: 850px) {
+    padding-left: 0px;
   }
 `;
 

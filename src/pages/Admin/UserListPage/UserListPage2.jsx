@@ -331,6 +331,15 @@ const Container = styled.div`
     padding-left: 20px;
     padding-right: 20px;
   }
+
+  @media (max-width: 850px) {
+    margin-left: 150px;
+  }
+
+  @media (max-width: 700px) {
+    margin-left: 0px;
+    padding-left: 4px;
+  }
 `;
 
 const ButtonContainer = styled.div`
@@ -362,6 +371,10 @@ const Pagination = styled.div`
   position: absolute;
   top: 620px;
   left: 45%;
+
+  @media (max-width: 700px) {
+    left: 30%;
+  }
 `;
 
 const PageButton = styled.button`
@@ -400,7 +413,7 @@ const Td = styled.td`
     width: 50px;
   }
   &:nth-child(3) {
-    min-width: 100px;
+    min-width: 80px;
     width: 100px;
   }
   &:nth-child(5) {
