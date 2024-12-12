@@ -25,7 +25,7 @@ const CustomTable = styled.table`
 `;
 
 const TableHeader = styled.thead`
-  background-color: #f2f2f2;
+  background-color: #d5d5d5;
 `;
 
 const Th = styled.th`
@@ -59,24 +59,3 @@ const Th = styled.th`
 //     width: 200px;
 //   }
 // `;
-
-{
-  /* <CustomTable>
-<TableHeader>
-  <tr>
-    {thead?.map((item, idx) => (
-      <Th key={idx}>{item}</Th>
-    ))}
-  </tr>
-</TableHeader>
-<tbody>
-  {data.map((row, index) => (
-    <TableRow key={index}>
-      {Object.keys(row).map((key, index) => (
-        <Td key={index}>{row[key]}</Td>
-      ))}
-    </TableRow>
-  ))}
-</tbody>
-</CustomTable> */
-}

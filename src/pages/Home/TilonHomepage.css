@@ -4,7 +4,6 @@ body {
   padding: 0;
   scroll-behavior: smooth;
   /* 스크롤 애니메이션 활성화 */
-
 }
 
 .homepage {
@@ -28,8 +27,6 @@ body {
     top: 90vh;
     right: 80px;
     z-index: 100;
-
-
   }
 
   .top-icon.hidden {
@@ -43,3 +40,14 @@ body {
   }
 }
 
+/* 커스텀 스크롤바 스타일링하겠다는 기본속성
+이  속성이없으면 다른 모든 스크롤바속성은 비활성화 */
+::-webkit-scrollbar {
+  width: 8px; /* 세로축 스크롤바 폭 너비 */
+}
+
+/* 스크롤바 막대 바꾸기 */
+body::-webkit-scrollbar-thumb {
+  background-color: #b4b4b4;
+  border-radius: 12px 12px 12px 12px;
+}

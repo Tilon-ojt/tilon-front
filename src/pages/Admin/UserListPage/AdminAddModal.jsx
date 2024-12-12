@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { CLOSE_MODAL } from "../../reducer/AdminModal";
+import React, { useState } from "react";
+import { CLOSE_MODAL } from "../../../reducer/AdminModal";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import api from "../../api/axios";
+import api from "../../../api/axios";
 
 function AdminAddModal({ getUserList }) {
   const [nickname, setnickname] = useState("");
@@ -52,20 +52,37 @@ function AdminAddModal({ getUserList }) {
           },
         }
       );
-      console.log(response.data);
 
-      if (response.status === 201) {
-        dispatch({ type: CLOSE_MODAL });
-        alert("아이디 생성 성공");
-        getUserList();
-        console.log("정상 처리되었습니다.");
-      } else {
-        dispatch({ type: CLOSE_MODAL });
-        alert("아이디 생성 실패");
-        console.log("오류가 발생했습니다.");
-      }
+      // console.log(response.data);
+      // 성공 케이스 (2xx 상태 코드)
+      dispatch({ type: CLOSE_MODAL });
+      alert("아이디 생성 성공");
+      getUserList();
+      console.log("정상 처리되었습니다.");
     } catch (error) {
-      console.log("에러:", error);
+      // 에러 처리
+      if (error.response) {
+        // 서버가 응답을 반환한 경우
+        if (error.response.status === 409) {
+          alert("이미 존재하는 아이디입니다.");
+        } else {
+          alert("아이디 생성 실패");
+          dispatch({ type: CLOSE_MODAL });
+        }
+      } else if (error.request) {
+        // 요청이 전송되었으나 응답을 받지 못한 경우
+        alert("서버 응답이 없습니다.");
+      } else {
+        // 요청 설정 중에 문제가 발생한 경우
+        alert("요청 중 오류가 발생했습니다.");
+      }
+      console.error("에러:", error);
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      submitHandler();
     }
   };
 
@@ -76,6 +93,8 @@ function AdminAddModal({ getUserList }) {
         <Label>
           <P>이름 :</P>
           <Input
+            autoComplete="off" // 이전에 입력한 데이터 보이지않도록 설정
+            autoFocus // 자동으로 눌러저있도록 설정
             type="text"
             name="nickname"
             value={nickname}
@@ -85,12 +104,14 @@ function AdminAddModal({ getUserList }) {
         <Label>
           <P>아이디 :</P>
           <Input
+            autoComplete="off"
             type="text"
             name="empName"
             value={empName}
             onChange={handleEmpNameChange}
             required
             placeholder="영문과 숫자만 입력 가능합니다"
+            onKeyDown={handleKeyPress} // 엔터 키 입력 감지
           />
         </Label>
         <ModalButtons>

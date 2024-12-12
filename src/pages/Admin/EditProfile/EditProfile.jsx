@@ -6,6 +6,7 @@ import TheButton2 from "../../../components/element/TheButton2";
 import { useNavigate } from "react-router-dom";
 import TheModal from "../../../components/element/TheModal";
 import { CircleAlert } from "lucide-react";
+import getRefreshToken from "../../../utils/getRefreshToken";
 
 function EditProfile({ token }) {
   const navigate = useNavigate(); // useNavigate Hook
@@ -17,7 +18,7 @@ function EditProfile({ token }) {
       try {
         const decoded = jwtDecode(token);
         setDecodedToken(decoded); // 상태 업데이트
-        setMyAdminId(decoded.adminId || null); // adminId가 없는 경우 null로 설정
+        setMyAdminId([decoded.adminId] || null); // adminId가 없는 경우 null로 설정
       } catch (err) {
         console.error("토큰 디코딩 중 오류 발생:", err);
       }
@@ -61,10 +62,17 @@ function EditProfile({ token }) {
     }
   }, [newPassword, confirmNewPassword]);
 
+  // 비밀번호 변경
   const handleSubmit = async () => {
     console.log(`currentPassword: ${password}, newPassword: ${newPassword}`);
+    if (password === newPassword) {
+      alert("현재 비밀번호와 새 비밀번호가 동일합니다.");
+      setNewPassword("");
+      setConfirmNewPassword("");
+      return;
+    }
     try {
-      const verifyResponse = await api.patch(
+      const response = await api.patch(
         "/admin/update",
         { currentPassword: password, newPassword: newPassword }, // 데이터 본문
         {
@@ -75,21 +83,26 @@ function EditProfile({ token }) {
         }
       );
 
-      if (verifyResponse.status === 200) {
-        setPasswordError(""); // 초기화
-        setNewPasswordError(""); // 초기화
-        setConfirmPasswordError(""); // 초기화
-        setPassword("");
-        setNewPassword("");
-        setConfirmNewPassword("");
-        alert("비밀번호가 성공적으로 변경되었습니다.");
-        navigate("/admin/news");
-      } else {
-        setPasswordError("현재 비밀번호가 올바르지 않습니다.");
-        return;
-      }
+      setPasswordError(""); // 초기화
+      setNewPasswordError(""); // 초기화
+      setConfirmPasswordError(""); // 초기화
+      setPassword("");
+      setNewPassword("");
+      setConfirmNewPassword("");
+      alert("비밀번호가 성공적으로 변경되었습니다.");
+      navigate("/admin/news");
     } catch (error) {
+      //   if (error.response.status === 409) {
+      //     alert("현재 비밀번호와 새 비밀번호가 동일합니다.");
+      //     setNewPassword("");
+      //     setConfirmNewPassword("");
+      //   } else if (error.response.status === 401) {
+      //     alert("현재 비밀번호가 올바르지 않습니다.");
+      //     setPassword("");
+      //   }
+
       alert("현재 비밀번호가 올바르지 않습니다.");
+      setPassword("");
     }
   };
 
@@ -104,10 +117,14 @@ function EditProfile({ token }) {
 
   const deleteUser = async () => {
     console.log(`삭제 또는 탈퇴할 사용자 ID: ${myAmdinId}`);
+    console.log(`adminIds: ${myAmdinId}, password: ${password}`);
+    console.log(`${token}`);
+    const refreshtoken = getRefreshToken();
     try {
       const response = await api.delete("/admin/account", {
         data: { adminIds: myAmdinId, password: password },
         headers: {
+          "Refresh-Token": refreshtoken, // 파싱된 리프레시 토큰 값 사용
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
@@ -117,10 +134,13 @@ function EditProfile({ token }) {
       setPassword("");
       ClosePasswordCheckModal();
       sessionStorage.removeItem("jwt");
+      document.cookie = `refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/admin`;
       navigate("/");
     } catch (error) {
-      alert(`비밀번호가 일치하지 않습니다.`);
-      console.error("실패:", error);
+      if (error.status === 401) {
+        alert("비밀번호가 일치하지 않습니다.");
+        setPassword("");
+      }
     }
   };
 
@@ -221,11 +241,13 @@ function EditProfile({ token }) {
       </EditProfileCard>
       {passwordCheckModalIsShow && (
         <TheModal title={"정말 탈퇴하시겠어요?"}>
-          <CircleAlert size={80} style={{ color: "red" }} />
-          <P style={{ color: "red" }}>
+          <CircleAlert size={80} style={{ color: "red", width: "100%" }} />
+          <P style={{ color: "red", width: "100%", marginBottom: "0" }}>
             탈퇴버튼 선택시, 계정은 삭제되며 복구되지 않습니다.
           </P>
-          <P>탈퇴를 원하면 비밀번호 입력 후 탈퇴버튼을 눌러주세요.</P>
+          <P style={{ width: "100%", marginTop: "0" }}>
+            탈퇴를 원하면 비밀번호 입력 후 탈퇴버튼을 눌러주세요.
+          </P>
           <Label>
             <P>비밀번호 :</P>
             <Input
@@ -334,7 +356,7 @@ const EditProfileCard = styled.div`
     }
 
     &:disabled {
-      background-color: #ccc;
+      background-color: #8bbdff;
       cursor: not-allowed;
     }
   }

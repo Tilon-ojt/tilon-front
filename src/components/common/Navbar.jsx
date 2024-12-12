@@ -4,13 +4,16 @@ import { jwtDecode } from "jwt-decode";
 import api from "../../api/axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import getRefreshToken from "../../utils/getRefreshToken";
+import TheButton2 from "../element/TheButton2";
+import TheModal from "../element/TheModal";
 
 function Navbar() {
   const token = useSelector((state) => state.auth.token);
-  // const token = useSelector((state) => state.auth.AccessToken);
   // token이 유효한지 확인하고 jwtDecode 사용
   const [empName, setEmpName] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [logoutModal, setLogoutModal] = useState(false);
 
   const navigate = useNavigate();
 
@@ -30,26 +33,30 @@ function Navbar() {
   }, [token]);
 
   const logoutHandler = async () => {
-    const isConfirmed = window.confirm("로그아웃하시겠습니까?");
-    if (isConfirmed) {
-      try {
-        const response = await api.post(`/admin/logout`, null, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
-        console.log("로그아웃 성공:", response.data);
-        alert("로그아웃 성공");
-        sessionStorage.removeItem("jwt");
-        navigate("/admin/login");
-      } catch (error) {
-        alert(`로그아웃 실패`);
-        console.error("로그아웃 실패:", error);
-      }
-    } else {
-      console.log("로그아웃 실패");
+    // console.log(`엑세스토큰확인: ${token} `);
+    const refreshtoken = getRefreshToken();
+    // console.log(`가지고있는 쿠키: ${refreshtoken}`);
+
+    try {
+      const response = await api.post(`/admin/logout`, null, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Refresh-Token": `${refreshtoken}`,
+          "Content-Type": "application/json",
+        },
+      });
+      // console.log("로그아웃 성공:", response.data);
+      sessionStorage.removeItem("jwt");
+      document.cookie = `refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/admin`;
+      navigate("/admin/login");
+    } catch (error) {
+      alert(`로그아웃 실패`);
+      console.error("로그아웃 실패:", error);
     }
+  };
+
+  const openLogoutModal = () => {
+    setLogoutModal(true);
   };
 
   return (
@@ -63,12 +70,25 @@ function Navbar() {
             : "사용자 정보를 불러올 수 없습니다."}
         </span>
       </IdTxt>
-      <LogoutIcon onClick={logoutHandler}>
+      <LogoutIcon onClick={openLogoutModal}>
+        <p>로그아웃</p>
         <img
           src="https://cdn1.iconfinder.com/data/icons/heroicons-ui/24/logout-512.png"
           alt="Logout"
         />
       </LogoutIcon>
+      {logoutModal && (
+        <TheModal title={"로그아웃 하시겠습니까?"}>
+          <ButtonContainer2>
+            <TheButton2 $dark width="200px" onClick={() => logoutHandler()}>
+              로그아웃
+            </TheButton2>
+            <TheButton2 width="200px" onClick={() => setLogoutModal(false)}>
+              취소
+            </TheButton2>
+          </ButtonContainer2>
+        </TheModal>
+      )}
     </Container>
   );
 }
@@ -79,20 +99,27 @@ const Container = styled.div`
   border-bottom: 2px solid #f5f5f5;
   position: fixed;
   top: 0;
-  left: 300px;
-  width: calc(100% - 300px);
+  right: 0;
   height: 62px;
   background: white;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 20px;
-  padding: 0 20px;
+  padding: 0 110px;
   box-sizing: border-box;
   z-index: 1000;
 
   span {
     color: black;
+  }
+
+  @media (max-width: 1090px) {
+    padding-right: 20px;
+  }
+
+  @media (max-width: 850px) {
+    padding-left: 0px;
   }
 `;
 
@@ -113,11 +140,13 @@ const IdTxt = styled.div`
 `;
 
 const LogoutIcon = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 5px;
   cursor: pointer;
-
   img {
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     opacity: 0.7;
     margin-top: 5px;
   }
@@ -125,4 +154,18 @@ const LogoutIcon = styled.div`
   &:hover img {
     opacity: 1;
   }
+
+  p {
+    opacity: 0.7;
+  }
+
+  &:hover p {
+    opacity: 1;
+  }
+`;
+
+const ButtonContainer2 = styled.div`
+  margin-top: 40px;
+  display: flex;
+  gap: 10px;
 `;

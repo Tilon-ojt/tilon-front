@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 
-const TheModal = ({ title, children }) => {
+const TheModal = ({ title, children, ...props }) => {
   return (
     <ModalOverlay>
-      <ModalContainer>
+      <ModalContainer {...props}>
         <ModalTitle>{title}</ModalTitle>
         {children}
       </ModalContainer>
@@ -29,7 +29,7 @@ const ModalOverlay = styled.div`
 
 const ModalContainer = styled.div`
   background: #fff;
-  padding: 20px;
+  padding: ${(p) => p.padding || "20px"};
   border-radius: 8px;
   width: 400px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
