@@ -242,7 +242,7 @@ function UserListPage2({ token }) {
             <P>비밀번호 :</P>
             <Input
               autoFocus
-              autocomplete="off"
+              autoComplete="off"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -291,7 +291,7 @@ function UserListPage2({ token }) {
             <P>비밀번호 :</P>
             <Input
               autoFocus
-              autocomplete="off"
+              autoComplete="off"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

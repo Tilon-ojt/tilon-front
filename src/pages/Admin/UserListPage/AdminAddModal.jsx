@@ -93,7 +93,7 @@ function AdminAddModal({ getUserList }) {
         <Label>
           <P>이름 :</P>
           <Input
-            autocomplete="off" // 이전에 입력한 데이터 보이지않도록 설정
+            autoComplete="off" // 이전에 입력한 데이터 보이지않도록 설정
             autoFocus // 자동으로 눌러저있도록 설정
             type="text"
             name="nickname"
@@ -104,7 +104,7 @@ function AdminAddModal({ getUserList }) {
         <Label>
           <P>아이디 :</P>
           <Input
-            autocomplete="off"
+            autoComplete="off"
             type="text"
             name="empName"
             value={empName}

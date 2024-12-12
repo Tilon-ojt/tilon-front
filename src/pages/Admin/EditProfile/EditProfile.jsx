@@ -131,8 +131,10 @@ function EditProfile({ token }) {
       sessionStorage.removeItem("jwt");
       navigate("/");
     } catch (error) {
-      alert(`비밀번호가 일치하지 않습니다.`);
-      console.error("실패:", error);
+      if (error.status === 401) {
+        alert("비밀번호가 일치하지 않습니다.");
+        setPassword("");
+      }
     }
   };
 

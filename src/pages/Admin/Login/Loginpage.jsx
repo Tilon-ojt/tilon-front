@@ -53,7 +53,7 @@ function Loginpage() {
         <h1>로그인</h1>
         <input
           autoFocus
-          autocomplete="off"
+          autoComplete="off"
           type="text"
           placeholder="아이디"
           value={empName}
