@@ -1,6 +1,6 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import { darken } from "polished"; // polished의 darken 함수 가져오기
+import { darken, lighten } from "polished"; // polished의 darken 함수 가져오기
 
 // 예시
 {
@@ -73,7 +73,7 @@ const StyledButton = styled.button`
       color: white;
 
       &:hover {
-        background-color: ${darken(
+        background-color: ${lighten(
           0.1,
           "#212529"
         )}; /* 호버 시 밝아지는 어두운 회색 */

@@ -3,7 +3,7 @@ import styled from "styled-components";
 const TheLayout = ({
   title, 
   children,
-  cildrenBtn
+  childrenBtn
 }) => {
   return (
     <Container>
@@ -11,7 +11,7 @@ const TheLayout = ({
         <Title>{title}</Title>
       </Header>
       <ContentContainer>{children}</ContentContainer>
-      <BtnContainer>{cildrenBtn}</BtnContainer>
+      <BtnContainer>{childrenBtn}</BtnContainer>
     </Container>
   );
 }

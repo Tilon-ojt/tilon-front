@@ -43,8 +43,10 @@ function AdminInsight({ token }) {
   const totalPages = Math.ceil(postInfo.length / itemsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  const handlePrevPage = () => currentPage > 1 && setCurrentPage(currentPage - 1);
-  const handleNextPage = () => currentPage < totalPages && setCurrentPage(currentPage + 1);
+  const handlePrevPage = () =>
+    currentPage > 1 && setCurrentPage(currentPage - 1);
+  const handleNextPage = () =>
+    currentPage < totalPages && setCurrentPage(currentPage + 1);
 
   const goToEditHandler = (postId) => {
     console.log(`선택한 게시물 ID: ${postId}`);
@@ -62,19 +64,18 @@ function AdminInsight({ token }) {
       }
 
       const response = await api.get("/admin/posts", {
-        params: { 
-          category: "INSIGHT", 
-          page: currentPage 
+        params: {
+          category: "INSIGHT",
+          page: currentPage,
         },
         headers: {
-          Authorization: `Bearer ${token}`, 
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
 
       console.log("게시글 목록:", response.data);
       setPostInfo(response.data.content);
-
     } catch (error) {
       console.error("Post 목록 가져오기 실패:", error.message);
       alert("Post 데이터를 불러오는 데 실패했습니다.");
@@ -125,7 +126,7 @@ function AdminInsight({ token }) {
           삭제
         </TheButton2>
       </ButtonContainer>
-      <Title>Insight</Title>
+      <Title>INSIGHT</Title>
       <TheTable2 thead={["", "번호", "제목", "내용", "작성날짜"]}>
         {currentItems.map((item) => (
           <TableRow key={item.postId}>
@@ -137,7 +138,10 @@ function AdminInsight({ token }) {
               />
             </Td>
             <Td>{item.postId}</Td>
-            <Td onClick={() => goToEditHandler(item.postId)} style={{ cursor: "pointer" }}>
+            <Td
+              onClick={() => goToEditHandler(item.postId)}
+              style={{ cursor: "pointer" }}
+            >
               {item.title}
             </Td>
             <ContentTd
