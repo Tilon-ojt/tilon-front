@@ -65,18 +65,21 @@ import TilonHomepage from "./pages/Home/TilonHomepage";
 import Sidebar from "./components/common/Sidebar";
 import Navbar from "./components/common/Navbar";
 
-import PostEdit from "./pages/Admin/PostEdit/PostEdit";
 import Loginpage from "./pages/Admin/Login/Loginpage";
 import EditProfile from "./pages/Admin/EditProfile/EditProfile";
 
 import AdminNews from "./pages/Admin/NewsPage/AdminNews";
-// import NewsDetail from './pages/Admin/NewsPage/NewsDetail';
+import NewsDetail from "./pages/Admin/NewsPage/NewsDetail";
 import NewsCreate from "./pages/Admin/NewsPage/NewsCreate";
 import NewsEdit from "./pages/Admin/NewsPage/NewsEdit";
 
 import AdminPr from "./pages/Admin/Pr/AdminPr";
 import PrivateRoute from "./routes/PrivateRoute";
 import UserListPage2 from "./pages/Admin/UserListPage/UserListPage2";
+import PostEdit from "./pages/Admin/Pr/EditPr";
+import EditPr from "./pages/Admin/Pr/EditPr";
+import EditDetail from "./pages/Admin/Pr/EditDetail";
+import PostWrite from "./pages/Admin/PostEdit/PostWrite";
 
 function App() {
   return (
@@ -110,21 +113,40 @@ function App() {
                     element={<PrivateRoute element={<AdminNews />} />}
                   />
                   <Route
+                    path="/news/:postId"
+                    element={<PrivateRoute element={<NewsDetail />} />}
+                  />
+
+                  <Route
                     path="news/create"
                     element={<PrivateRoute element={<NewsCreate />} />}
                   />
+
                   <Route
                     path="/news/edit/:postId"
                     element={<PrivateRoute element={<NewsEdit />} />}
                   />
+
                   <Route
                     path="/pr"
                     element={<PrivateRoute element={<AdminPr />} />}
                   />
+
                   <Route
-                    path="/edit"
-                    element={<PrivateRoute element={<PostEdit />} />}
+                    path="/pr/:postId"
+                    element={<PrivateRoute element={<EditDetail />} />}
                   />
+
+                  <Route
+                    path="/pr/write"
+                    element={<PrivateRoute element={<PostWrite />} />}
+                  />
+
+                  <Route
+                    path="/insight"
+                    element={<PrivateRoute element={<AdminInsight />} />}
+                  />
+
                   {/* 추가적인 하위 경로 */}
                 </Routes>
               </>

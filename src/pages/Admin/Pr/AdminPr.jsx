@@ -1,125 +1,257 @@
+import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import api from "../../../api/axios";
+import { OPEN_MODAL } from "../../../reducer/AdminModal";
+import TheButton2 from "../../../components/element/TheButton2";
+import TheTable2 from "../../../components/element/TheTable2";
 import styled from "styled-components";
-import Btn from "../../../components/element/ThePrButton";
+import { ChevronRight, ChevronLeft } from "lucide-react";
 
-// AdminNews 컴포넌트
-function AdminPr() {
-  const navigate = useNavigate(); // useNavigate 훅 사용
+function AdminPr({ token }) {
+  const navigate = useNavigate();
+  console.log(`전달받은 jwt: ${JSON.stringify(token, null, 2)}`);
 
-  // 예제 데이터 (뉴스 리스트)
-  const exampleNewsList = [
-    { id: "1", title: "First Pr", thumbnail:null, url: "https://example.com/1" },
-    { id: "2", title: "Second Pr", thumbnail: null, url: "https://example.com/2" },
-    { id: "3", title: "Third Pr", thumbnail: null, url: "https://example.com/3" },
-  ];
+  useEffect(() => {
+    getUserList();
+  }, []);
+
+  const dispatch = useDispatch();
+  const openModal = () => {
+    dispatch({ type: OPEN_MODAL });
+    navigate("/admin/pr/write");
+  };
+
+  const [postInfo, setPostInfo] = useState([]);
+  const [selectedPostIds, setSelectedPostIds] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  useEffect(() => {
+    console.log("선택된 Post ID:", selectedPostIds);
+  }, [selectedPostIds]);
+
+  const handleCheckboxChange = (id) => {
+    setSelectedPostIds((prev) =>
+      prev.includes(id) ? prev.filter((userId) => userId !== id) : [...prev, id]
+    );
+  };
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = postInfo.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(postInfo.length / itemsPerPage);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const handlePrevPage = () => currentPage > 1 && setCurrentPage(currentPage - 1);
+  const handleNextPage = () => currentPage < totalPages && setCurrentPage(currentPage + 1);
+
+  const goToEditHandler = (postId) => {
+    console.log(`선택한 게시물 ID: ${postId}`);
+    navigate(`/admin/pr/${postId}`);
+  };
+
+  const getUserList = async () => {
+    try {
+      const token = sessionStorage.getItem("jwt");
+      console.log("JWT:", token);
+
+      if (!token) {
+        alert("로그인이 필요합니다.");
+        return;
+      }
+
+      const response = await api.get("/admin/posts", {
+        params: { 
+          category: "PR", 
+          page: currentPage 
+        },
+        headers: {
+          Authorization: `Bearer ${token}`, 
+          "Content-Type": "application/json",
+        },
+      });
+
+      console.log("게시글 목록:", response.data);
+      setPostInfo(response.data.content);
+
+    
+    } catch (error) {
+      console.error("Post 목록 가져오기 실패:", error.message);
+      alert("Post 데이터를 불러오는 데 실패했습니다.");
+    }
+  };
+
+  const deletePost = async () => {
+    if (selectedPostIds.length === 0) {
+      alert("삭제할 사용자가 선택되지 않았습니다.");
+      return;
+    }
+  };
+
+  // 이미지를 제외한 HTML을 반환하는 함수
+  const removeImagesFromHTML = (html) => {
+    const div = document.createElement("div");
+    div.innerHTML = html;
+    const images = div.querySelectorAll("img");
+    images.forEach((img) => img.remove()); // 이미지 제거
+    return div.innerHTML; // 이미지가 제거된 HTML 반환
+  };
 
   return (
     <Container>
-      <Header>
-        <Title>Pr</Title>
-        <BtnContainer>
-          <Btn type="NavigateN" label="Create new PR" />
-          <Btn type="DeleteN" label="Delete PR" />
-        </BtnContainer>
-      </Header>
-
-      <List>
-        <Type> no  Title URL</Type>
-        <hr/> 
-        {exampleNewsList.map((pr) => (
-          <ListItem key={pr.id}>
-            <input type="checkbox"/>
-            <ItemContent key={pr.id} onClick={() => navigate(`/admin/pr/edit/${pr.id}`)}>
-              <span>{pr.id}</span>
-              <span>{pr.title}</span>
-              <span>{pr.url}</span>
-            </ItemContent>
-          </ListItem>
+      <ButtonContainer>
+        <TheButton2 $primary onClick={openModal}>
+          생성
+        </TheButton2>
+        <TheButton2 $danger onClick={deletePost}>
+          삭제
+        </TheButton2>
+      </ButtonContainer>
+      <Title>PR</Title>
+      <TheTable2 thead={["", "번호", "제목", "내용", "작성날짜"]}>
+        {currentItems.map((item) => (
+          <TableRow key={item.postId}>
+            <Td>
+              <input
+                type="checkbox"
+                checked={selectedPostIds.includes(item.postId)}
+                onChange={() => handleCheckboxChange(item.postId)}
+              />
+            </Td>
+            <Td>{item.postId}</Td>
+            <Td onClick={() => goToEditHandler(item.postId)} style={{ cursor: "pointer" }}>
+              {item.title}
+            </Td>
+            
+            <ContentTd
+              onClick={() => goToEditHandler(item.postId)}
+              style={{ cursor: "pointer" }}
+              dangerouslySetInnerHTML={{ __html: removeImagesFromHTML(item.content) }} // 이미지 제거 후 HTML 출력
+            />
+            <Td>{item.updatedAt}</Td>
+          </TableRow>
         ))}
-      </List>
+      </TheTable2>
+      <Pagination>
+        <ChevronLeft
+          onClick={handlePrevPage}
+          style={{
+            cursor: "pointer",
+            visibility: currentPage > 1 ? "visible" : "hidden",
+          }}
+        />
+        {[...Array(totalPages)].map((_, index) => (
+          <PageButton
+            key={index}
+            onClick={() => paginate(index + 1)}
+            className={currentPage === index + 1 ? "active" : ""}
+          >
+            {index + 1}
+          </PageButton>
+        ))}
+        <ChevronRight
+          onClick={handleNextPage}
+          style={{
+            cursor: "pointer",
+            visibility: currentPage < totalPages ? "visible" : "hidden",
+          }}
+        />
+      </Pagination>
     </Container>
   );
 }
 
-// 스타일 정의
+export default AdminPr;
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-
-  height: 100vh;
-  padding: 20px;
-  box-sizing: border-box;
-
+  height: calc(100vh - 62px);
   margin-left: 300px;
   margin-top: 62px;
+  position: relative;
+  padding: 100px;
+  padding-top: 60px;
 `;
 
-const Header = styled.div`
+const ButtonContainer = styled.div`
+  display: flex;
+  position: absolute;
+  top: 60px;
+  right: 100px;
+  gap: 10px;
+  z-index: 10;
+`;
+
+const Title = styled.h2`
+  color: black;
+  align-self: flex-start;
+  font-size: 24px;
+  margin-bottom: 20px;
+  margin-top: 0;
+`;
+
+const Pagination = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 70vw;
-`;
-
-const Title = styled.h1`
-  font-size: 2rem;
-  color: #333;
-  font-weight: bold;
-`;
-
-const BtnContainer = styled.div`
-  display: flex;
-  flex-direction: row;
+  justify-content: center;
   gap: 10px;
+  margin-top: 20px;
 `;
 
-const Type = styled.span`
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-`;
-
-
-const List = styled.div`
-  height: 70vh;
-  width: 70vw;
-  margin-top: 50px;
-  padding: 20px;
-  border: 1px solid lightgray;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
-  overflow-y: auto;
-`;
-
-const ListItem = styled.div`
-
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 10px;
-  border: 1px solid #ddd;
-  padding-left: 15px;
-  border-radius: 5px;
-  background-color: #f9f9f9;
+const PageButton = styled.button`
+  margin: 0 5px;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
   cursor: pointer;
-  transition: background-color 0.3s;
-
-  span {
-    margin: 20px;
-    font-size: 0.9rem;
-    color: #666;
+  border-radius: 50%;
+  &.active {
+    background-color: #007bff;
+    color: white;
   }
-
   &:hover {
-    background-color: #f1f1f1;
+    background-color: #ddd;
   }
 `;
 
-const ItemContent = styled.div`
-  // border: 1px solid lightgray;
-  padding: 15px;
-  width: 100%;
-`
+const TableRow = styled.tr`
+  &:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+`;
 
-export default AdminPr;
+const Td = styled.td`
+  padding: 12px 15px;
+  text-align: left;
+  font-size: 14px;
+  border-bottom: 1px solid #e9e9e9;
+`;
+
+const TitleTd = styled.td`
+  padding: 12px 15px;
+  text-align: left;
+  font-size: 14px;
+  border-bottom: 1px solid #e9e9e9;
+  cursor: pointer;
+`;
+
+const ContentTd = styled.td`
+  padding: 8px 10px; /* 기존의 높이를 줄이기 위해 padding을 축소 */
+  text-align: left;
+  font-size: 14px;
+  border-bottom: 1px solid #e9e9e9;
+  max-height: 40px; /* 최대 높이 설정 */
+  overflow: hidden; /* 내용이 넘치면 숨김 처리 */
+  text-overflow: ellipsis; /* 넘치는 내용을 말줄임표로 표시 */
+  white-space: nowrap; /* 줄바꿈 방지 */
+  cursor: pointer;
+
+  /* td 내부에 렌더링된 HTML 태그 스타일 */
+  p,
+  div {
+    margin: 0; /* 불필요한 margin 제거 */
+    padding: 0; /* 불필요한 padding 제거 */
+    line-height: 1.2; /* 줄 간격 축소 */
+  }
+`;

@@ -1,199 +1,247 @@
-import { useParams } from "react-router-dom";
-import styled from "styled-components";
-import TheNewsButton from "../../../components/element/TheNewsButton";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import ReactQuill, { Quill } from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import { useSelector } from "react-redux";
+import axios from "axios";
+import { useParams } from 'react-router-dom'; // react-router-dom에서 useParams import
 
-// 예제 데이터 (AdminNews에서 전달받는다고 가정)
-const exampleNewsList = [
-  {
-    id: "1",
-    title: "First News",
-    content: "This is the content of the first news.",
-    category: "Technology",
-    status: "PUBLISHED",
-    fix: "FIX",
-    link: "https://example.com/1",
-    thumbnail: null,
-  },
-  {
-    id: "2",
-    title: "Second News",
-    content: "This is the content of the second news.",
-    category: "Health",
-    status: "DRAFT",
-    fix: "NOT_FIX",
-    link: "https://example.com/2",
-    thumbnail: null,
-  },
-  {
-    id: "3",
-    title: "Third News",
-    content: "This is the content of the third news.",
-    category: "Finance",
-    status: "PUBLISHED",
-    fix: "NOT_FIX",
-    link: "https://example.com/3",
-    thumbnail: null,
-  },
-];
+import ImageResize from 'quill-image-resize';
+
+Quill.register('modules/ImageResize', ImageResize);
 
 function EditPr() {
-  const { id } = useParams(); // URL에서 ID 가져오기
-  const [newsData, setNewsData] = useState(null); // 선택한 뉴스 데이터 저장
-  const [thumbnail, setThumbnail] = useState(null);
+    let redux = useSelector((state) => { return state });
+    const { categoryParam } = useParams();  // URL에서 category 값을 추출
+    const [title, setTitle] = useState('');  // 제목
+    const [content, setContent] = useState('');  // 내용
+    const [category, setCategory] = useState(categoryParam);  // category 값을 경로에서 추출
+    const [status, setStatus] = useState('PUBLISHED');  // 게시상태 (예: 'active', 'inactive')
+    const [fix, setFix] = useState(false);  // 고정 여부 (예: true, false)
+    const [link, setLink] = useState('');  // URL 링크
+    const [tempPostId, setTempPostId] = useState(null);  // 임시 게시글 ID
+    const [imageUrls, setImageUrls] = useState([]);  // 서버에서 받은 이미지 URL들
 
-  // 뉴스 데이터 초기화
-  useEffect(() => {
-    const selectedNews = exampleNewsList.find((news) => news.id === id);
-    if (selectedNews) {
-      setNewsData(selectedNews);
-      setThumbnail(selectedNews.thumbnail);
+    // 더미 데이터 설정
+    useEffect(() => {
+        const dummyData = {
+            title: "더미 제목",
+            content: "더미 내용입니다. <img src='data:image/jpeg;base64,...' />",
+            category: categoryParam || "pr",
+            status: "PUBLISHED",
+            fix: true,
+            link: "https://dummy.link",
+        };
+
+        setTitle(dummyData.title);
+        setContent(dummyData.content);
+        setCategory(dummyData.category);
+        setStatus(dummyData.status);
+        setFix(dummyData.fix);
+        setLink(dummyData.link);
+    }, [categoryParam]);
+
+    // 이미지 업로드 및 URL로 변환하는 로직
+    const srcArray = [];
+    const blopArray = [];
+    const urlArray = [];
+    const gainSource = /(<img[^>]*src\s*=\s*[\"']?([^>\"']+)[\"']?[^>]*>)/g;
+
+    useEffect(() => {
+        // 처음에 tempPostId 생성
+        const generateTempPostId = () => {
+            const tempId = Date.now().toString();  // 임시 ID 생성
+            setTempPostId(tempId);
+        };
+        generateTempPostId();
+    }, []);
+
+    async function SaveBoard() {
+        while (gainSource.test(content)) {
+            let result = RegExp.$2;
+            srcArray.push(result);
+            const byteString = atob(result.split(",")[1]);
+            const ab = new ArrayBuffer(byteString.length);
+            const ia = new Uint8Array(ab);
+            for (let i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i);
+            }
+            const blob = new Blob([ia], { type: "image/jpeg" });
+            const file = new File([blob], "image.jpg");
+
+            const formData = new FormData();
+            formData.append("file", file);
+            const config = { header: { 'content-type': 'multipart/form-data' } };
+
+            // 임시 게시글 ID를 사용하여 이미지 업로드
+            await axios.post(`/api/board/uploadImgFolder?tempPostId=${tempPostId}`, formData, config)
+                .then(response => {
+                    if (response.data.success) {
+                        urlArray.push(response.data.url);  // 서버에서 받은 URL 추가
+                        setImageUrls(prevUrls => [...prevUrls, response.data.url]); // imageUrls 상태에 추가
+                    } else {
+                        alert('이미지를 서버에 업로드하는데 실패했습니다.');
+                    }
+                });
+        }
+
+        let endContent = content;
+        if (srcArray.length > 0) {
+            for (let i = 0; i < srcArray.length; i++) {
+                let replace = endContent.replace(srcArray[i], urlArray[i]);
+                endContent = replace;
+            }
+        }
+
+        // 요청할 데이터 객체
+        let writeInform = {
+            title: title,  // 제목
+            content: endContent,  // 내용 (변경된 이미지 URL 포함)
+            category: category,  // 카테고리
+            admin_id: redux.setUser.u_id,  // 어드민 번호
+            status: status,  // 게시상태 (예: 'active')
+            fix: fix,  // 고정 여부
+            link: link,  // URL 링크
+            tempPostId: tempPostId,  // 임시 게시글 ID
+            imageUrls: imageUrls,  // 업로드된 이미지 URLs
+        };
+
+        // 게시글 작성 API 호출
+        axios.post('/api/admin/post', writeInform, {
+            headers: { 
+                'Authorization': `Bearer ${redux.setUser.token}`,
+                'Content-Type': 'application/json' 
+            }
+        })
+        .then(response => {
+            if (response.data.success) {
+                console.log('업로드 성공');
+            } else {
+                alert('업로드에 실패하였습니다.');
+            }
+        })
+        .catch(error => {
+            console.error('게시글 업로드 실패:', error);
+            alert('게시글 업로드 실패');
+        });
     }
-  }, [id]);
 
-  // 썸네일 선택 핸들러
-  const handleThumbnailChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => setThumbnail(reader.result);
-      reader.readAsDataURL(file);
-    }
-  };
+    const modules = {
+        toolbar: [
+            [{ 'font': [] }],
+            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+            ['bold', 'italic', 'underline', 'strike', 'blockquote', 'code-block'],
+            ['link', 'image'],
+            [{ 'align': [] }, { 'color': [] }, { 'background': [] }],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            [{ 'indent': '-1' }, { 'indent': '+1' }],
+        ],
+        ImageResize: {
+            parchment: Quill.import('parchment')
+        }
+    };
 
-  // 썸네일 삭제 핸들러
-  const handleRemoveThumbnail = () => {
-    setThumbnail(null);
-    document.querySelector('input[type="file"]').value = ""; // 인풋 리셋
-  };
+    return (
+        <div
+            style={{
+                width: '100%',
+                height: '100vh', // 화면 전체 높이 기준
+                display: 'flex',
+                marginTop: '10vh',
+                
+            }}
+        >
+            <div
+                style={{
+                    width: '1000px', // 고정된 너비
+                    height: '700px', // 고정된 높이
+                    margin: 'auto',
+                    borderRadius: '19px',
+                    boxShadow: '0 4px 10px rgba(0,0,0,0.1)', // 약간의 그림자 추가
+                    padding: '20px', // 내부 여백 추가
+                    backgroundColor: '#fff', // 배경색 설정
+                    border: '0.1px solid lightgray'
+                }}
+            >
 
-  // 데이터가 로드되지 않은 경우 로딩 상태 표시
-  if (!newsData) {
-    return <div>Loading...</div>;
-  }
 
-  return (
-    <Container>
-      <Header>
-        <PageLabel>Edit Pr</PageLabel>
-      </Header>
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '15px',
+                        marginBottom: '10px',
+                        
+                    }}
+                >
+                    <select
+                        value={category}
+                        disabled
+                        style={{ width: '150px' }}
+                    >
+                        <option value="pr">PR</option>
+                        <option value="insight">INSIGHT</option>
+                    </select>
 
-      <Body>
-       
-      </Body>
+                    <input
+                        type="text"
+                        placeholder="링크를 입력하세요"
+                        value={link}
+                        onChange={(e) => setLink(e.target.value)}
+                        style={{ flex: 1 }} // input 필드가 가능한 공간을 채우도록 설정
+                    />
 
-      <Btn>
-        <TheNewsButton type="SubmitN" label="수정 하기" />
-        <TheNewsButton type="CancelN" />
-      </Btn>
-    </Container>
-  );
+                    <select
+                        value={status}
+                        onChange={(e) => setStatus(e.target.value)}
+                        style={{ width: '150px' }}
+                    >
+                        <option value="PUBLISHED">PUBLISHED</option>
+                        <option value="DRAFT">DRAFT</option>
+                    </select>
+
+                    <label style={{ marginLeft: '10px' }}>
+                        고정:
+                        <input
+                            type="checkbox"
+                            checked={fix}
+                            onChange={(e) => setFix(e.target.checked)}
+                        />
+                    </label>
+                </div>
+
+                <input
+                    className="Title"
+                    placeholder="제목을 입력해 주세요"
+                    style={{
+                        padding: '7px',
+                        marginBottom: '10px',
+                        width: '100%',
+                        border: '1px solid lightGray',
+                        fontSize: '15px',
+                        boxSizing: 'border-box',
+                        marginTop: '20px',
+                        
+                    }}
+                    value={title}  // 더미 데이터로 초기화된 제목
+                    onChange={(e) => { setTitle(e.target.value) }}
+                />
+                <div style={{ height: '380px', width: '100%' }}>
+                    <ReactQuill
+                        modules={modules}
+                        placeholder='내용을 입력해 주세요'
+                        value={content}  // 더미 데이터로 초기화된 내용
+                        onChange={setContent}
+                        style={{
+                            height: "550px",
+                            width: '100%',
+                            boxSizing: 'border-box'
+                            
+                        }}
+                    />
+                </div>
+            </div>
+        </div>
+    );
 }
-
-// 스타일 정의
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100vh;
-  padding: 20px;
-  box-sizing: border-box;
-  margin-left: 300px;
-  margin-top: 62px;
-`;
-
-const Header = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 70vw;
-`;
-
-const PageLabel = styled.span`
-  font-size: 2rem;
-  color: #333;
-  font-weight: bold;
-`;
-
-const Btn = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-`;
-
-const Body = styled.div`
-  height: 60vh;
-  width: 70vw;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: 50px 0;
-  padding: 20px;
-  border: 1px solid lightgray;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
-`;
-
-const Thumnail = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 50px;
-
-  div {
-    position: relative;
-  }
-
-  img {
-    border: 2px solid lightgray;
-    border-radius: 10px;
-    width: 400px;
-    height: auto;
-  }
-`;
-
-const RemoveBtn = styled.button`
-  display: flex;
-  align-items: center;
-  font-size: 25px;
-  opacity: 0.5;
-  border: none;
-  background-color: transparent;
-  transition: all 0.35s;
-
-  &:hover {
-    opacity: 1;
-  }
-`;
-
-const Input = styled.div`
-  width: 30vw;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: 30px;
-
-  span {
-    width: 5vw;
-    border-right: 2px solid lightgray;
-    margin-right: 30px;
-  }
-
-  input[type="text"],
-  input[type="url"] {
-    width: 60%;
-    height: 10px;
-    padding: 10px;
-    border: 1px solid lightgray;
-    border-radius: 5px;
-
-    &:focus {
-      outline: none;
-      border: 2px solid lightgray;
-    }
-  }
-`;
 
 export default EditPr;
