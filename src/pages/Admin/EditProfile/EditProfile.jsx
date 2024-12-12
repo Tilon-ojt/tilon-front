@@ -6,6 +6,7 @@ import TheButton2 from "../../../components/element/TheButton2";
 import { useNavigate } from "react-router-dom";
 import TheModal from "../../../components/element/TheModal";
 import { CircleAlert } from "lucide-react";
+import getRefreshToken from "../../../utils/getRefreshToken";
 
 function EditProfile({ token }) {
   const navigate = useNavigate(); // useNavigate Hook
@@ -17,7 +18,7 @@ function EditProfile({ token }) {
       try {
         const decoded = jwtDecode(token);
         setDecodedToken(decoded); // 상태 업데이트
-        setMyAdminId(decoded.adminId || null); // adminId가 없는 경우 null로 설정
+        setMyAdminId([decoded.adminId] || null); // adminId가 없는 경우 null로 설정
       } catch (err) {
         console.error("토큰 디코딩 중 오류 발생:", err);
       }
@@ -116,10 +117,14 @@ function EditProfile({ token }) {
 
   const deleteUser = async () => {
     console.log(`삭제 또는 탈퇴할 사용자 ID: ${myAmdinId}`);
+    console.log(`adminIds: ${myAmdinId}, password: ${password}`);
+    console.log(`${token}`);
+    const refreshtoken = getRefreshToken();
     try {
       const response = await api.delete("/admin/account", {
         data: { adminIds: myAmdinId, password: password },
         headers: {
+          "Refresh-Token": refreshtoken, // 파싱된 리프레시 토큰 값 사용
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
@@ -129,6 +134,7 @@ function EditProfile({ token }) {
       setPassword("");
       ClosePasswordCheckModal();
       sessionStorage.removeItem("jwt");
+      document.cookie = `refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/admin`;
       navigate("/");
     } catch (error) {
       if (error.status === 401) {

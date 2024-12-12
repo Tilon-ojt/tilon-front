@@ -71,11 +71,11 @@ function Navbar() {
         </span>
       </IdTxt>
       <LogoutIcon onClick={openLogoutModal}>
-        {/* <img
+        <p>로그아웃</p>
+        <img
           src="https://cdn1.iconfinder.com/data/icons/heroicons-ui/24/logout-512.png"
           alt="Logout"
-        /> */}
-        <p>로그아웃</p>
+        />
       </LogoutIcon>
       {logoutModal && (
         <TheModal title={"로그아웃 하시겠습니까?"}>
@@ -133,10 +133,13 @@ const IdTxt = styled.div`
 `;
 
 const LogoutIcon = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 5px;
   cursor: pointer;
   img {
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     opacity: 0.7;
     margin-top: 5px;
   }
@@ -145,8 +148,12 @@ const LogoutIcon = styled.div`
     opacity: 1;
   }
 
+  p {
+    opacity: 0.7;
+  }
+
   &:hover p {
-    border-bottom: 1px solid #000; /* 밑줄 두께와 색상 */
+    opacity: 1;
   }
 `;
 

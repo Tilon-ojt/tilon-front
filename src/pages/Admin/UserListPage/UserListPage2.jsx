@@ -8,6 +8,7 @@ import React, { useState, useEffect } from "react";
 import AdminAddModal from "./AdminAddModal";
 import styled from "styled-components";
 import api from "../../../api/axios";
+import getRefreshToken from "../../../utils/getRefreshToken";
 
 function UserListPage2({ token }) {
   // console.log(`전달받은 jwt: ${JSON.stringify(token, null, 2)}`);
@@ -133,10 +134,12 @@ function UserListPage2({ token }) {
 
   const deleteUser = async () => {
     console.log(`삭제 또는 탈퇴할 사용자 ID: ${selectedUserIds}`);
+    const refreshtoken = getRefreshToken();
     try {
       const response = await api.delete("/admin/account", {
         data: { adminIds: selectedUserIds, password: password },
         headers: {
+          "Refresh-Token": refreshtoken, // 파싱된 리프레시 토큰 값 사용
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
