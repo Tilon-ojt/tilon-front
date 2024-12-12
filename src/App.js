@@ -80,6 +80,7 @@ import PostEdit from "./pages/Admin/Pr/EditPr";
 import EditPr from "./pages/Admin/Pr/EditPr";
 import EditDetail from "./pages/Admin/Pr/EditDetail";
 import PostWrite from "./pages/Admin/PostEdit/PostWrite";
+import AdminInsight from "./pages/Admin/Insight/AdminInsight";
 
 function App() {
   return (

@@ -108,7 +108,7 @@ function AdminPr({ token }) {
           삭제
         </TheButton2>
       </ButtonContainer>
-      <Title>PR</Title>
+      <Title>INSIGHT</Title>
       <TheTable2 thead={["", "번호", "제목", "내용", "작성날짜"]}>
         {currentItems.map((item) => (
           <TableRow key={item.postId}>
