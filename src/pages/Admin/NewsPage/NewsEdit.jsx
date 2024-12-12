@@ -17,7 +17,7 @@ function NewsEdit({ token }) {
   const fileInputRef = useRef(null);
 
 
-  const [PostId, setPostId] = useState("");
+  // const [PostId, setPostId] = useState("");
 
   const [selectedFile, setSelectedFile] = useState(null);
 
@@ -54,14 +54,6 @@ function NewsEdit({ token }) {
     }
   }, [newsItem]);
 
-  // const thumbnailHandler = (e) => {
-  //   const file = e.target.files[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onload = (e) => setThumbnailSrc(e.target.result);
-  //     reader.readAsDataURL(file);
-  //   }
-  // };
 
   const clearThumbnailHandler = () => {
     setThumbnailSrc(placeholdImg);
@@ -71,7 +63,7 @@ function NewsEdit({ token }) {
   };
 
 
-  // 파일 선택
+// 파일 선택
 const thumbnailHandler = async (e) => {
   const file = e.target.files[0];
 
@@ -91,60 +83,86 @@ const thumbnailHandler = async (e) => {
 
 const imguploadHandler = async (file) => {
   try {
-    console.log("서버 업로드 시작...");
-
     const formData = new FormData();
     formData.append("ImgFile", file);
-    formData.append("PostId", PostId);
+    // formData.append("tempPostId", tempPostId);
 
-    const response = await api.post(
-      "/admin/posts/image/upload",
-      formData,
-      {
-        params: { PostId },
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    const response = await api.post("/admin/posts/image/upload", formData, {
+      params:{
+        postId,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
-    console.log("------image url:", response.data);
-    const imageUrl = response.data;
-    setThumbnailSrc(imageUrl);  // 이미지 URL 상태 업데이트
+    console.log("서버 응답 데이터:", response.data);
 
-    return imageUrl;
-
+    // 서버 응답에서 전달된 이미지 URL을 수정 없이 반환
+    if (response.data && response.data.imageUrl) {
+      return response.data.imageUrl;  // 수정 없이 그대로 반환
+    } else {
+      throw new Error("서버 응답 데이터에 imageUrl이 없습니다.");
+    }
   } catch (error) {
     console.error("이미지 업로드 실패:", error.message);
     return null;
   }
 };
 
-  // 수정 완료 버튼
-  const submitHandler = async () => {
-    try {
-      const updatedData = {
-        title: title.trim(),
-        link: link.trim(),
-        imageUrl: thumbnailSrc,
-      };
 
-      const response = await api.put(`/admin/posts/${postId}`, updatedData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+// 뉴스 수정 제출 핸들러
+const submitHandler = async () => {
 
-      console.log("수정된 데이터:", response.data);
-      alert("수정이 완료되었습니다.");
-      navigate("/admin/news");
-    } catch (error) {
-      console.error("수정 요청 실패:", error.message);
-      alert("수정에 실패했습니다. 다시 시도해주세요.");
+  if (!title.trim() || !link.trim()) {
+    alert("제목과 링크가 비어있습니다.");
+    return;
+  }
+
+  if (!selectedFile) {
+    alert("이미지가 선택되지 않았습니다.");
+    return;
+  }
+
+  try {
+    // 서버에 이미지 업로드 요청
+    const uploadedUrl = await imguploadHandler(selectedFile);
+
+    if (!uploadedUrl) {
+      alert("이미지 업로드 실패");
+      return;
     }
-  };
+
+    const updatedData = {
+      title: title.trim(),
+      category: "NEWS",
+      adminId: "5",
+      status: "PUBLISHED",
+      link: link.trim(),
+      postId: postId,
+      imageUrl: uploadedUrl,  // 수정된 URL 저장
+    };
+
+    console.log("뉴스 저장 데이터:", updatedData);
+
+    const response = await api.post(`/admin/posts`, updatedData, {
+      params: { postId },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    console.log("서버 저장 응답:", response.data);
+    alert("뉴스 저장 완료!");
+    navigate("/admin/news");
+  } catch (error) {
+    console.error("서버 요청 실패:", error.message);
+    alert("뉴스 저장 중 문제가 발생했습니다.");
+  }
+};
+
 
   // 취소 버튼
   const cancelHandler = () => {
