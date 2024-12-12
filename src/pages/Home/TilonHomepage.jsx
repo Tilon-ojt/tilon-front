@@ -122,7 +122,6 @@ const TilonHomepage = () => {
       </div>
       <div className="section" ref={sectionRefs[1]}>
         <News />
-        {/* <NewsHome/> */}
       </div>
       <div className="section" ref={sectionRefs[2]}>
         <PrInsight />
