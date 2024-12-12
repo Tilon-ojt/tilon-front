@@ -52,19 +52,31 @@ function AdminAddModal({ getUserList }) {
           },
         }
       );
-      console.log(response.data);
 
-      if (response.status === 201) {
-        dispatch({ type: CLOSE_MODAL });
-        alert("아이디 생성 성공");
-        getUserList();
-        console.log("정상 처리되었습니다.");
-      } else {
-        dispatch({ type: CLOSE_MODAL });
-        alert("아이디 생성 실패");
-      }
+      // console.log(response.data);
+      // 성공 케이스 (2xx 상태 코드)
+      dispatch({ type: CLOSE_MODAL });
+      alert("아이디 생성 성공");
+      getUserList();
+      console.log("정상 처리되었습니다.");
     } catch (error) {
-      console.log("에러:", error);
+      // 에러 처리
+      if (error.response) {
+        // 서버가 응답을 반환한 경우
+        if (error.response.status === 409) {
+          alert("이미 존재하는 아이디입니다.");
+        } else {
+          alert("아이디 생성 실패");
+          dispatch({ type: CLOSE_MODAL });
+        }
+      } else if (error.request) {
+        // 요청이 전송되었으나 응답을 받지 못한 경우
+        alert("서버 응답이 없습니다.");
+      } else {
+        // 요청 설정 중에 문제가 발생한 경우
+        alert("요청 중 오류가 발생했습니다.");
+      }
+      console.error("에러:", error);
     }
   };
 

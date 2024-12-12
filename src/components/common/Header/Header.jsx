@@ -46,7 +46,7 @@ function Header({ headerBackground }) {
             <ul>
               <li>
                 <a href="">
-                  <p onClick={() => navigate("/admin")}>회사소개</p>
+                  <p onClick={() => navigate("/admin/login")}>회사소개</p>
                 </a>
               </li>
               <li>

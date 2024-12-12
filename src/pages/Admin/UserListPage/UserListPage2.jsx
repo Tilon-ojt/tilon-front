@@ -147,8 +147,12 @@ function UserListPage2({ token }) {
       getUserList(); // 유저목록 갱신
       setPasswordCheckModalIsShow(false); // 모달 닫기
     } catch (error) {
-      alert(`실패`);
-      console.error("실패:", error);
+      if (error.request.state === 500) {
+        // 요청이 전송되었으나 응답을 받지 못한 경우
+        alert("서버 오류가 발생했습니다.");
+      } else if (error.response.status === 401) {
+        alert(`비밀번호가 일치하지 않습니다.`);
+      }
     }
   };
 

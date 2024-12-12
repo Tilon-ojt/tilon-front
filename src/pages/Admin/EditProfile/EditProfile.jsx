@@ -61,16 +61,17 @@ function EditProfile({ token }) {
     }
   }, [newPassword, confirmNewPassword]);
 
+  // 비밀번호 변경
   const handleSubmit = async () => {
     console.log(`currentPassword: ${password}, newPassword: ${newPassword}`);
     if (password === newPassword) {
-      alert("변경할 비밀번호와 새 비밀번호가 같습니다.");
+      alert("현재 비밀번호와 새 비밀번호가 동일합니다.");
       setNewPassword("");
       setConfirmNewPassword("");
       return;
     }
     try {
-      const verifyResponse = await api.patch(
+      const response = await api.patch(
         "/admin/update",
         { currentPassword: password, newPassword: newPassword }, // 데이터 본문
         {
@@ -81,21 +82,26 @@ function EditProfile({ token }) {
         }
       );
 
-      if (verifyResponse.status === 200) {
-        setPasswordError(""); // 초기화
-        setNewPasswordError(""); // 초기화
-        setConfirmPasswordError(""); // 초기화
-        setPassword("");
-        setNewPassword("");
-        setConfirmNewPassword("");
-        alert("비밀번호가 성공적으로 변경되었습니다.");
-        navigate("/admin/news");
-      } else {
-        setPasswordError("현재 비밀번호가 올바르지 않습니다.");
-        return;
-      }
+      setPasswordError(""); // 초기화
+      setNewPasswordError(""); // 초기화
+      setConfirmPasswordError(""); // 초기화
+      setPassword("");
+      setNewPassword("");
+      setConfirmNewPassword("");
+      alert("비밀번호가 성공적으로 변경되었습니다.");
+      navigate("/admin/news");
     } catch (error) {
+      //   if (error.response.status === 409) {
+      //     alert("현재 비밀번호와 새 비밀번호가 동일합니다.");
+      //     setNewPassword("");
+      //     setConfirmNewPassword("");
+      //   } else if (error.response.status === 401) {
+      //     alert("현재 비밀번호가 올바르지 않습니다.");
+      //     setPassword("");
+      //   }
+
       alert("현재 비밀번호가 올바르지 않습니다.");
+      setPassword("");
     }
   };
 

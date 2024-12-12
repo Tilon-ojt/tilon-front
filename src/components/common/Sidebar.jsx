@@ -3,9 +3,10 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-
+import { useNavigate } from "react-router-dom";
 function Sidebar() {
   const token = useSelector((state) => state.auth.token);
+  const navigate = useNavigate();
   // token이 유효한지 확인하고 jwtDecode 사용
   let decodedToken = null;
   if (token) {
@@ -38,7 +39,7 @@ function Sidebar() {
 
   return (
     <Container>
-      <Logo>
+      <Logo onClick={() => navigate("/")}>
         <img
           alt="logo"
           src="https://www.tilon.com/dist/pc_logo.png?a30e64d3cafa9a2c5cbf7b217ccc9aba"
@@ -73,6 +74,7 @@ const Container = styled.div`
 `;
 
 const Logo = styled.div`
+  cursor: pointer;
   img {
     height: 30px;
     width: auto;
