@@ -24,6 +24,7 @@ function PostEdit() {
         updated_at: 'updatedAt',
         status: 'status',
         fix: 'fix',
+        image: '',  // 이미지 데이터 추가
     });
 
     const [editedData, setEditedData] = useState({
@@ -45,9 +46,6 @@ function PostEdit() {
     const fetchPostDetail = async () => {
         setIsLoading(true);
         try {
-            console.log('요청 URL:', `/admin/posts/${postId}`);
-            console.log('토큰:', userState);
-
             const response = await api.get(`/admin/posts/${postId}`, {
                 headers: {
                     'Authorization': `Bearer ${userState}`,
@@ -55,38 +53,15 @@ function PostEdit() {
                 }
             });
 
-            console.log('PR 상세 조회 API 응답:', response.data);
-            console.log('응답 상태 코드:', response.status); 
-
-            if (response.status === 200 ) {
-                setPostData({
-                    post_id: response.data.post_id,
-                    title: response.data.title,
-                    content: response.data.content,
-                    category: response.data.category,
-                    admin_id: response.data.admin_id,
-                    created_at: response.data.createdAt,
-                    updated_at: response.data.updatedAt,
-                    status: response.data.status,
-                    fix: response.data.fix,
-                });
-
-                setEditedData({
-                    title: response.data.title,
-                    content: response.data.content,
-                    category: response.data.category,
-                    postStatus: response.data.status,
-                    fix: response.data.fix,
-                });
-            } else {
-                alert('게시글을 불러오는데 실패했습니다.');
+            // 응답 데이터 로깅 추가
+            console.log('게시글 상세 응답:', response.data);
+            console.log('content 내용:', response.data.content);
+            
+            if (response.status === 200) {
+                setPostData(response.data);
             }
         } catch (error) {
-            console.error('에러 상세 정보:', {
-                message: error.message,
-                response: error.response,
-                request: error.request
-            });
+            console.error('서버 응답 에러:', error.response?.data);
         } finally {
             setIsLoading(false);
         }
@@ -94,16 +69,17 @@ function PostEdit() {
 
     const handleUpdate = async () => {
         try {
-            // 서버에 맞는 형식으로 데이터 변환
             const requestData = {
-                title: editedData.title,
-                content: editedData.content,
-                category: editedData.category,
-                status: editedData.postStatus,  // postStatus를 status로 변환
-                fix: editedData.fix,
+                title: postData.title,
+                content: postData.content,
+                category: postData.category,
+                status: postData.status,
+                fix: postData.fix,
             };
 
-            console.log('전송할 데이터:', requestData); // 디버깅용
+            console.log('PostEdit - 요청 데이터:', requestData);
+            console.log('PostEdit - content 길이:', postData.content.length);
+            console.log('PostEdit - content 내용:', postData.content);
 
             const response = await api.put(`/admin/posts/${postId}`, requestData, {
                 headers: {
@@ -111,18 +87,17 @@ function PostEdit() {
                     'Content-Type': 'application/json'
                 }
             });
+            console.log('PostEdit - 서버 응답:', response);
 
-            console.log('서버 응답:', response); // 디버깅용
-
-            if (response.status === 204) {  // response.data.success 대신 status 확인
+            if (response.status === 204) {
                 alert('게시글이 성공적으로 수정되었습니다.');
                 navigate(`/admin/pr`);
             } else {
                 alert('게시글 수정에 실패했습니다.');
             }
         } catch (error) {
-            console.error('게시글 수정 실패:', error);
-            alert('게시글 수정에 실패했습니다.');
+            console.error('PostEdit - 에러:', error);
+            alert(`게시글 수정에 실패했습니다: ${error.response?.data?.message || error.message}`);
         }
     };
 
@@ -133,7 +108,66 @@ function PostEdit() {
             [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
             ['link', 'image'],
             ['clean']
-        ],
+        ]
+    };
+
+    function imageHandler() {
+        const input = document.createElement('input');
+        input.setAttribute('type', 'file');
+        input.setAttribute('accept', 'image/*');
+        input.click();
+
+        input.onchange = async () => {
+            const file = input.files[0];
+            // 여기서 이미지 업로드 로직 구현
+        };
+    }
+
+    const handleEdit = async () => {
+        try {
+            const quillContent = document.querySelector('.ql-editor');
+            const images = quillContent.getElementsByTagName('img');
+            let contentCopy = postData.content;
+           
+            if (images.length > 0) {
+                for (let i = 0; i < images.length; i++) {
+                    const img = images[i];
+                    const base64Image = img.src;
+
+                    if (base64Image.startsWith('data:image')) {
+                        try {
+                            const formData = new FormData();
+                            // ... formData 처리 코드 ...
+                           
+                            const imageResponse = await api.post(
+                                `/admin/posts/image/upload?postId=${postId}`,
+                                formData,
+                                {
+                                    headers: {
+                                        'Authorization': `Bearer ${userState}`,
+                                        'Content-Type': 'multipart/form-data'
+                                    }
+                                }
+                            );
+
+                            console.log('이미지 업로드 응답:', imageResponse.data);
+                            console.log('이미지 URL 응답:', imageResponse.data.imageUrl);
+
+                            const imageUrl = imageResponse.data.imageUrl;
+                            contentCopy = contentCopy.replace(base64Image, imageUrl);
+                        } catch (error) {
+                            console.error('이미지 업로드 실패:', error);
+                            throw error;
+                        }
+                    }
+                }
+            }
+
+            // ... 나머지 코드 ...
+        } catch (error) {
+            console.error('게시글 수정 실패:', error);
+            alert('게시글 수정에 실패했습니다.');
+        }
     };
 
     return (
@@ -205,6 +239,15 @@ function PostEdit() {
                     }}
                 />
 
+                {/* 이미지 렌더링 추가 */}
+                {postData.image && (
+                    <img 
+                        src={postData.image} 
+                        alt="Post Image" 
+                        style={{ width: '100%', height: 'auto', marginBottom: '10px' }}
+                    />
+                )}
+
                 <div style={{ height: '60vh', width: '100%' }}>
                     <ReactQuill
                         value={postData.content}
@@ -237,7 +280,7 @@ function PostEdit() {
                                 fontSize: '16px',
                             }}
                         >
-                            생성
+                            수정
                         </button>
                         <button 
                             onClick={() => navigate('/admin/pr')}

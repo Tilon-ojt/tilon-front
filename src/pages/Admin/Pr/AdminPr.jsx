@@ -83,8 +83,32 @@ function AdminPr({ token }) {
 
   const deletePost = async () => {
     if (selectedPostIds.length === 0) {
-      alert("삭제할 사용자가 선택되지 않았습니다.");
+      alert("삭제할 게시글을 선택해주세요.");
       return;
+    }
+
+    const isConfirmed = window.confirm(`선택한 게시글을 삭제하시겠습니까?`);
+    if (isConfirmed) {
+      try {
+        // 선택된 모든 게시글에 대해 삭제 요청
+        const deletePromises = selectedPostIds.map(postId => 
+          api.delete(`/admin/posts/${postId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          })
+        );
+
+        await Promise.all(deletePromises);
+        
+        alert("게시글이 성공적으로 삭제되었습니다.");
+        setSelectedPostIds([]); // 선택된 게시글 초기화
+        getUserList(); // 게시글 목록 갱신
+      } catch (error) {
+        console.error("게시글 삭제 실패:", error);
+        alert("게시글 삭제에 실패했습니다.");
+      }
     }
   };
 

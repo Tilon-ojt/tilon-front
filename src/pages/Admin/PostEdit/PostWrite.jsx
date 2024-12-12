@@ -3,7 +3,7 @@ import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
-import ImageResize from 'quill-image-resize';
+import ImageResize from 'quill-image-resize-module-react';
 import api from "../../../api/axios";
 import { jwtDecode } from "jwt-decode";
 
@@ -44,123 +44,143 @@ function PostWrite({ isEdit, editPostId }) {
         }
         console.log(`문제0.5`);
         try {
-            // Quill 인스턴스의 내용을 파싱
             const quillContent = document.querySelector('.ql-editor');
             const images = quillContent.getElementsByTagName('img');
             let contentCopy = postData.content;
-            let match;
-            console.log(`문제1`);
+           
+            if (images.length > 0) {
+                for (let i = 0; i < images.length; i++) {
+                    const img = images[i];
+                    const base64Image = img.src;
 
-            // HTML Collection을 배열로 변환하여 처리
-            for (let i = 0; i < images.length; i++) {
-                const img = images[i];
-                const base64Image = img.src;
-
-                if (base64Image.startsWith('data:image')) {
-                    console.log(`문제2`);
-                    try {
-                        const formData = new FormData();
-                        
-                        // base64 데이터에서 실제 바이너리 데이터 추출
-                        const base64Data = base64Image.split(',')[1];
-                        const byteCharacters = atob(base64Data);
-                        const byteArrays = [];
-                        
-                        for (let i = 0; i < byteCharacters.length; i++) {
-                            byteArrays.push(byteCharacters.charCodeAt(i));
-                        }
-                        
-                        // 바이너리 데이터로 Blob 생성
-                        const blob = new Blob([new Uint8Array(byteArrays)], {
-                            type: 'image/jpeg'
-                        });
-                        
-                        // sessionStorage에서 토큰 가져오기
-                        const token = sessionStorage.getItem("jwt");
-                        console.log("전송할 토큰:", token);
-
-                        if (!token) {
-                            throw new Error("인증 토큰이 없습니다.");
-                        }
-                        
-                        // FormData에 추가
-                        formData.append('ImgFile', blob, `image_${Date.now()}.jpg`);
-
+                    if (base64Image.startsWith('data:image')) {
+                        console.log(`문제2`);
                         try {
-                            // 임시 게시글 ID 생성
-                            const tempPostId = Date.now().toString();
-                            const params = isEdit ? { postId: editPostId } : { tempPostId };
-                            
-                            const imageResponse = await api.post(
-                                `/admin/posts/image/upload`, 
-                                formData,
-                                {
-                                    params: params,
-                                    headers: {
-                                        'Authorization': `Bearer ${token}`
-                                    }
-                                }
-                            );
-
-                            console.log('이미지 업로드 응답:', imageResponse.data.imageUrl);
-                            console.log('이미지 업로드 응답:', imageResponse.data);
-
-                            if (!imageResponse.data || !imageResponse.data.imageUrl) {
-                                throw new Error('이미지 URL을 받지 못했습니다.');
+                            const formData = new FormData();
+                           
+                            const base64Data = base64Image.split(',')[1];
+                            const byteCharacters = atob(base64Data);
+                            const byteArrays = [];
+                           
+                            for (let i = 0; i < byteCharacters.length; i++) {
+                                byteArrays.push(byteCharacters.charCodeAt(i));
                             }
+                           
+                            const blob = new Blob([new Uint8Array(byteArrays)], {
+                                type: 'image/jpeg'
+                            });
+                           
+                            const token = sessionStorage.getItem("jwt");
+                            console.log("전송할 토큰:", token);
 
-                            // 이미지 URL 추출
-                            const imageUrl = imageResponse.data.imageUrl;
+                            if (!token) {
+                                throw new Error("인증 토큰이 없습니다.");
+                            }
+                           
+                            formData.append('ImgFile', blob, `image_${Date.now()}.jpg`);
 
-                            // 이미지 URL로 content 업데이트
-                            const updatedContent = contentCopy.replace(base64Image, imageUrl);
-
-                            // link 필드에 이미지 URL 설정
-                            const requestData = {
-                                title: postData.title,
-                                adminId: decodedToken.adminId,
-                                content: updatedContent,
-                                category: 'PR',
-                                status: 'PUBLISHED',
-                                // fix: false,
-                                // tempPostId: tempPostId
-                            };
-
-                            console.log('서버로 전송되는 데이터:', requestData);
-
-                            const response = await api.post(`/admin/posts`, requestData ,{
-                                params: {tempPostId},
-                                
-                                    headers: {
-                                        Authorization: `Bearer ${token}`,
-                                        'Content-Type': 'application/json'
+                            try {
+                                const tempPostId = Date.now().toString();
+                                const params = isEdit ? { postId: editPostId } : { tempPostId };
+                               
+                                const imageResponse = await api.post(
+                                    `/admin/posts/image/upload`,
+                                    formData,
+                                    {
+                                        params: params,
+                                        headers: {
+                                            'Authorization': `Bearer ${token}`,
+                                            'Content-Type': 'multipart/form-data'
+                                        },
+                                        timeout: 10000
                                     }
-                                
-                        });
+                                );
 
-                            if (response.status === 201 || response.status === 200) {
-                                console.log('게시글 생성 성공:', response.data);
-                                alert('게시글이 성공적으로 생성되었습니다.');
-                                navigate('/admin/pr');
+                                console.log('이미지 업로드 응답:', imageResponse.data.imageUrl);
+                                console.log('이미지 업로드 응답:', imageResponse.data);
+
+                                if (!imageResponse.data || !imageResponse.data.imageUrl) {
+                                    throw new Error('이미지 URL을 받지 못했습니다.');
+                                }
+
+                                const imageUrl = imageResponse.data.imageUrl;
+
+                                const updatedContent = contentCopy.replace(base64Image, imageUrl);
+
+                                const requestData = {
+                                    title: postData.title,
+                                    adminId: decodedToken.adminId,
+                                    content: updatedContent,
+                                    category: 'PR',
+                                    status: 'PUBLISHED',
+                                };
+
+                                console.log('서버로 전송되는 데이터:', requestData);
+
+                                const response = await api.post(`/admin/posts`, requestData ,{
+                                    params: {tempPostId},
+                                   
+                                        headers: {
+                                            Authorization: `Bearer ${token}`,
+                                            'Content-Type': 'application/json'
+                                        }
+                                   
+                            });
+
+                                if (response.status === 201 || response.status === 200) {
+                                    console.log('게시글 생성 성공:', response.data);
+                                    alert('게시글이 성공적으로 생성되었습니다.');
+                                    navigate('/admin/pr');
+                                }
+                            } catch (error) {
+                                console.error('이미지 업로드 실패:', error);
+                                console.error('에러 상세 정보:', {
+                                    message: error.message,
+                                    status: error.response?.status,
+                                    data: error.response?.data,
+                                    config: error.config
+                                });
+                                throw error;
                             }
                         } catch (error) {
-                            console.error('이미지 업로드 실패:', error);
+                            console.error('이미지 업로드 중 에러 발생:', error);
+                            if (error.response) {
+                                console.error('에러 응답:', error.response.data);
+                                console.error('에러 상태:', error.response.status);
+                                console.error('에러 헤더:', error.response.headers);
+                            }
                             throw error;
                         }
-                    } catch (error) {
-                        console.error('이미지 업로드 중 에러 발생:', error);
-                        if (error.response) {
-                            console.error('에러 응답:', error.response.data);
-                            console.error('에러 상태:', error.response.status);
-                            console.error('에러 헤더:', error.response.headers);
-                        }
-                        throw error;
                     }
+                }
+            } else {
+                const token = sessionStorage.getItem("jwt");
+                const tempPostId = Date.now().toString();
+               
+                const requestData = {
+                    title: postData.title,
+                    adminId: decodedToken.adminId,
+                    content: postData.content,
+                    category: postData.category,
+                    status: postData.status,
+                };
+
+                const response = await api.post(`/admin/posts`, requestData, {
+                    params: { tempPostId },
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.status === 201 || response.status === 200) {
+                    console.log('게시글 생성 성공:', response.data);
+                    alert('게시글이 성공적으로 생성되었습니다.');
+                    navigate('/admin/pr');
                 }
             }
         } catch (error) {
             console.error('게시글 생성 실패:', error);
-            // 에러 응답 데이터 출력
             if (error.response) {
                 console.error('에러 응답 데이터:', error.response.data);
                 console.error('에러 상태:', error.response.status);
@@ -267,13 +287,13 @@ function PostWrite({ isEdit, editPostId }) {
                     />
                 </div>
 
-                <div style={{ 
-                    marginTop: '20px', 
-                    display: 'flex', 
-                    justifyContent: 'flex-end' 
+                <div style={{
+                    marginTop: '20px',
+                    display: 'flex',
+                    justifyContent: 'flex-end'
                 }}>
                     <div style={{ display: 'flex', gap: '30px', marginTop:'30px'}}>
-                        <button 
+                        <button
                             onClick={handleCreate}
                             style={{
                                 backgroundColor: '#0d6efd',
@@ -287,7 +307,7 @@ function PostWrite({ isEdit, editPostId }) {
                         >
                             생성
                         </button>
-                        <button 
+                        <button
                             onClick={() => navigate('/admin/pr')}
                             style={{
                                 backgroundColor: 'gray',
