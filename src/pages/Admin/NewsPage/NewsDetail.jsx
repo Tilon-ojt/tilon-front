@@ -29,10 +29,8 @@ function NewsDetail({ token }) {
         const { title, link, imageUrl } = response.data;
   
         const serverDomain = "http://172.16.5.51:8080";
-  
-        // 백슬래시 -> 슬래시 변환 + 서버 도메인 합치기
         const formattedImageUrl = imageUrl
-          ? `${serverDomain}/static/image/${imageUrl.split('\\').pop()}`
+          ? `${serverDomain}/image/${imageUrl}`
           : defaultThumbnail;
   
         console.log("변환된 이미지 URL:", formattedImageUrl);
@@ -40,7 +38,8 @@ function NewsDetail({ token }) {
         setNewsItem({
           title,
           link,
-          imageUrl: formattedImageUrl,
+          // imageUrl: formattedImageUrl,
+          imageUrl,
         });
       }
     } catch (error) {

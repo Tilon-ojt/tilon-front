@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { ChevronRight, ChevronLeft } from "lucide-react";
 import TheLayout from "../../../components/element/TheLayout";
 import TheButton from "../../../components/element/TheButton";
 import TheTable2 from "../../../components/element/TheTable2";
@@ -11,7 +12,6 @@ function AdminNews({token}) {
   const [selectedRows, setSelectedRows] = useState([]);
   const navigate = useNavigate();
   const [tbody, setTbody] = useState([]);
-  // const token = useSelector((state) => state.auth.token);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState("");
@@ -28,7 +28,6 @@ function AdminNews({token}) {
 
   const fetchNews = async (page) => {
     try {
-      // console.log("Redux token:", token);
       const token = sessionStorage.getItem("jwt");
       console.log("jwt: ", token);
 
@@ -66,7 +65,7 @@ function AdminNews({token}) {
 
 
   const pageHandler =(page)=>{
-    if(page>=1 && page < totalPages){
+    if(page>=1 && page <= totalPages){
       setCurrentPage(page);
     }
   }
@@ -129,28 +128,6 @@ function AdminNews({token}) {
     }
   };
   
-  
-
-  const renderButtons = () => (
-    <>
-      <TheButton
-        label="Add new News"
-        width="150px"
-        height="40px"
-        onClick={goToCreateHandler}
-      />
-      <TheButton
-        label="Delete News"
-        role="delete"
-        color="white"
-        $bgColor="#ff4141"
-        width="150px"
-        height="40px"
-        onClick={deleteHandler}
-      />
-    </>
-  );
-
 
   const Td = ({ children, onClick }) => <td onClick={onClick}>{children}</td>;
 
@@ -159,7 +136,25 @@ function AdminNews({token}) {
       title="News"
       hasSearch={true}
       onClick={searchHandler}
-      childrenBtn={renderButtons()}
+      childrenBtn={
+        <>
+        <TheButton
+          label="Add new News"
+          width="150px"
+          height="40px"
+          onClick={goToCreateHandler}
+        />
+        <TheButton
+          label="Delete News"
+          role="delete"
+          color="white"
+          $bgColor="#ff4141"
+          width="150px"
+          height="40px"
+          onClick={deleteHandler}
+        />
+      </>
+      }
       childrenTable={
         <>
           <TheTable2 thead={["", "no", "title", "url", "latest update"]}>
@@ -186,23 +181,31 @@ function AdminNews({token}) {
           </TheTable2>
 
           <Pagination>
-            <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
-              Prev
-            </button>
+
+            <ArrowBtn>
+              <ChevronLeft  
+                  onClick={() => pageHandler(currentPage - 1)} 
+                  disabled={currentPage === 1}
+              />
+            </ArrowBtn>
+
+
 
             {Array.from({ length: totalPages }).map((_, idx) => (
               <button
                 key={idx + 1}
-                onClick={() => handlePageChange(idx + 1)}
+                onClick={() => pageHandler(idx + 1)}
                 disabled={currentPage === idx + 1}
               >
                 {idx + 1}
               </button>
             ))}
-
-            <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
-              Next
-            </button>
+            <ArrowBtn>
+              <ChevronRight 
+                onClick={() => pageHandler(currentPage + 1)} 
+                disabled={currentPage === totalPages}
+              />
+            </ArrowBtn>
           </Pagination>
         </>
       }
@@ -262,22 +265,31 @@ const Pagination = styled.div`
   justify-content: center;
   padding: 15px;
 
+
   button {
-    padding: 10px;
     cursor: pointer;
-    background-color: #f0f4f8;
+    background-color: transparent;
     margin: 0 5px;
     border: none;
-    font-weight: bold;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 100%;
+
 
     &:hover {
-      background-color: #e1f1ff;
+      background-color: #007bff;
     }
+
     &:disabled {
       opacity: 0.5;
       pointer-events: none;
     }
   }
+
 `;
+
+const ArrowBtn = styled.div`
+  cursor: pointer;
+`
 
 export default AdminNews;
