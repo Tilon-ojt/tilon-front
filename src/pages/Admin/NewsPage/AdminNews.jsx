@@ -16,6 +16,7 @@ function AdminNews({token}) {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState("");
 
+  const [isActive, setIsActive] = useState();
 
   useEffect(() => {
     if (!token) {
@@ -57,11 +58,6 @@ function AdminNews({token}) {
     }
   };
 
-  useEffect(() => {
-    if(token){
-      fetchNews();
-    }
-  }, []);
 
 
   const pageHandler =(page)=>{
@@ -92,6 +88,7 @@ function AdminNews({token}) {
         : [...prevSelected, postId]
     );
   };
+  
 
   const handleRowClick = (postId, e) => {
     e.stopPropagation(); // 이벤트 버블링 방지
@@ -128,13 +125,48 @@ function AdminNews({token}) {
     }
   };
   
+  const handleToggleChange = async (postId, currentFixStatus) => {
+    try {
+
+
+      const newFixStatus = currentFixStatus === "FIX" ? "NOT_FIX" : "FIX";
+      const updatedData = {
+        category: "NEWS",
+        fix:"newFixStatus",
+      };
+
+      // 서버에 PUT 요청으로 상태 수정
+      await api.put(`/admin/posts/${postId}`,updatedData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+  
+      // 상태 업데이트 - UI 즉시 반영
+      setTbody((prevData) =>
+        prevData.map((item) =>
+          item.postId === postId ? { ...item, fix: newFixStatus } : item
+        )
+      );
+  
+      alert(`뉴스 상태가 '${newFixStatus}'으로 변경되었습니다.`);
+    } catch (error) {
+      console.error("Failed to update fix status:", error.message);
+      alert("상태 변경에 실패했습니다.");
+    }
+  };
+  
+  
 
   const Td = ({ children, onClick }) => <td onClick={onClick}>{children}</td>;
 
   return (
     <TheLayout
       title="News"
-      hasSearch={true}
+      hasSearch={false}
       onClick={searchHandler}
       childrenBtn={
         <>
@@ -157,7 +189,7 @@ function AdminNews({token}) {
       }
       childrenTable={
         <>
-          <TheTable2 thead={["", "no", "title", "url", "latest update"]}>
+          <TheTable2 thead={["", "no", "title", "url", "latest update", "fix"]}>
             {tbody.map((item) => (
               <TableRow
                 key={item.postId}
@@ -165,17 +197,30 @@ function AdminNews({token}) {
                 onClick={(e) => handleRowClick(item.postId, e)} 
               >
               <Td>
-                <input
-                  type="checkbox"
-                  checked={selectedRows.includes(item.postId)}
-                  onChange={(e) => handleCheckboxChange(item.postId)}
-                  onClick={(e) => e.stopPropagation()}  // 클릭 시 링크 이동 방지
-                 />
+                  <input
+                    type="checkbox"
+                    checked={selectedRows.includes(item.postId)}
+                    onChange={() => handleCheckboxChange(item.postId)}
+                    onClick={(e) => e.stopPropagation()}  // 선택 클릭 이벤트 방지
+                  />
               </Td>
-                 <Td>{item.postId}</Td>
-                 <Td>{item.title}</Td>
-                 <Td>{item.link}</Td>
-                 <Td>{item.updatedAt}</Td>
+
+              <Td>{item.postId}</Td>
+              <Td>{item.title}</Td>
+              <Td>{item.link}</Td>
+              <Td>{item.updatedAt}</Td>
+              <Td onClick={(e) => e.stopPropagation()}>
+                <ToggleSwitch>
+                  <CheckBox
+                    type="checkbox"
+                    checked={item.fix === "FIX"}  // 현재 상태에 맞게 체크 여부 설정
+                    onChange={() => handleToggleChange(item.postId, item.fix)}
+                    onClick={(e) => e.stopPropagation()}  // 이벤트 버블링 방지
+                  />
+                  <ToggleSlider />
+                </ToggleSwitch>
+              </Td>
+   
                </TableRow>
               ))}
           </TheTable2>
@@ -230,7 +275,7 @@ const TableRow = styled.tr`
     text-align: left;
     font-size: 14px;
     color: #555;
-    border: 1px solid #ddd;
+    /* border: 1px solid #ddd; */
     height: 20px; /* 셀 높이를 고정 */
     max-width: 150px; /* 셀 너비 최대 값 */
     overflow: hidden;
@@ -291,5 +336,58 @@ const Pagination = styled.div`
 const ArrowBtn = styled.div`
   cursor: pointer;
 `
+
+const ToggleSwitch = styled.label`
+  position: relative;
+  display: inline-block;
+  width: 47.7px;
+  height: 23.33px;
+`;
+
+const ToggleSlider = styled.span`
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  border-radius: 34px;
+
+  &:before {
+    position: absolute;
+    content: "";
+    height: 15px;
+    width: 15px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+    border-radius: 50%;
+  }
+`;
+
+const CheckBox = styled.input`
+  opacity: 0;
+  width: 0;
+  height: 0;
+
+  &:checked + ${ToggleSlider} {
+    background-color: #ed6a2c;
+  }
+
+  &:focus + ${ToggleSlider} {
+    box-shadow: 0 0 1px #2196f3;
+  }
+
+  &:checked + ${ToggleSlider}:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
+`;
 
 export default AdminNews;

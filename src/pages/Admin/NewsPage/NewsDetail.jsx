@@ -38,8 +38,7 @@ function NewsDetail({ token }) {
         setNewsItem({
           title,
           link,
-          // imageUrl: formattedImageUrl,
-          imageUrl,
+          imageUrl: formattedImageUrl,
         });
       }
     } catch (error) {

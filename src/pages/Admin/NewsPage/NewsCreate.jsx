@@ -121,6 +121,7 @@ const submitHandler = async () => {
       category: "NEWS",
       adminId: "5",
       status: "PUBLISHED",
+      fix:"NOT_FIX",
       link: url.trim(),
       tempPostId: tempPostId,
       imageUrl: uploadedUrl,  // 수정된 URL 저장
